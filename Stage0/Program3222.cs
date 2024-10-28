@@ -14,5 +14,10 @@ partial class Program
         string name = Console.ReadLine();
         Console.WriteLine("{0}, welcome to my first console application", name);
     }
-        private static void welcome5197() { }
+        private static void welcome5197() 
+    {
+        Console.WriteLine("Enter your name:");
+        string name = Console.ReadLine();
+        Console.WriteLine("{0}, welcome to my first console application", name);
+    } 
 }
