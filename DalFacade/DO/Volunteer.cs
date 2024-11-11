@@ -5,35 +5,35 @@ namespace DO;
 ///  Volunteer Entity represents a volunteer with all its props
 /// </summary>
 /// <param name="ID">Personal unique ID of the Volunteer</param>
-/// <param name="Name"></param>
-/// <param name="Phone"></param>
-/// <param name="Email"></param>
-/// <param name="Password"></param>
-/// <param name="Address"></param>
-/// <param name="Latitude"></param>
-/// <param name="Longitude"></param>
-/// <param name="Role"></param>
-/// <param name="IsActive"></param>
-/// <param name="MaxDistanceForCall"></param>
-/// <param name="DistanceType"></param>
+/// <param name="Name">Private Name of the volanteer</param>
+/// <param name="Phone">The volanteer private phone</param>
+/// <param name="Email">The volanteer private email</param>
+/// <param name="Password">The volanteer password</param>
+/// <param name="Address">The volanteer private address</param>
+/// <param name="Latitude">The volanteer latitude</param>
+/// <param name="Longitude">The volanteer longitude</param>
+/// <param name="Role">The user role- volunteer or manager</param>
+/// <param name="IsActive">I f the volunteer has task right now</param>
+/// <param name="MaxDistanceForCall">The volunteer permition dictance</param>
+/// <param name="DistanceType">which kind of distance</param>
 public record Volunteer
 (
    int ID, 
    string Name,
    string Phone,
    string Email,
-   string? Password=null,
-   string? Address = null,
-   double? Latitude = null,
-   double? Longitude = null,
    Role Role,
    bool IsActive,
+   DistanceType DistanceType,
    double? MaxDistanceForCall = null,
-   DistanceType DistanceType
+   string? Password = null,
+   string? Address = null,
+   double? Latitude = null,
+   double? Longitude = null
 )
 {
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Volunteer();
+    public Volunteer() : this(0, "", "", "", Role.Volunteer, false, DistanceType.AirDistance) { }
 }

@@ -15,5 +15,14 @@ public enum DistanceType
 
 public enum TypeOfCall
 {
+    ToPrepareFood,
+    ToCarryFood,
+}
 
+public enum TypeOfFinishTreatment
+{
+  Treated,
+  SelfCancellation,
+  ManagerCancellation,
+  OutOfRangeCancellation
 }
