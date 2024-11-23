@@ -1,50 +1,52 @@
 ﻿namespace Dal;
 using DalApi;
 using DO;
+using System.Collections.Generic;
 
 public class VolunteerImplementation : IVolunteer
 {
     public void Create(Volunteer item)
     {
-        if (DataSource.Volunteer.Any(v => v?.Id == item.Id))
-            throw new Exception("Volunteer with the same ID already exists.");
-
-        // הוספת המתנדב לרשימה
-        DataSource.Volunteer.Add(item);
+        if (DataSource.Volunteers.Any(v => v?.ID == item.ID))
+            throw new Exception($"Volunteer with ID={item.ID} is already exist");
+        DataSource.Volunteers.Add(item);
     }
-    public Volunteer? Read(int id)
-    {
-        let volunteer = DataSource.Volunteer.Find(v => v?.Id == id);
 
-        if (volunteer == null)
-            throw new Exception("Volunteer not found.");
-
-        return volunteer;
-    }
-    public List<Volunteer> ReadAll()
-    {
-        return DataSource.Volunteer.Where(v => v != null).ToList();
-    }
-    public void Update(Volunteer item)
-    {
-        let index = DataSource.Volunteer.FindIndex(v => v?.Id == item.Id);
-
-        if (index == -1)
-            throw new Exception("Volunteer not found.");
-
-        // עדכון המתנדב ברשימה
-        DataSource.Volunteer[index] = item;
-    }
     public void Delete(int id)
     {
-        int removedCount = DataSource.Volunteer.RemoveAll(v => v?.Id == id);
 
-        if (removedCount == 0)
-            throw new Exception("Volunteer not found.");
+        Volunteer? newVolunteer = DataSource.Volunteers.Find(volunteer => volunteer.ID == id);
+        if (newVolunteer == null)
+            throw new Exception($"Volunteer with ID={id} does Not exist");
+        else
+            DataSource.Volunteers.Remove(newVolunteer);
     }
+
     public void DeleteAll()
     {
-        DataSource.Volunteer.Clear();
+        DataSource.Volunteers.Clear();
     }
 
+    public Volunteer? Read(int id)
+    {
+        Volunteer? newvolunteer = DataSource.Volunteers.Find(volunteer => volunteer.ID == id);
+        return newvolunteer;
+    }
+
+    public List<Volunteer> ReadAll()
+    {
+        return new List<Volunteer>(DataSource.Volunteers);
+    }
+
+    public void Update(Volunteer item)
+    {
+        Volunteer? newVolunteer = DataSource.Volunteers.Find(volunteer => volunteer.ID == item.ID);
+        if (newVolunteer == null)
+            throw new Exception($"Volunteer with ID={item.ID} does Not exist");
+        else
+        {
+            DataSource.Volunteers.Remove(newVolunteer);
+            DataSource.Volunteers.Add(item);
+        }
+    }
 }
