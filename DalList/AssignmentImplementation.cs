@@ -7,14 +7,13 @@ public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        int newId = Config.NextAssignmentId;
-        Assignment copy = item with { ID = newId};//hkhkj
+        Assignment copy = item with { ID = Config.NextAssignmentId };//hkhkj
         DataSource.Assignments.Add(copy);
     }
 
     public void Delete(int id)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.ID == id);
+        Assignment? newAssignment = Read(id);
         if (newAssignment == null)
             throw new Exception($"Assignment with ID={id} does Not exist");
         else
@@ -28,18 +27,18 @@ public class AssignmentImplementation : IAssignment
 
     public Assignment? Read(int id)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.ID == id);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.ID == id);
         return newAssignment;
     }
 
     public List<Assignment> ReadAll()
     {
-        return new List<Assignment>(DataSource.Assignments);
+        return new List<Assignment>(DataSource.Assignments!);
     }
 
     public void Update(Assignment item)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.ID == item.ID);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.ID == item.ID);
         if (newAssignment == null)
             throw new Exception($"Assignment with ID={item.ID} does Not exist");
         else

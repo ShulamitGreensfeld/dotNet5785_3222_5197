@@ -19,7 +19,4 @@ public interface IConfig
         /// Resets all configuration properties to their initial values.
         /// </summary>
         void Reset();
-    }
-}
-
 }

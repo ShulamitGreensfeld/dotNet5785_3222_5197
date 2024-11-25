@@ -14,18 +14,19 @@ namespace DO;
 /// <param name="CallDescription"></param>
 public record Call
 (
-   int ID,
    TypeOfCall TypeOfCall,
    string Address,
    double Latitude,
    double Longitude,
    DateTime OpeningTime,
+   DateTime ClosingTime,
    DateTime? MaxTimeForClosing=null,
    string? CallDescription = null
 )
 {
+    public int ID { get; init; }
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Call() : this(0, TypeOfCall.ToCarryFood, "", 0, 0, DateTime.Now) { }
+    public Call() : this( TypeOfCall.ToCarryFood, "", 0, 0, DateTime.Now, DateTime.Now) { }
 }

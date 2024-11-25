@@ -1,6 +1,7 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
+//using System.Security.Cryptography.X509Certificates;
 
 public static class Initialization
 {
@@ -11,10 +12,49 @@ public static class Initialization
 
     private static readonly Random s_rand = new();
 
-    private static void createAssignment()
+    private static void CreateAssignments()
     {
-        
+        List<Volunteer> volunteersList = s_dalVolunteer!.ReadAll();
+        List<Call> callsList = s_dalCall!.ReadAll();
+        foreach (var call in callsList)
+        {
+            // התעלמות מקריאות ללא זמן סיום מקסימלי
+            if (call.MaxTimeForClosing == null) continue;
+
+            // וידוא שיש מתנדבים ברשימה
+            if (!volunteersList.Any()) continue;
+
+            DateTime minTime = call.OpeningTime;
+            DateTime maxTime = (DateTime)call.MaxTimeForClosing!;
+            TimeSpan diff = maxTime - minTime - TimeSpan.FromHours(2);
+
+            if (diff.TotalMinutes <= 0) continue;
+
+            // יצירת זמן אקראי
+            DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)diff.TotalMinutes));
+
+            // בחירת מתנדב אקראי
+            Volunteer randomVolunteer = volunteersList[s_rand.Next(volunteersList.Count)];
+
+            // סוג טיפול רנדומלי
+            TypeOfFinishTreatment finishType = (TypeOfFinishTreatment)s_rand.Next(Enum.GetValues(typeof(TypeOfFinishTreatment)).Length - 1);
+
+            // בדיקה אם ההקצאה קיימת
+            if (s_dalAssignment!.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID))
+                continue;
+
+            // יצירת הקצאה
+            s_dalAssignment.Create(new Assignment
+            {
+                CallId = call.ID,
+                VolunteerId = randomVolunteer.ID,
+                EntryTimeForTreatment = randomTime,
+                EndTimeForTreatment = randomTime.AddHours(2),
+                TypeOfFinishTreatment = finishType
+            });
+        }
     }
+
     private static void createCall()
     {
         TypeOfCall[] TypeOfCalls =
@@ -190,35 +230,111 @@ public static class Initialization
          34.9216, 34.7720, 34.7700, 34.8364, 34.7797, 34.8741, 34.8454, 34.7950, 34.7721, 34.8154,
          34.8361, 34.9046, 34.7964, 34.7533, 34.7831, 34.7724, 34.8302, 34.7789, 34.7819, 34.8065
         };
-        //DateTime start = new DateTime   //חסר לנו קריאות של השעון
 
-        DateTime systemTime = s_dalConfig.Clock;
-        DateTime[] openingTimes = new DateTime[50];
-        DateTime[] finishTimes = new DateTime[50];// מגדירים מערך עם 50 תאים
-        DateTime callStartTime;
-        DateTime callEndTime;
-        Random rand = new Random();
+        DateTime start = new DateTime(s_dalConfig!.Clock.Year, s_dalConfig.Clock.Month, s_dalConfig.Clock.Day, s_dalConfig.Clock.Hour - 7, 0, 0);
+        int range = (int)(s_dalConfig.Clock - start).TotalMinutes;
+
+        // יצירת קריאות
         for (int i = 0; i < 50; i++)
         {
-            int randomNegativeSeconds = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
-            callStartTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
-            int randomPositiveNumber = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
-            callEndTime = callStartTime.AddMinutes(randomPositiveNumber);
-            openingTimes[i] = callStartTime; // שומרים את הזמן במערך
-            finishTimes[i] = callEndTime;
-        }
-        for (int i = 0; i < 50; i++)
-        {
-            s_dalCall.Create(new Call(s_dalConfig.nextCallId, TypeOfCalls[i], CallDescriptions[i], CallAddresses[i], CallLlatitudes[i], CallLongitudes[i], openingTimes[i], finishTimes[i]));
+            int startingTime = s_rand.Next(range);
+            int index = s_rand.Next(CallDescriptions.Length);
+            DateTime openingTime = start.AddMinutes(-startingTime);
+            DateTime? closingTime = (i % 10 == 0) ? null : openingTime.AddMinutes(s_rand.Next(30, 360)); // 10% קריאות לא הוקצו
+
+            if (i < 5) // 5 קריאות שפג תוקפן
+                closingTime = openingTime.AddMinutes(-s_rand.Next(30, 120));
+
+
+            Call newCall = new Call(
+                TypeOfCall: TypeOfCalls[index],
+                Address: CallAddresses[index],
+                Longitude: CallLongitudes[index],
+                Latitude: CallLlatitudes[index],
+                OpeningTime: openingTime,
+                ClosingTime: start.AddMinutes(startingTime + s_rand.Next(30, 360)),
+                MaxTimeForClosing: start.AddMinutes(s_rand.Next(1, 720)),
+                CallDescription: CallDescriptions[index]);
+
+            if (s_dalCall!.Read(newCall.ID) == null) { s_dalCall.Create(newCall); }
         }
     }
     private static void createVolunteer()
     {
+        Random rand = new Random();
 
+        string[] VolunteerNames = {
+         "John Smith", "Mary Johnson", "Robert Brown", "Emily Davis", "Michael Wilson",
+         "Sarah Taylor", "David Anderson", "Jessica Thomas", "James Jackson", "Linda White",
+         "William Harris", "Patricia Martin", "Charles Lee", "Sophia Clark", "Joseph Walker",
+         "Daniel Hall", "Olivia Allen", "Matthew Young", "Lily King", "Andrew Scott"
+       };
+        string[] VolunteerAddresses = {
+         "10 Nordau Boulevard, Tel Aviv", "5 Bialik Street, Ramat Gan", "12 HaAtzmaut Street, Haifa", "18 Eilat Street, Tel Aviv",
+         "22 David HaMelech Street, Jerusalem", "30 Yehuda HaLevi Street, Tel Aviv", "15 HaRav Kook Street, Netanya",
+         "19 HaShomer Street, Petah Tikva", "9 Shderot HaGalim, Herzliya", "7 HaArava Street, Eilat", "4 HaHistadrut Boulevard, Kfar Saba",
+         "27 HaTzafon Street, Holon", "33 Jabotinsky Boulevard, Ramat Gan", "25 Alkalai Street, Tel Aviv", "6 HaAliya Street, Acre",
+         "20 Jerusalem Boulevard, Bat Yam", "2 HaTsiyonut Street, Rishon LeZion", "14 HaNasi Harishon Boulevard, Rehovot",
+         "11 King Solomon Street, Ashkelon", "8 Harel Street, Modi'in"
+       };
+        string[] VolunteerPhoneNumbers = {
+         "052-1234567", "052-2345678", "052-3456789", "052-4567890", "052-5678901", "052-6789012", "052-7890123",
+         "052-8901234", "052-9012345", "052-0123456", "052-1239876", "052-2349876", "052-3459876", "052-4569876",
+         "052-5679876", "052-6789876", "052-7899876", "052-8909876", "052-9019876", "052-0129876"
+       };
+        string[] VolunteerPasswords = {
+         "password123", "qwerty123", "admin2024", "securepass01", "mypassword01", "volunteer01", "summer2024",
+         "helloWorld123", "welcome1234", "trustme456", "loveyou789", "ilovevolunteer", "peace1234", "strongpass01",
+         "123volunteer", "password2024", "support2024", "bestfriend123", "helpme567", "donate1234"
+       };
+        double[] Latitudes = {
+          32.0736, 32.0739, 32.8194, 32.0702, 31.7702, 32.0782, 32.3212, 32.0951, 32.1575, 29.5596,
+          32.1749, 32.0926, 32.0814, 32.1311, 31.7665, 32.0509, 32.0354, 31.9737, 32.0656, 31.6730
+       };
+        double[] Longitudes = {
+          34.7704, 34.8221, 34.9890, 34.7915, 35.2137, 34.7839, 34.8573, 34.8874, 34.7909, 34.9494,
+          34.7631, 34.8036, 34.7862, 34.7927, 34.6292, 34.7657, 34.7894, 34.8360, 34.8040, 34.6489
+       };
+        for (int i = 0; i < 15; i++)
+        {
+            s_dalVolunteer!.Create(new Volunteer() with
+            {
+                ID = rand.Next(100000000, 999999999),
+                Name = VolunteerNames[i],
+                Phone = VolunteerPhoneNumbers[i],
+                Email = $"{VolunteerNames[i]}@gmail.com",
+                Address = VolunteerAddresses[i],
+                //Password = VolunteerPasswords[i],
+                Latitude = Latitudes[i],
+                Longitude = Longitudes[i],
+                Role = Role.Volunteer,
+                IsActive = true,
+                DistanceType = (DistanceType)rand.Next(Enum.GetValues(typeof(DistanceType)).Length),
+                MaxDistanceForCall = rand.Next(0, 100000)
+            });
+
+        }
     }
-    private static void createConfig()
+
+    public static void Do(ICall? dalCall, IAssignment? dalAssignment, IVolunteer? dalVolunteer, IConfig? dalConfig) //stage 1
     {
+        s_dalCall = dalCall ?? throw new NullReferenceException("DAL can not be null!");
+        s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL can not be null!");
+        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL can not be null!");
+        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL can not be null!");
+        Console.WriteLine("Reset Configuration values and List values...");
+        s_dalConfig.Reset(); //stage 1
+        s_dalCall.DeleteAll(); //stage 1
+        Console.WriteLine("Reset Configuration values and List values...");
+        s_dalConfig.Reset(); //stage 1
+        s_dalAssignment.DeleteAll(); //stage
+        Console.WriteLine("Reset Configuration values and List values...");
+        s_dalConfig.Reset(); //stage 1
+        s_dalVolunteer.DeleteAll(); //stage 1
+        Console.WriteLine("Initializing Students list ...");
+        createCall();
+        CreateAssignments();
+        createVolunteer();
 
     }
-
 }

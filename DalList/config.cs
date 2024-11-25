@@ -13,8 +13,7 @@
         internal static int NextAssignmentId { get => nextAssignmentId++; }
 
         // שעון המערכת
-        internal static DateTime Clock { get; set; } = DateTime.Now;
-
+        internal static DateTime Clock { get; set; } = new DateTime(2025, 3, 13, 2, 45, 30);
         // טווח זמן סיכון
         internal static TimeSpan RiskRange { get; set; } = TimeSpan.FromHours(2);
 

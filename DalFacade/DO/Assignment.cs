@@ -12,7 +12,6 @@ namespace DO;
 /// <param name="TypeOfFinishTreatment"></param>
 public record Assignment
 (
-   int ID,
    int CallId,
    int VolunteerId,
    DateTime EntryTimeForTreatment,
@@ -20,8 +19,9 @@ public record Assignment
    TypeOfFinishTreatment? TypeOfFinishTreatment=null
 )
 {
+    public int ID { get; set; }
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Assignment() : this(0, 0, 0, DateTime.Now) { }
+    public Assignment() : this(0, 0, DateTime.Now) { }
 }
