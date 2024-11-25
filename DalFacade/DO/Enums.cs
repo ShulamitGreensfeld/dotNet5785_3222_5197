@@ -17,6 +17,9 @@ public enum TypeOfCall
 {
     ToPrepareFood,
     ToCarryFood,
+    ToPackageFood,
+    ToDonateRawMaterials,
+    ToCommunityCookingNights
 }
 
 public enum TypeOfFinishTreatment
