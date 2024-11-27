@@ -47,15 +47,14 @@ public record Volunteer
     bool IsActive,
     DistanceType DistanceType,
     double? MaxDistanceForCall = null,
-    string? PasswordHash = null, // אחסון הסיסמה המוצפנת
+    string? Password = null, // אחסון הסיסמה המוצפנת
     string? Address = null,
     double? Latitude = null,
-    double? Longitude = null,
-    Dictionary<string, object>? CustomAttributes = null
+    double? Longitude = null
 )
 {
     public Volunteer() : this(0, "", "", "", Role.Volunteer, false, DistanceType.AirDistance)
     {
-        CustomAttributes = new Dictionary<string, object>();
+
     }
 }

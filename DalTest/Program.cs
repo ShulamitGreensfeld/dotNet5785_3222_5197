@@ -1,852 +1,8 @@
-﻿//using Dal;
-//using DalApi;
-//using DO;
-////using System;
-//using System.Security.Cryptography;
-
-//namespace DalTest
-//{
-//    public static class Program
-//    {
-//        private static IAssignment? s_dalAssignment = new AssignmentImplementation();
-//        private static ICall? s_dalCall = new CallImplementation();
-//        private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();
-//        private static IConfig? s_dalConfig = new ConfigImplementation();
-
-//        public static void Main()
-//        {
-//            try
-//            {
-//                while (true)
-//                {
-//                    PrintMainMenu();
-//                    string? choice = Console.ReadLine()?.Trim();
-//                    if (string.IsNullOrEmpty(choice) || choice.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
-
-
-//                    switch (choice)
-//                    {
-//                        case "1": ManageAssignments(); break;
-//                        case "2": ManageCalls(); break;
-//                        case "3": ManageVolunteers(); break;
-//                        case "4": ManageConfiguration(); break;
-//                        case "5": InitializeDatabase(); break;
-//                        case "6": DisplayAllData(); break;
-//                        case "7": ResetDatabase(); break;
-//                        default: Console.WriteLine("Invalid choice. Please try again."); break;
-//                    }
-//                }
-//            }
-//            catch (Exception ex)
-//            {
-//                Console.WriteLine($"An error occurred: {ex.Message}");
-//            }
-//        }
-//        private static void PrintMainMenu()
-//        {
-//            Console.WriteLine("\nMain Menu:");
-//            Console.WriteLine("1. Manage Assignments");
-//            Console.WriteLine("2. Manage Calls");
-//            Console.WriteLine("3. Manage Volunteers");
-//            Console.WriteLine("4. Manage Configuration");
-//            Console.WriteLine("5. Initialize Database");
-//            Console.WriteLine("6. Display All Data");
-//            Console.WriteLine("7. Reset Database");
-//            Console.WriteLine("Press 'exit' to quit.");
-//            Console.Write("Enter your choice: ");
-//        }
-
-//        private static void ResetDatabase()
-//        {
-//            Console.WriteLine("Are you sure you want to reset the database? Type 'yes' to confirm.");
-//            string? confirmation = Console.ReadLine();
-//            if (confirmation?.Trim().Equals("yes", StringComparison.OrdinalIgnoreCase) == true)
-//            {
-//                try
-//                {
-//                    s_dalAssignment!.DeleteAll();
-//                    s_dalCall!.DeleteAll();
-//                    s_dalVolunteer!.DeleteAll();
-//                    s_dalConfig!.Reset();
-//                    Console.WriteLine("Database and configuration reset successfully!");
-//                }
-//                catch (Exception ex)
-//                {
-//                    Console.WriteLine($"Error resetting database: {ex.Message}");
-//                }
-//            }
-//            else
-//            {
-//                Console.WriteLine("Database reset canceled.");
-//            }
-//        }
-
-
-
-
-//        private static void ManageAssignments()
-//        {
-//            while (true)
-//            {
-//                Console.WriteLine("\nAssignment Menu:");
-//                Console.WriteLine("1. Create Assignment");
-//                Console.WriteLine("2. Read Assignment by ID");
-//                Console.WriteLine("3. Read All Assignments");
-//                Console.WriteLine("4. Update Assignment");
-//                Console.WriteLine("5. Delete Assignment by ID");
-//                Console.WriteLine("6. Delete All Assignments");
-//                Console.WriteLine("Press 'exit' to return to the main menu.");
-//                Console.Write("Enter your choice: ");
-
-//                string? choice = Console.ReadLine();
-
-//                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-//                    break;
-
-//                try
-//                {
-//                    switch (choice)
-//                    {
-//                        case "1":
-//                            CreateAssignment();
-//                            break;
-
-//                        case "2":
-//                            ReadAssignment();
-//                            break;
-
-//                        case "3":
-//                            ReadAllAssignments();
-//                            break;
-
-//                        case "4":
-//                            UpdateAssignment();
-//                            break;
-
-//                        case "5":
-//                            DeleteAssignment();
-//                            break;
-
-//                        case "6":
-//                            DeleteAllAssignments();
-//                            break;
-
-//                        default:
-//                            Console.WriteLine("Invalid choice. Please try again.");
-//                            break;
-//                    }
-//                }
-//                catch (Exception ex)
-//                {
-//                    Console.WriteLine($"Error: {ex.Message}");
-//                }
-//            }
-//        }
-
-//        private static void CreateAssignment()
-//        {
-//            Console.WriteLine("Enter Call ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int callId))
-//            {
-//                Console.WriteLine("Invalid Call ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            Console.WriteLine("Enter Volunteer ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int volunteerId))
-//            {
-//                Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            var assignment = new Assignment
-//            {
-//                CallId = callId,
-//                VolunteerId = volunteerId,
-//                EntryTimeForTreatment = s_dalConfig!.Clock // Using system clock
-//            };
-//            s_dalAssignment!.Create(assignment);
-//            Console.WriteLine("Assignment created successfully!");
-//        }
-
-//        private static void ReadAssignment()
-//        {
-//            Console.WriteLine("Enter Assignment ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid Assignment ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            var readAssignment = s_dalAssignment!.Read(id);
-//            Console.WriteLine(readAssignment != null ? readAssignment.ToString() : "Assignment not found.");
-//        }
-
-//        private static void ReadAllAssignments()
-//        {
-//            foreach (var item in s_dalAssignment!.ReadAll())
-//                Console.WriteLine(item);
-//        }
-
-//        private static void UpdateAssignment()
-//        {
-//            Console.WriteLine("Enter Assignment ID to update:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            var existingAssignment = s_dalAssignment!.Read(id);
-//            if (existingAssignment != null)
-//            {
-//                Console.WriteLine($"Current Volunteer ID: {existingAssignment.VolunteerId}");
-//                Console.WriteLine("Enter new Volunteer ID (leave empty to keep current):");
-//                string? newVolunteerId = Console.ReadLine();
-//                if (!string.IsNullOrWhiteSpace(newVolunteerId) && int.TryParse(newVolunteerId, out int newId))
-//                    existingAssignment = existingAssignment with { VolunteerId = newId };
-//                s_dalAssignment.Update(existingAssignment);
-//                Console.WriteLine("Assignment updated successfully!");
-//            }
-//            else
-//            {
-//                Console.WriteLine("Assignment not found.");
-//            }
-//        }
-
-//        private static void DeleteAssignment()
-//        {
-//            Console.WriteLine("Enter Assignment ID to delete:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            s_dalAssignment!.Delete(id);
-//            Console.WriteLine("Assignment deleted successfully!");
-//        }
-
-//        private static void DeleteAllAssignments()
-//        {
-//            s_dalAssignment!.DeleteAll();
-//            Console.WriteLine("All assignments deleted successfully!");
-//        }
-
-//        private static void ManageCalls()
-//        {
-//            while (true)
-//            {
-//                Console.WriteLine("\nCall Menu:");
-//                Console.WriteLine("1. Create Call");
-//                Console.WriteLine("2. Read Call by ID");
-//                Console.WriteLine("3. Read All Calls");
-//                Console.WriteLine("4. Update Call");
-//                Console.WriteLine("5. Delete Call by ID");
-//                Console.WriteLine("6. Delete All Calls");
-//                Console.WriteLine("Press 'exit' to return to main menu.");
-//                Console.Write("Enter your choice: ");
-
-//                string? choice = Console.ReadLine();
-
-//                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-//                    break;
-
-//                try
-//                {
-//                    switch (choice)
-//                    {
-//                        case "1":
-//                            CreateCall();
-//                            break;
-
-//                        case "2":
-//                            ReadCall();
-//                            break;
-
-//                        case "3":
-//                            ReadAllCalls();
-//                            break;
-
-//                        case "4":
-//                            UpdateCall();
-//                            break;
-
-//                        case "5":
-//                            DeleteCall();
-//                            break;
-
-//                        case "6":
-//                            DeleteAllCalls();
-//                            break;
-
-//                        default:
-//                            Console.WriteLine("Invalid choice. Please try again.");
-//                            break;
-//                    }
-//                }
-//                catch (Exception ex)
-//                {
-//                    Console.WriteLine($"Error: {ex.Message}");
-//                }
-//            }
-//        }
-
-//        private static void CreateCall()
-//        {
-//            //Console.WriteLine("Enter Call Address:");
-//            //string address = Console.ReadLine()!;
-//            //var call = new Call
-//            //{
-//            //    Address = address,
-//            //    OpeningTime = s_dalConfig!.Clock, // Using system clock
-//            //    ClosingTime = s_dalConfig!.Clock.AddHours(1)
-//            //};
-//            //s_dalCall!.Create(call);
-//            //Console.WriteLine("Call created successfully!");
-
-
-//            Console.Clear();
-
-//            // קריאה לסוג ה-call עם בדיקת תקינות
-//            Console.Write("Enter Call Type (To Prepare Food, To Carry Food, To Package Food, To Donate Raw Materials, To Community Cooking Nights): ");
-//            if (!Enum.TryParse(Console.ReadLine()!, out DO.TypeOfCall call_type))
-//            {
-//                throw new FormatException("Call Type is invalid!");
-//            }
-
-//            // קריאה לתיאור ה-call
-//            Console.Write("Enter Call Description: ");
-//            string verbal_description = Console.ReadLine()!;
-
-//            // קריאה לכתובת ה-call
-//            Console.Write("Enter Full Address: ");
-//            string full_address = Console.ReadLine()!;
-
-//            // קריאה לקואורדינטות (Latitude ו-Longitude) עם TryParse
-//            Console.Write("Enter Latitude: ");
-//            if (!double.TryParse(Console.ReadLine(), out double latitude))
-//            {
-//                throw new FormatException("Latitude is invalid!");
-//            }
-
-//            Console.Write("Enter Longitude: ");
-//            if (!double.TryParse(Console.ReadLine(), out double longitude))
-//            {
-//                throw new FormatException("Longitude is invalid!");
-//            }
-
-//            // יצירת ה-call החדש
-//            Call newCall = new Call
-//            {
-//                TypeOfCall = call_type,                      // המרה תקינה של Enum
-//                CallDescription = verbal_description,    // שמירת תיאור
-//                Address = full_address,                // שמירת כתובת
-//                Latitude = latitude,                        // שמירת Latitude
-//                Longitude = longitude,                      // שמירת Longitude
-//            };
-
-//            // יצירת ה-call ב-DAL
-//            s_dalCall?.Create(newCall);
-//            Console.WriteLine("Call created successfully.");
-//        }
-
-//        private static void ReadCall()
-//        {
-//            Console.Clear();
-//            Console.Write("Enter Call ID to read: ");
-//            int id = int.Parse(Console.ReadLine()!);
-//            var call = s_dalCall?.Read(id);
-//            if (call != null)
-//            {
-//                Console.WriteLine($"Call ID: {call.ID}, Call Type: {call.TypeOfCall}, " +
-//                    $"Description: {call.CallDescription ?? "N/A"}, Full Address: {call.Address}, " +
-//                    $"Latitude: {call.Latitude}, Longitude: {call.Longitude}, " +
-//                    $"Opening Time: {call.OpeningTime}, Max Finish Time: {call.MaxTimeForClosing}");
-//            }
-//            else
-//            {
-//                Console.WriteLine("Call not found.");
-//            }
-//        }
-
-//        private static void ReadAllCalls()
-//        {
-//            Console.Clear();
-//            var calls = s_dalCall?.ReadAll();
-//            if (calls != null)
-//            {
-//                foreach (var call in calls)
-//                {
-//                    Console.WriteLine($"Call ID: {call.ID}, Call Type: {call.TypeOfCall}, " +
-//                        $"Description: {call.CallDescription ?? "N/A"}, Full Address: {call.Address}, " +
-//                        $"Latitude: {call.Latitude}, Longitude: {call.Longitude}, " +
-//                        $"Opening Time: {call.OpeningTime}, Max Finish Time: {call.MaxTimeForClosing}");
-//                }
-//            }
-//            else
-//            {
-//                Console.WriteLine("No calls found.");
-//            }
-//        }
-
-//        private static void UpdateCall()
-//        {
-//            Console.WriteLine("Enter Call ID to update:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            var existingCall = s_dalCall!.Read(id);
-//            if (existingCall != null)
-//            {
-//                Console.WriteLine($"Current Address: {existingCall.Address}");
-//                Console.WriteLine("Enter new Address (leave empty to keep current):");
-//                string? newAddress = Console.ReadLine();
-//                if (!string.IsNullOrWhiteSpace(newAddress))
-//                    existingCall = existingCall with { Address = newAddress };
-//                s_dalCall.Update(existingCall);
-//                Console.WriteLine("Call updated successfully!");
-//            }
-//            else
-//            {
-//                Console.WriteLine("Call not found.");
-//            }
-//        }
-
-//        private static void DeleteCall()
-//        {
-//            Console.WriteLine("Enter Call ID to delete:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            s_dalCall!.Delete(id);
-//            Console.WriteLine("Call deleted successfully!");
-//        }
-
-//        private static void DeleteAllCalls()
-//        {
-//            s_dalCall!.DeleteAll();
-//            Console.WriteLine("All calls deleted successfully!");
-//        }
-
-//        private static void ManageVolunteers()
-//        {
-//            while (true)
-//            {
-//                Console.WriteLine("\nVolunteer Menu:");
-//                Console.WriteLine("1. Create Volunteer");
-//                Console.WriteLine("2. Create Volunteer with Password"); // אופציה חדשה
-//                Console.WriteLine("3. Read Volunteer by ID");
-//                Console.WriteLine("4. Read All Volunteers");
-//                Console.WriteLine("5. Update Volunteer");
-//                Console.WriteLine("6. Update Volunteer Password"); // אופציה חדשה
-//                Console.WriteLine("7. Update Volunteer DistanceType");
-//                Console.WriteLine("8. Add Custom Attribute to Volunteer"); // אופציה חדשה
-//                Console.WriteLine("9. Display Volunteer Attributes");      // אופציה חדשה
-//                Console.WriteLine("10. Delete Volunteer by ID");
-//                Console.WriteLine("11. Delete All Volunteers");
-//                Console.WriteLine("Press 'exit' to return to the main menu.");
-//                Console.Write("Enter your choice: ");
-
-//                string? choice = Console.ReadLine();
-
-//                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-//                    break;
-
-//                try
-//                {
-//                    switch (choice)
-//                    {
-//                        case "1": CreateVolunteer(); break;
-//                        case "2": CreateVolunteerWithPassword(); break; // אופציה חדשה
-//                        case "3": ReadVolunteer(); break;
-//                        case "4": ReadAllVolunteers(); break;
-//                        case "5": UpdateVolunteer(); break;
-//                        case "6": UpdateVolunteerPassword(); break; // אופציה חדשה
-//                        case "7": UpdateVolunteerDistanceType(); break;
-//                        case "8": AddCustomAttributeToVolunteer(); break; // אופציה חדשה
-//                        case "9": DisplayVolunteerAttributes(); break;      // אופציה חדשה
-//                        case "10": DeleteVolunteer(); break;
-//                        case "11": DeleteAllVolunteers(); break;
-//                        default: Console.WriteLine("Invalid choice. Please try again."); break;
-//                    }
-//                }
-//                catch (Exception ex)
-//                {
-//                    Console.WriteLine($"Error: {ex.Message}");
-//                }
-//            }
-//        }
-
-//        private static void InitializeDatabase()
-//        {
-//            try
-//            {
-//                Initialization.Do(s_dalCall, s_dalAssignment, s_dalVolunteer, s_dalConfig);
-//                Console.WriteLine("Database initialized successfully!");
-//            }
-//            catch (Exception ex)
-//            {
-//                Console.WriteLine($"Initialization failed: {ex.Message}");
-//            }
-//        }
-
-//        private static void AddCustomAttributeToVolunteer()
-//        {
-//            Console.WriteLine("Enter Volunteer ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid Volunteer ID.");
-//                return;
-//            }
-
-//            var volunteer = s_dalVolunteer!.Read(id);
-//            if (volunteer == null)
-//            {
-//                Console.WriteLine("Volunteer not found.");
-//                return;
-//            }
-
-//            Console.WriteLine("Enter attribute name:");
-//            string attributeName = Console.ReadLine()!;
-
-//            Console.WriteLine("Enter attribute value:");
-//            string attributeValue = Console.ReadLine()!;
-
-//            if (volunteer.CustomAttributes == null)
-//                volunteer = volunteer with { CustomAttributes = new Dictionary<string, object>() };
-
-//            volunteer.CustomAttributes[attributeName] = attributeValue;
-//            s_dalVolunteer.Update(volunteer);
-
-//            Console.WriteLine("Custom attribute added successfully!");
-//        }
-//        private static void DisplayVolunteerAttributes()
-//        {
-//            Console.WriteLine("Enter Volunteer ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid Volunteer ID.");
-//                return;
-//            }
-
-//            var volunteer = s_dalVolunteer!.Read(id);
-//            if (volunteer == null)
-//            {
-//                Console.WriteLine("Volunteer not found.");
-//                return;
-//            }
-
-//            Console.WriteLine($"Volunteer ID: {volunteer.ID}");
-//            Console.WriteLine($"Name: {volunteer.Name}");
-
-//            if (volunteer.CustomAttributes != null && volunteer.CustomAttributes.Any())
-//            {
-//                Console.WriteLine("Custom Attributes:");
-//                foreach (var attribute in volunteer.CustomAttributes)
-//                {
-//                    Console.WriteLine($"- {attribute.Key}: {attribute.Value}");
-//                }
-//            }
-//            else
-//            {
-//                Console.WriteLine("No custom attributes found.");
-//            }
-//        }
-
-//        private static void UpdateVolunteerDistanceType()
-//        {
-//            Console.WriteLine("Enter Volunteer ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            var volunteer = s_dalVolunteer!.Read(id);
-//            if (volunteer != null)
-//            {
-//                Console.WriteLine($"Current DistanceType: {volunteer.DistanceType}");
-//                Console.WriteLine("Choose new DistanceType (1-AirDistance, 2-WalkingDistance, 3-DrivingDistance): ");
-//                if (int.TryParse(Console.ReadLine(), out int choice) &&
-//                    Enum.IsDefined(typeof(DistanceType), choice - 1))
-//                {
-//                    volunteer = volunteer with { DistanceType = (DistanceType)(choice - 1) };
-//                    s_dalVolunteer.Update(volunteer);
-//                    Console.WriteLine("DistanceType updated successfully!");
-//                }
-//                else
-//                {
-//                    Console.WriteLine("Invalid DistanceType choice.");
-//                }
-//            }
-//            else
-//            {
-//                Console.WriteLine("Volunteer not found.");
-//            }
-//        }
-
-//        // בדיקת חוזק סיסמה
-//        private static bool IsStrongPassword(string password)
-//        {
-//            if (password.Length < 8) return false;
-//            if (!password.Any(char.IsUpper)) return false;
-//            if (!password.Any(char.IsLower)) return false;
-//            if (!password.Any(char.IsDigit)) return false;
-//            if (!password.Any(ch => "!@#$%^&*()_+-=[]{}|;':\",.<>?/".Contains(ch))) return false;
-
-//            return true;
-//        }
-
-//        // פונקציה להצפנת סיסמה (Hash)
-//        private static string HashPassword(string password)
-//        {
-//            using (SHA256 sha256 = SHA256.Create())
-//            {
-//                byte[] hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-//                return Convert.ToBase64String(hashedBytes);
-//            }
-//        }
-
-//        // פונקציה לאימות סיסמה
-//        private static bool VerifyPassword(string enteredPassword, string storedHash)
-//        {
-//            string hashOfEntered = HashPassword(enteredPassword);
-//            return hashOfEntered == storedHash;
-//        }
-
-//        private static void CreateVolunteerWithPassword()
-//        {
-//            Console.WriteLine("Enter Volunteer Name:");
-//            string name = Console.ReadLine()!;
-
-//            Console.WriteLine("Enter Volunteer Email:");
-//            string email = Console.ReadLine()!;
-
-//            Console.WriteLine("Enter Volunteer Password:");
-//            string password = Console.ReadLine()!;
-
-//            if (!IsStrongPassword(password))
-//            {
-//                Console.WriteLine("Password is not strong enough. Try again.");
-//                return;
-//            }
-
-//            string passwordHash = HashPassword(password);
-
-//            var volunteer = new Volunteer
-//            {
-//                ID = new Random().Next(100000, 999999), // מספר אקראי כ-ID
-//                Name = name,
-//                Email = email,
-//                PasswordHash = passwordHash
-//            };
-
-//            s_dalVolunteer!.Create(volunteer);
-//            Console.WriteLine("Volunteer created successfully with an encrypted password.");
-//        }
-
-//        private static void UpdateVolunteerPassword()
-//        {
-//            Console.WriteLine("Enter Volunteer ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid ID.");
-//                return;
-//            }
-
-//            var volunteer = s_dalVolunteer!.Read(id);
-//            if (volunteer == null)
-//            {
-//                Console.WriteLine("Volunteer not found.");
-//                return;
-//            }
-
-//            Console.WriteLine("Enter current password:");
-//            string currentPassword = Console.ReadLine()!;
-
-//            if (!VerifyPassword(currentPassword, volunteer.PasswordHash!))
-//            {
-//                Console.WriteLine("Incorrect current password.");
-//                return;
-//            }
-
-//            Console.WriteLine("Enter new password:");
-//            string newPassword = Console.ReadLine()!;
-
-//            if (!IsStrongPassword(newPassword))
-//            {
-//                Console.WriteLine("Password is not strong enough. Try again.");
-//                return;
-//            }
-
-//            string newPasswordHash = HashPassword(newPassword);
-//            volunteer = volunteer with { PasswordHash = newPasswordHash };
-//            s_dalVolunteer.Update(volunteer);
-
-//            Console.WriteLine("Password updated successfully.");
-//        }
-
-//        private static void CreateVolunteer()
-//        {
-//            Console.WriteLine("Enter Volunteer Name:");
-//            string name = Console.ReadLine()!;
-//            var volunteer = new Volunteer
-//            {
-//                Name = name
-//            };
-//            s_dalVolunteer!.Create(volunteer);
-//            Console.WriteLine("Volunteer created successfully!");
-//        }
-
-//        private static void ReadVolunteer()
-//        {
-//            Console.WriteLine("Enter Volunteer ID:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            var readVolunteer = s_dalVolunteer!.Read(id);
-//            Console.WriteLine(readVolunteer != null ? readVolunteer.ToString() : "Volunteer not found.");
-//        }
-
-//        private static void ReadAllVolunteers()
-//        {
-//            foreach (var item in s_dalVolunteer!.ReadAll())
-//                Console.WriteLine(item);
-//        }
-
-//        private static void UpdateVolunteer()
-//        {
-//            Console.WriteLine("Enter Volunteer ID to update:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            var existingVolunteer = s_dalVolunteer!.Read(id);
-//            if (existingVolunteer != null)
-//            {
-//                Console.WriteLine($"Current Name: {existingVolunteer.Name}");
-//                Console.WriteLine("Enter new Name (leave empty to keep current):");
-//                string? newName = Console.ReadLine();
-//                if (!string.IsNullOrWhiteSpace(newName))
-//                    existingVolunteer = existingVolunteer with { Name = newName };
-//                s_dalVolunteer.Update(existingVolunteer);
-//                Console.WriteLine("Volunteer updated successfully!");
-//            }
-//            else
-//            {
-//                Console.WriteLine("Volunteer not found.");
-//            }
-//        }
-
-//        private static void DeleteVolunteer()
-//        {
-//            Console.WriteLine("Enter Volunteer ID to delete:");
-//            if (!int.TryParse(Console.ReadLine(), out int id))
-//            {
-//                Console.WriteLine("Invalid ID. Please enter a valid number.");
-//                return;
-//            }
-
-//            s_dalVolunteer!.Delete(id);
-//            Console.WriteLine("Volunteer deleted successfully!");
-//        }
-
-//        private static void DeleteAllVolunteers()
-//        {
-//            s_dalVolunteer!.DeleteAll();
-//            Console.WriteLine("All volunteers deleted successfully!");
-//        }
-
-//        private static void ManageConfiguration()
-//        {
-//            while (true)
-//            {
-//                Console.WriteLine("\nConfiguration Menu:");
-//                Console.WriteLine("1. Advance Clock by 1 minute");
-//                Console.WriteLine("2. Advance Clock by 1 hour");
-//                Console.WriteLine("3. Display current Clock value");
-//                Console.WriteLine("4. Reset Configuration");
-//                Console.WriteLine("Press 'exit' to return to main menu.");
-//                Console.Write("Enter your choice: ");
-
-//                string? choice = Console.ReadLine();
-
-//                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-//                    break;
-
-//                try
-//                {
-//                    switch (choice)
-//                    {
-//                        case "1":
-//                            s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
-//                            Console.WriteLine("Clock advanced by 1 minute.");
-//                            break;
-//                        case "2":
-//                            s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1);
-//                            Console.WriteLine("Clock advanced by 1 hour.");
-//                            break;
-//                        case "3":
-//                            Console.WriteLine($"Current Clock: {s_dalConfig!.Clock}");
-//                            break;
-//                        case "4":
-//                            s_dalConfig!.Reset();
-//                            Console.WriteLine("Configuration reset successfully!");
-//                            break;
-//                        default:
-//                            Console.WriteLine("Invalid choice. Please try again.");
-//                            break;
-//                    }
-//                }
-//                catch (Exception ex)
-//                {
-//                    Console.WriteLine($"Error: {ex.Message}");
-//                }
-//            }
-//        }
-//        private static void DisplayAllData()
-//        {
-//            try
-//            {
-//                Console.WriteLine("\nAll Assignments:");
-//                foreach (var assignment in s_dalAssignment!.ReadAll())
-//                    Console.WriteLine(assignment);
-
-//                Console.WriteLine("\nAll Calls:");
-//                foreach (var call in s_dalCall!.ReadAll())
-//                    Console.WriteLine(call);
-
-//                Console.WriteLine("\nAll Volunteers:");
-//                foreach (var volunteer in s_dalVolunteer!.ReadAll())
-//                    Console.WriteLine(volunteer);
-//            }
-//            catch (Exception ex)
-//            {
-//                Console.WriteLine($"Error displaying data: {ex.Message}");
-//            }
-//        }
-
-//    }
-//}
-
-
-
-using Dal;
+﻿using Dal;
 using DalApi;
 using DO;
 using System.Security.Cryptography;
+using System.Xml.Linq;
 
 namespace DalTest
 {
@@ -861,34 +17,43 @@ namespace DalTest
         {
             try
             {
-                while (true)
-                {
+                bool isRunning = true;
+                do {
                     PrintMainMenu();
-                    string? choice = Console.ReadLine()?.Trim();
-                    if (string.IsNullOrEmpty(choice) || choice.Equals("exit", StringComparison.OrdinalIgnoreCase)) break;
-
+                    int choice = TryGetValidChoice();
 
                     switch (choice)
                     {
-                        case "1": ManageAssignments(); break;
-                        case "2": ManageCalls(); break;
-                        case "3": ManageVolunteers(); break;
-                        case "4": ManageConfiguration(); break;
-                        case "5": InitializeDatabase(); break;
-                        case "6": DisplayAllData(); break;
-                        case "7": ResetDatabase(); break;
+                        case 0: isRunning = false; break;
+                        case 1: AssignmentsMenu(); break;
+                        case 2: CallsMenu(); break;
+                        case 3: VolunteersMenu(); break;
+                        case 4: ConfigurationMenu(); break;
+                        case 5: InitializeDatabase(); break;
+                        case 6: DisplayAllData(); break;
+                        case 7: ResetDatabase(); break;
                         default: Console.WriteLine("Invalid choice. Please try again."); break;
                     }
-                }
+                } while (isRunning);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
+
+        private static int TryGetValidChoice()
+        {
+            int choice;
+            while (!int.TryParse(Console.ReadLine(), out choice))
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            return choice;
+        }
+
         private static void PrintMainMenu()
         {
             Console.WriteLine("\nMain Menu:");
+            Console.WriteLine("0. Exit");
             Console.WriteLine("1. Assignments Menu");
             Console.WriteLine("2. Calls Menu");
             Console.WriteLine("3. Volunteers Menu");
@@ -896,12 +61,12 @@ namespace DalTest
             Console.WriteLine("5. Initialize Database");
             Console.WriteLine("6. Display All Data");
             Console.WriteLine("7. Reset Database");
-            Console.WriteLine("Press 'exit' to quit.");
             Console.Write("Enter your choice: ");
         }
 
         private static void ResetDatabase()
         {
+            Console.Clear();
             Console.WriteLine("Are you sure you want to reset the database? Press 'yes' to confirm.");
             string? confirmation = Console.ReadLine();
             if (confirmation?.Trim().Equals("yes", StringComparison.OrdinalIgnoreCase) == true)
@@ -925,344 +90,6 @@ namespace DalTest
             }
         }
 
-
-
-
-        private static void ManageAssignments()
-        {
-            while (true)
-            {
-                Console.WriteLine("\nAssignment Menu:");
-                Console.WriteLine("1. Create Assignment");
-                Console.WriteLine("2. Read Assignment by ID");
-                Console.WriteLine("3. Read All Assignments");
-                Console.WriteLine("4. Update Assignment");
-                Console.WriteLine("5. Delete Assignment by ID");
-                Console.WriteLine("6. Delete All Assignments");
-                Console.WriteLine("Press 'exit' to return to the main menu.");
-                Console.Write("Enter your choice: ");
-
-                string? choice = Console.ReadLine();
-
-                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                    break;
-
-                try
-                {
-                    switch (choice)
-                    {
-                        case "1":
-                            CreateAssignment();
-                            break;
-
-                        case "2":
-                            ReadAssignment();
-                            break;
-
-                        case "3":
-                            ReadAllAssignments();
-                            break;
-
-                        case "4":
-                            UpdateAssignment();
-                            break;
-
-                        case "5":
-                            DeleteAssignment();
-                            break;
-
-                        case "6":
-                            DeleteAllAssignments();
-                            break;
-
-                        default:
-                            Console.WriteLine("Invalid choice. Please try again.");
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-            }
-        }
-
-        private static void CreateAssignment()
-        {
-            Console.WriteLine("Enter Call ID:");
-            if (!int.TryParse(Console.ReadLine(), out int callId))
-            {
-                Console.WriteLine("Invalid Call ID. Please enter a valid number.");
-                return;
-            }
-
-            Console.WriteLine("Enter Volunteer ID:");
-            if (!int.TryParse(Console.ReadLine(), out int volunteerId))
-            {
-                Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
-                return;
-            }
-
-            var assignment = new Assignment
-            {
-                CallId = callId,
-                VolunteerId = volunteerId,
-                EntryTimeForTreatment = s_dalConfig!.Clock // Using system clock
-            };
-            s_dalAssignment!.Create(assignment);
-            Console.WriteLine("Assignment created successfully!");
-        }
-
-        private static void ReadAssignment()
-        {
-            Console.WriteLine("Enter Assignment ID:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid Assignment ID. Please enter a valid number.");
-                return;
-            }
-
-            var readAssignment = s_dalAssignment!.Read(id);
-            Console.WriteLine(readAssignment != null ? readAssignment.ToString() : "Assignment not found.");
-        }
-
-        private static void ReadAllAssignments()
-        {
-            foreach (var item in s_dalAssignment!.ReadAll())
-                Console.WriteLine(item);
-        }
-
-        private static void UpdateAssignment()
-        {
-            Console.WriteLine("Enter Assignment ID to update:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid ID. Please enter a valid number.");
-                return;
-            }
-
-            var existingAssignment = s_dalAssignment!.Read(id);
-            if (existingAssignment != null)
-            {
-                Console.WriteLine($"Current Volunteer ID: {existingAssignment.VolunteerId}");
-                Console.WriteLine("Enter new Volunteer ID (leave empty to keep current):");
-                string? newVolunteerId = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(newVolunteerId) && int.TryParse(newVolunteerId, out int newId))
-                    existingAssignment = existingAssignment with { VolunteerId = newId };
-                s_dalAssignment.Update(existingAssignment);
-                Console.WriteLine("Assignment updated successfully!");
-            }
-            else
-            {
-                Console.WriteLine("Assignment not found.");
-            }
-        }
-
-        private static void DeleteAssignment()
-        {
-            Console.WriteLine("Enter Assignment ID to delete:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid ID. Please enter a valid number.");
-                return;
-            }
-
-            s_dalAssignment!.Delete(id);
-            Console.WriteLine("Assignment deleted successfully!");
-        }
-
-        private static void DeleteAllAssignments()
-        {
-            s_dalAssignment!.DeleteAll();
-            Console.WriteLine("All assignments deleted successfully!");
-        }
-
-        private static void ManageCalls()
-        {
-            while (true)
-            {
-                Console.WriteLine("\nCall Menu:");
-                Console.WriteLine("1. Create Call");
-                Console.WriteLine("2. Read Call by ID");
-                Console.WriteLine("3. Read All Calls");
-                Console.WriteLine("4. Update Call");
-                Console.WriteLine("5. Delete Call by ID");
-                Console.WriteLine("6. Delete All Calls");
-                Console.WriteLine("Press 'exit' to return to the main menu.");
-                Console.Write("Enter your choice: ");
-
-                string? choice = Console.ReadLine();
-
-                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                    break;
-
-                try
-                {
-                    switch (choice)
-                    {
-                        case "1":
-                            CreateCall();
-                            break;
-
-                        case "2":
-                            ReadCall();
-                            break;
-
-                        case "3":
-                            ReadAllCalls();
-                            break;
-
-                        case "4":
-                            UpdateCall();
-                            break;
-
-                        case "5":
-                            DeleteCall();
-                            break;
-
-                        case "6":
-                            DeleteAllCalls();
-                            break;
-
-                        default:
-                            Console.WriteLine("Invalid choice. Please try again.");
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-            }
-        }
-
-        private static void CreateCall()
-        {
-            Console.WriteLine("Enter Call Address:");
-            string address = Console.ReadLine()!;
-            var call = new Call
-            {
-                Address = address,
-                OpeningTime = s_dalConfig!.Clock, // Using system clock
-                ClosingTime = s_dalConfig!.Clock.AddHours(1)
-            };
-            s_dalCall!.Create(call);
-            Console.WriteLine("Call created successfully!");
-        }
-
-        private static void ReadCall()
-        {
-            Console.WriteLine("Enter Call ID:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid Call ID. Please enter a valid number.");
-                return;
-            }
-
-            var readCall = s_dalCall!.Read(id);
-            Console.WriteLine(readCall != null ? readCall.ToString() : "Call not found.");
-        }
-
-        private static void ReadAllCalls()
-        {
-            foreach (var item in s_dalCall!.ReadAll())
-                Console.WriteLine(item);
-        }
-
-        private static void UpdateCall()
-        {
-            Console.WriteLine("Enter Call ID to update:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid ID. Please enter a valid number.");
-                return;
-            }
-
-            var existingCall = s_dalCall!.Read(id);
-            if (existingCall != null)
-            {
-                Console.WriteLine($"Current Address: {existingCall.Address}");
-                Console.WriteLine("Enter new Address (leave empty to keep current):");
-                string? newAddress = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(newAddress))
-                    existingCall = existingCall with { Address = newAddress };
-                s_dalCall.Update(existingCall);
-                Console.WriteLine("Call updated successfully!");
-            }
-            else
-            {
-                Console.WriteLine("Call not found.");
-            }
-        }
-
-        private static void DeleteCall()
-        {
-            Console.WriteLine("Enter Call ID to delete:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid ID. Please enter a valid number.");
-                return;
-            }
-
-            s_dalCall!.Delete(id);
-            Console.WriteLine("Call deleted successfully!");
-        }
-
-        private static void DeleteAllCalls()
-        {
-            s_dalCall!.DeleteAll();
-            Console.WriteLine("All calls deleted successfully!");
-        }
-
-        private static void ManageVolunteers()
-        {
-            while (true)
-            {
-                Console.WriteLine("\nVolunteer Menu:");
-                Console.WriteLine("1. Create Volunteer");
-                Console.WriteLine("2. Create Volunteer with Password"); // אופציה חדשה
-                Console.WriteLine("3. Read Volunteer by ID");
-                Console.WriteLine("4. Read All Volunteers");
-                Console.WriteLine("5. Update Volunteer");
-                Console.WriteLine("6. Update Volunteer Password"); // אופציה חדשה
-                Console.WriteLine("7. Update Volunteer DistanceType");
-                Console.WriteLine("8. Add Custom Attribute to Volunteer"); // אופציה חדשה
-                Console.WriteLine("9. Display Volunteer Attributes");      // אופציה חדשה
-                Console.WriteLine("10. Delete Volunteer by ID");
-                Console.WriteLine("11. Delete All Volunteers");
-                Console.WriteLine("Press 'exit' to return to the main menu.");
-                Console.Write("Enter your choice: ");
-
-                string? choice = Console.ReadLine();
-
-                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                    break;
-
-                try
-                {
-                    switch (choice)
-                    {
-                        case "1": CreateVolunteer(); break;
-                        case "2": CreateVolunteerWithPassword(); break; // אופציה חדשה
-                        case "3": ReadVolunteer(); break;
-                        case "4": ReadAllVolunteers(); break;
-                        case "5": UpdateVolunteer(); break;
-                        case "6": UpdateVolunteerPassword(); break; // אופציה חדשה
-                        case "7": UpdateVolunteerDistanceType(); break;
-                        case "8": AddCustomAttributeToVolunteer(); break; // אופציה חדשה
-                        case "9": DisplayVolunteerAttributes(); break;      // אופציה חדשה
-                        case "10": DeleteVolunteer(); break;
-                        case "11": DeleteAllVolunteers(); break;
-                        default: Console.WriteLine("Invalid choice. Please try again."); break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
-            }
-        }
-
         private static void InitializeDatabase()
         {
             try
@@ -1276,213 +103,455 @@ namespace DalTest
             }
         }
 
-        private static void AddCustomAttributeToVolunteer()
+        private static void DisplayAllData()
         {
-            Console.WriteLine("Enter Volunteer ID:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
+            try
             {
-                Console.WriteLine("Invalid Volunteer ID.");
-                return;
+                Console.WriteLine("\t\t\t\t\t--------Calls Start--------");
+                ReadAllCalls();
+                Console.WriteLine("\t\t\t\t\t--------Calls End--------");
+                Console.WriteLine("\t\t\t\t\t--------Volunteers Start--------");
+                ReadAllVolunteers();
+                Console.WriteLine("\t\t\t\t\t--------Volunteers End--------");
+                Console.WriteLine("\t\t\t\t\t--------Assignments Start--------");
+                ReadAllAssignments();
+                Console.WriteLine("\t\t\t\t\t--------Assignments End--------");
             }
-
-            var volunteer = s_dalVolunteer!.Read(id);
-            if (volunteer == null)
+            catch (Exception ex)
             {
-                Console.WriteLine("Volunteer not found.");
-                return;
+                Console.WriteLine($"Error displaying data: {ex.Message}");
             }
-
-            Console.WriteLine("Enter attribute name:");
-            string attributeName = Console.ReadLine()!;
-
-            Console.WriteLine("Enter attribute value:");
-            string attributeValue = Console.ReadLine()!;
-
-            if (volunteer.CustomAttributes == null)
-                volunteer = volunteer with { CustomAttributes = new Dictionary<string, object>() };
-
-            volunteer.CustomAttributes[attributeName] = attributeValue;
-            s_dalVolunteer.Update(volunteer);
-
-            Console.WriteLine("Custom attribute added successfully!");
         }
-        private static void DisplayVolunteerAttributes()
+
+        private static void AssignmentsMenu()
         {
-            Console.WriteLine("Enter Volunteer ID:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
-            {
-                Console.WriteLine("Invalid Volunteer ID.");
-                return;
-            }
+            Console.Clear();
+            Console.WriteLine("\nAssignment Menu:");
+            Console.WriteLine("0. Back to Main Menu");
+            Console.WriteLine("1. Create Assignment");
+            Console.WriteLine("2. Read Assignment by ID");
+            Console.WriteLine("3. Read All Assignments");
+            Console.WriteLine("4. Update Assignment");
+            Console.WriteLine("5. Delete Assignment by ID");
+            Console.WriteLine("6. Delete All Assignments");
 
-            var volunteer = s_dalVolunteer!.Read(id);
-            if (volunteer == null)
+            bool isRunning = true;
+            do
             {
-                Console.WriteLine("Volunteer not found.");
-                return;
-            }
-
-            Console.WriteLine($"Volunteer ID: {volunteer.ID}");
-            Console.WriteLine($"Name: {volunteer.Name}");
-
-            if (volunteer.CustomAttributes != null && volunteer.CustomAttributes.Any())
-            {
-                Console.WriteLine("Custom Attributes:");
-                foreach (var attribute in volunteer.CustomAttributes)
+                try
                 {
-                    Console.WriteLine($"- {attribute.Key}: {attribute.Value}");
+                    Console.Write("Enter your choice: ");
+                    int choice = TryGetValidChoice();
+
+                    switch (choice)
+                    {
+                        case 0: isRunning = false; break;
+                        case 1: CreateAssignment(); break;
+                        case 2: ReadAssignment(); break;
+                        case 3: ReadAllAssignments(); break;
+                        case 4: UpdateAssignment(); break;
+                        case 5: DeleteAssignment(); break;
+                        case 6: DeleteAllAssignments(); break;
+                        case 7: ResetDatabase(); break;
+                        default: Console.WriteLine("Invalid choice. Please try again."); break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            } while (isRunning);
+        }
+
+        private static void CreateAssignment()
+        {
+            Console.WriteLine("Enter Volunteer ID: ");
+            if (!int.TryParse(Console.ReadLine()!, out int volunteerId) || (s_dalVolunteer!.Read(volunteerId) == null))
+                throw new FormatException("Volunteer ID is invalid!");
+            Console.WriteLine("Enter Call ID: ");
+            if (!int.TryParse(Console.ReadLine()!, out int callId) || (s_dalCall!.Read(callId) == null))
+                throw new FormatException("Call ID is invalid!");
+            Assignment newAssignment = new() { VolunteerId = volunteerId, CallId = callId, };
+            s_dalAssignment!.Create(newAssignment);
+            Console.WriteLine("An Assignment was successfully created.");
+        }
+
+        private static void ReadAssignment()
+        {
+            Console.Write("Enter Assignment ID to read: ");
+            int id = int.Parse(Console.ReadLine()!);
+            var assignment = s_dalAssignment?.Read(id);
+            if (assignment != null)
+            {
+                Console.WriteLine($"Assignment ID: {assignment.ID}, Volunteer ID: {assignment.VolunteerId}, " +
+                    $"Call Id: {assignment.CallId},  Start Time: {assignment.EntryTimeForTreatment}, " +
+                    $"End Time: {assignment.EndTimeForTreatment}, End Type: {assignment.TypeOfFinishTreatment}, ");
+            }
+            else
+                Console.WriteLine("Assignment not found.");
+        }
+
+        private static void ReadAllAssignments()
+        {
+            var assignments = s_dalAssignment?.ReadAll();
+            if (assignments != null)
+            {
+                foreach (var assignment in assignments)
+                {
+                    Console.WriteLine($"Assignment ID: {assignment.ID}, Volunteer ID: {assignment.VolunteerId}, " +
+                        $"Call Id: {assignment.CallId},  Start Time: {assignment.EntryTimeForTreatment}, " +
+                        $"End Time: {assignment.EndTimeForTreatment}, End Type: {assignment.TypeOfFinishTreatment}, ");
                 }
             }
             else
-            {
-                Console.WriteLine("No custom attributes found.");
-            }
+                Console.WriteLine("No assignments found.");
         }
 
-        private static void UpdateVolunteerDistanceType()
-        {
-            Console.WriteLine("Enter Volunteer ID:");
+        private static void UpdateAssignment() {
+            Console.Write("Enter Assignment ID to update: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
+                throw new FormatException("Call ID is invalid!");
+            var assignment = s_dalAssignment?.Read(id);
+            if (assignment != null)
             {
-                Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
-                return;
-            }
-
-            var volunteer = s_dalVolunteer!.Read(id);
-            if (volunteer != null)
-            {
-                Console.WriteLine($"Current DistanceType: {volunteer.DistanceType}");
-                Console.WriteLine("Choose new DistanceType (1-AirDistance, 2-WalkingDistance, 3-DrivingDistance): ");
-                if (int.TryParse(Console.ReadLine(), out int choice) &&
-                    Enum.IsDefined(typeof(DistanceType), choice - 1))
+                Console.WriteLine(assignment);
+                Console.Write("Enter volunteer id:  ");
+                string volunteerIdInput = Console.ReadLine()!;
+                int volunteerId = string.IsNullOrEmpty(volunteerIdInput) || !int.TryParse(volunteerIdInput, out int vId) ? assignment.VolunteerId : vId;
+                Console.Write("Enter call id:  ");
+                string callIdInput = Console.ReadLine()!;
+                int callId = string.IsNullOrEmpty(callIdInput) || !int.TryParse(callIdInput, out int cId) ? assignment.CallId : cId;
+                Console.Write("Enter Start time:(dd/mm/yy hh:mm:ss) ");
+                string startTimeInput = Console.ReadLine()!;
+                DateTime? startTime = string.IsNullOrEmpty(startTimeInput) || !DateTime.TryParse(startTimeInput, out DateTime ent) ? assignment.EntryTimeForTreatment : ent;
+                Console.Write("Enter end time (dd/mm/yy hh:mm:ss): ");
+                string endTimeInput = Console.ReadLine()!;
+                DateTime? endTime = string.IsNullOrEmpty(endTimeInput) || !DateTime.TryParse(endTimeInput, out DateTime end) ? assignment.EndTimeForTreatment : end;
+                Console.Write("Enter end type(was_treated, self_cancellation, manager_cancellation, expired): ");
+                string endTypeInput = Console.ReadLine()!;
+                DO.TypeOfFinishTreatment? endType = string.IsNullOrEmpty(endTypeInput) || !Enum.TryParse(endTypeInput, out DO.TypeOfFinishTreatment eType) ? assignment.TypeOfFinishTreatment : eType;
+                Assignment newAssignment = new()
                 {
-                    volunteer = volunteer with { DistanceType = (DistanceType)(choice - 1) };
-                    s_dalVolunteer.Update(volunteer);
-                    Console.WriteLine("DistanceType updated successfully!");
-                }
-                else
-                {
-                    Console.WriteLine("Invalid DistanceType choice.");
-                }
+                    ID = assignment.ID,
+                    VolunteerId = volunteerId,
+                    CallId = callId,
+                    EntryTimeForTreatment = startTime ?? assignment.EntryTimeForTreatment,
+                    EndTimeForTreatment = endTime ?? assignment.EndTimeForTreatment,
+                    TypeOfFinishTreatment = (endType != DO.TypeOfFinishTreatment.OutOfRangeCancellation) && (endType != DO.TypeOfFinishTreatment.ManagerCancellation) && (endType != DO.TypeOfFinishTreatment.SelfCancellation) && (endType != DO.TypeOfFinishTreatment.Treated) ? assignment.TypeOfFinishTreatment : endType
+                };
+                s_dalAssignment?.Update(newAssignment);
+                Console.WriteLine("Assignment updated successfully.");
+                Console.WriteLine(newAssignment);
             }
             else
+                Console.WriteLine("Assignment not found.");
+        }
+private static void DeleteAssignment()
+        {
+            Console.Write("Enter Assignment ID to delete: ");
+            int id = int.Parse(Console.ReadLine()!);
+            s_dalAssignment?.Delete(id);
+            Console.WriteLine("Call deleted successfully.");
+        }
+
+        private static void DeleteAllAssignments()
+        {
+            s_dalAssignment!.DeleteAll();
+            Console.WriteLine("All assignments deleted successfully!");
+        }
+
+        private static void CallsMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("\nCall Menu:");
+            Console.WriteLine("0. Back to Main Menu");
+            Console.WriteLine("1. Create Call");
+            Console.WriteLine("2. Read Call by ID");
+            Console.WriteLine("3. Read All Calls");
+            Console.WriteLine("4. Update Call");
+            Console.WriteLine("5. Delete Call by ID");
+            Console.WriteLine("6. Delete All Calls");
+
+            bool isRunning = true;
+
+            do
             {
-                Console.WriteLine("Volunteer not found.");
+                try
+                {
+                    Console.Write("Enter your choice: ");
+                    int choice = TryGetValidChoice();
+                    switch (choice)
+                    {
+                        case 0: isRunning = false; break;
+                        case 1: CreateCall(); break;
+                        case 2: ReadCall(); break;
+                        case 3: ReadAllCalls(); break;
+                        case 4: UpdateCall(); break;
+                        case 5: DeleteCall(); break;
+                        case 6: DeleteAllCalls(); break;
+                        default: Console.WriteLine("Invalid choice. Please try again."); break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            } while (isRunning);
+        }
+
+        private static void CreateCall()
+        {
+            Console.Write("Enter Call Type (transportation, car_accident, vehicle_breakdown, search_and_rescue): ");
+            if (!Enum.TryParse(Console.ReadLine()!, out DO.TypeOfCall call_type))
+                throw new FormatException("Call Type is invalid!");
+            Console.Write("Enter Call Description: ");
+            string verbal_description = Console.ReadLine()!;
+            Console.Write("Enter Full Address: ");
+            string full_address = Console.ReadLine()!;
+            Console.Write("Enter Latitude: ");
+            if (!double.TryParse(Console.ReadLine(), out double latitude))
+                throw new FormatException("Latitude is invalid!");
+            Console.Write("Enter Longitude: ");
+            if (!double.TryParse(Console.ReadLine(), out double longitude))
+                throw new FormatException("Longitude is invalid!");
+            Console.Write("Enter full latest end time(dd/mm/yy hh:mm:ss): ");
+            if (!DateTime.TryParse(Console.ReadLine(), out DateTime endTime))
+                throw new FormatException("End time is invalid!");
+            Call newCall = new()
+            {
+                TypeOfCall = call_type,                   
+                CallDescription = verbal_description,    
+                Address = full_address,                
+                Latitude = latitude,                      
+                Longitude = longitude,                     
+                MaxTimeForClosing = endTime
+            };
+            s_dalCall?.Create(newCall);
+            Console.WriteLine("Call created successfully.");
+        }
+
+        private static void ReadCall()
+        {
+            Console.Write("Enter Call ID to read: ");
+            int id = int.Parse(Console.ReadLine()!);
+            var call = s_dalCall?.Read(id);
+            if (call != null)
+            {
+                Console.WriteLine($"Call ID: {call.ID}, Call Type: {call.TypeOfCall}, " +
+                    $"Description: {call.CallDescription ?? "N/A"}, Full Address: {call.Address}, " +
+                    $"Latitude: {call.Latitude}, Longitude: {call.Longitude}, " +
+                    $"Opening Time: {call.OpeningTime}, Max Finish Time: {call.MaxTimeForClosing}");
             }
+            else
+                Console.WriteLine("Call not found.");
         }
 
-        // בדיקת חוזק סיסמה
-        private static bool IsStrongPassword(string password)
+        private static void ReadAllCalls()
         {
-            if (password.Length < 8) return false;
-            if (!password.Any(char.IsUpper)) return false;
-            if (!password.Any(char.IsLower)) return false;
-            if (!password.Any(char.IsDigit)) return false;
-            if (!password.Any(ch => "!@#$%^&*()_+-=[]{}|;':\",.<>?/".Contains(ch))) return false;
-
-            return true;
+            var calls = s_dalCall?.ReadAll();
+            if (calls != null)
+                foreach (var call in calls)
+                {
+                    Console.WriteLine($"Call ID: {call.ID}, Call Type: {call.TypeOfCall}, " +
+                        $"Description: {call.CallDescription ?? "N/A"}, Full Address: {call.Address}, " +
+                        $"Latitude: {call.Latitude}, Longitude: {call.Longitude}, " +
+                        $"Opening Time: {call.OpeningTime}, Max Finish Time: {call.MaxTimeForClosing}");
+                }
+            else
+                Console.WriteLine("No calls found.");
         }
 
-        // פונקציה להצפנת סיסמה (Hash)
-        private static string HashPassword(string password)
+        private static void UpdateCall()
         {
-            using (SHA256 sha256 = SHA256.Create())
+            Console.Write("Enter Call ID to update: ");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+                throw new FormatException("Call ID is invalid!");
+
+            var call = s_dalCall?.Read(id);
+            if (call == null)
             {
-                byte[] hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
-        }
-
-        // פונקציה לאימות סיסמה
-        private static bool VerifyPassword(string enteredPassword, string storedHash)
-        {
-            string hashOfEntered = HashPassword(enteredPassword);
-            return hashOfEntered == storedHash;
-        }
-
-        private static void CreateVolunteerWithPassword()
-        {
-            Console.WriteLine("Enter Volunteer Name:");
-            string name = Console.ReadLine()!;
-
-            Console.WriteLine("Enter Volunteer Email:");
-            string email = Console.ReadLine()!;
-
-            Console.WriteLine("Enter Volunteer Password:");
-            string password = Console.ReadLine()!;
-
-            if (!IsStrongPassword(password))
-            {
-                Console.WriteLine("Password is not strong enough. Try again.");
+                Console.WriteLine("Call not found.");
                 return;
             }
 
-            string passwordHash = HashPassword(password);
+            Console.WriteLine(call);
 
-            var volunteer = new Volunteer
+            bool AskUserIfUpdate(string fieldName)
             {
-                ID = new Random().Next(100000, 999999), // מספר אקראי כ-ID
-                Name = name,
-                Email = email,
-                PasswordHash = passwordHash
+                Console.WriteLine($"Do you want to update {fieldName}? (yes/no): ");
+                string? response = Console.ReadLine()?.Trim().ToLower();
+                return response == "yes" || response == "y";
+            }
+
+            string GetValidInput(string prompt)
+            {
+                string? input;
+                do
+                {
+                    Console.Write(prompt);
+                    input = Console.ReadLine()?.Trim();
+                    if (string.IsNullOrEmpty(input))
+                        Console.WriteLine("Input cannot be empty. Please try again.");
+                } while (string.IsNullOrEmpty(input));
+
+                return input!;
+            }
+
+            Call newCall = new()
+            {
+                ID = call.ID, // ID אינו משתנה
+                TypeOfCall = AskUserIfUpdate("Call Type")
+                    && Enum.TryParse(GetValidInput("Enter Call Type (transportation, car_accident, vehicle_breakdown, search_and_rescue): "), out DO.TypeOfCall cType)
+                    ? cType : call.TypeOfCall,
+                CallDescription = AskUserIfUpdate("Call Description")
+                    ? GetValidInput("Enter Call Description: ")
+                    : call.CallDescription,
+                Address = AskUserIfUpdate("Full Address")
+                    ? GetValidInput("Enter Full Address: ")
+                    : call.Address,
+                Latitude = AskUserIfUpdate("Latitude")
+                    && double.TryParse(GetValidInput("Enter Latitude: "), out double latitude)
+                    ? latitude : call.Latitude,
+                Longitude = AskUserIfUpdate("Longitude")
+                    && double.TryParse(GetValidInput("Enter Longitude: "), out double longitude)
+                    ? longitude : call.Longitude,
             };
 
-            s_dalVolunteer!.Create(volunteer);
-            Console.WriteLine("Volunteer created successfully with an encrypted password.");
+            s_dalCall?.Update(newCall);
+            Console.WriteLine("Call updated successfully.");
+            Console.WriteLine(newCall);
         }
 
-        private static void UpdateVolunteerPassword()
+
+        private static void DeleteCall()
         {
-            Console.WriteLine("Enter Volunteer ID:");
-            if (!int.TryParse(Console.ReadLine(), out int id))
+            Console.Write("Enter Call ID to delete: ");
+            int id = int.Parse(Console.ReadLine()!);
+            s_dalCall?.Delete(id);
+            Console.WriteLine("Call deleted successfully.");
+        }
+
+        private static void DeleteAllCalls()
+        {
+            s_dalCall!.DeleteAll();
+            Console.WriteLine("All calls deleted successfully!");
+        }
+
+        private static void VolunteersMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("\nVolunteer Menu:");
+            Console.WriteLine("0. Back to Main Menu");
+            Console.WriteLine("1. Create Volunteer");
+            Console.WriteLine("2. Read Volunteer by ID");
+            Console.WriteLine("3. Read All Volunteers");
+            Console.WriteLine("4. Update Volunteer");
+            Console.WriteLine("5. Delete Volunteer by ID");
+            Console.WriteLine("6. Delete All Volunteers");
+
+            bool isRunning = true;
+
+            do
             {
-                Console.WriteLine("Invalid ID.");
-                return;
-            }
-
-            var volunteer = s_dalVolunteer!.Read(id);
-            if (volunteer == null)
-            {
-                Console.WriteLine("Volunteer not found.");
-                return;
-            }
-
-            Console.WriteLine("Enter current password:");
-            string currentPassword = Console.ReadLine()!;
-
-            if (!VerifyPassword(currentPassword, volunteer.PasswordHash!))
-            {
-                Console.WriteLine("Incorrect current password.");
-                return;
-            }
-
-            Console.WriteLine("Enter new password:");
-            string newPassword = Console.ReadLine()!;
-
-            if (!IsStrongPassword(newPassword))
-            {
-                Console.WriteLine("Password is not strong enough. Try again.");
-                return;
-            }
-
-            string newPasswordHash = HashPassword(newPassword);
-            volunteer = volunteer with { PasswordHash = newPasswordHash };
-            s_dalVolunteer.Update(volunteer);
-
-            Console.WriteLine("Password updated successfully.");
+                try
+                {
+                    Console.Write("Enter your choice: ");
+                    int choice = TryGetValidChoice();
+                    switch (choice)
+                    {
+                        case 0: isRunning = false; break;
+                        case 1: CreateVolunteer(); break;
+                        case 2: ReadVolunteer(); break;
+                        case 3: ReadAllVolunteers(); break;
+                        case 4: UpdateVolunteer(); break;
+                        case 5: DeleteVolunteer(); break;
+                        case 6: DeleteAllVolunteers(); break;
+                        default: Console.WriteLine("Invalid choice. Please try again."); break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            } while (isRunning);
         }
 
         private static void CreateVolunteer()
         {
-            Console.WriteLine("Enter Volunteer Name:");
+            Console.Write("Enter Volunteer ID: ");
+            if (!int.TryParse(Console.ReadLine(), out int Id))
+                throw new FormatException("ID is invalid!");
+            Console.Write("Enter Phone Number: ");
+            string phone = Console.ReadLine()!;
+            if (string.IsNullOrWhiteSpace(phone) || phone.Length < 10)
+                throw new FormatException("Phone number is invalid!");
+            Console.Write("Enter Name: ");
             string name = Console.ReadLine()!;
-            var volunteer = new Volunteer
-            {
-                Name = name
-            };
-            s_dalVolunteer!.Create(volunteer);
-            Console.WriteLine("Volunteer created successfully!");
+            if (string.IsNullOrWhiteSpace(name))
+                throw new FormatException("Name is required!");
+            Console.Write("Enter Email: ");
+            string EmailAddress = Console.ReadLine()!;
+            Console.Write("Enter Address: ");
+            string? fullAddress = Console.ReadLine()!;
+            Console.Write("Enter Latitude: ");
+            if (!double.TryParse(Console.ReadLine(), out double latitude))
+                throw new FormatException("Latitude is invalid!");
+            Console.Write("Enter Longitude: ");
+            if (!double.TryParse(Console.ReadLine(), out double longitude))
+                throw new FormatException("Longitude is invalid!");
+            Console.Write("Enter Role (manager/volunteer): ");
+            if (!Enum.TryParse(Console.ReadLine(), out Role role))
+                throw new FormatException("Role is invalid!");
+            Console.Write("Enter if Is Active (true/false): ");
+            if (!bool.TryParse(Console.ReadLine(), out bool isActive))
+                throw new FormatException("IsActive is invalid!");
+            Console.Write("Enter Distance Type (AirDistance,WalkingDistance,DrivingDistance: ");
+            if (!Enum.TryParse(Console.ReadLine(), out DistanceType distanceType))
+                throw new FormatException("DistanceType is invalid!");
+            Console.Write("Enter Max Distance (km): ");
+            double? maxDistance = null;
+            string MaxDistanceInput = Console.ReadLine()!;
+            if (!double.TryParse(MaxDistanceInput, out double parsedMaxDistance))
+                throw new FormatException("Max Distance is invalid!");
+            maxDistance = parsedMaxDistance;
+            Console.Write("Enter Password (optional): ");
+            string? password = Console.ReadLine();
+            Volunteer newVolunteer;
+            if (password == "")
+                newVolunteer = new Volunteer
+                {
+                    ID = Id,
+                    Name = name,
+                    Phone = phone,
+                    Email = EmailAddress,
+                    Address = fullAddress,
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    Role = role,
+                    IsActive = isActive,
+                    DistanceType = distanceType,
+                    MaxDistanceForCall = maxDistance,
+                };
+            else
+                newVolunteer = new Volunteer
+                {
+                    ID = Id,
+                    Name = name,
+                    Phone = phone,
+                    Email = EmailAddress,
+                    Address = fullAddress,
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    Role = role,
+                    IsActive = isActive,
+                    DistanceType = distanceType,
+                    MaxDistanceForCall = maxDistance,
+                    Password = password,
+                };
+            s_dalVolunteer?.Create(newVolunteer);
+            Console.WriteLine("Volunteer created successfully.");
         }
+
 
         private static void ReadVolunteer()
         {
@@ -1492,36 +561,87 @@ namespace DalTest
                 Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
                 return;
             }
-
-            var readVolunteer = s_dalVolunteer!.Read(id);
-            Console.WriteLine(readVolunteer != null ? readVolunteer.ToString() : "Volunteer not found.");
+            var volunteer = s_dalVolunteer?.Read(id);
+            if (volunteer != null)
+            {
+                Console.WriteLine($"Volunteer ID: {volunteer.ID}, Full Name: {volunteer.Name}, Cellphone: {volunteer.Phone}, Email: {volunteer.Email}, " +
+                    $"Full Address: {volunteer.Address}, Latitude: {volunteer.Latitude}, Longitude: {volunteer.Longitude}, " +
+                    $"Role: {volunteer.Role}, Active: {volunteer.IsActive}, Distance Type: {volunteer.DistanceType}, " +
+                    $"Max Distance: {volunteer.MaxDistanceForCall}, Password: {volunteer.Password}");
+            }
+            else
+                Console.WriteLine("Volunteer not found.");
         }
 
         private static void ReadAllVolunteers()
         {
-            foreach (var item in s_dalVolunteer!.ReadAll())
-                Console.WriteLine(item);
+            var volunteers = s_dalVolunteer?.ReadAll();
+            if (volunteers != null)
+            {
+                int i = 1;
+                foreach (var volunteer in volunteers)
+                {
+                    Console.WriteLine($"volunteer{i++}");
+                    Console.WriteLine($"Volunteer ID: {volunteer.ID}, Full Name: {volunteer.Name}, Cellphone: {volunteer.Phone}, Email: {volunteer.Email}, " +
+                    $"Full Address: {volunteer.Address}, Latitude: {volunteer.Latitude}, Longitude: {volunteer.Longitude}, " +
+                    $"Role: {volunteer.Role}, Active: {volunteer.IsActive}, Distance Type: {volunteer.DistanceType}, " +
+                    $"Max Distance: {volunteer.MaxDistanceForCall}, Password: {volunteer.Password}");
+                }
+            }
+            else
+                Console.WriteLine("No volunteers found.");
         }
 
         private static void UpdateVolunteer()
         {
-            Console.WriteLine("Enter Volunteer ID to update:");
+            Console.Write("Enter Volunteer ID to update: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
+                throw new FormatException("Volunteer ID is invalid!");
+
+            var volunteer = s_dalVolunteer?.Read(id);
+            Console.WriteLine(volunteer);
+
+            bool AskUserIfUpdate(string fieldName)
             {
-                Console.WriteLine("Invalid ID. Please enter a valid number.");
-                return;
+                Console.WriteLine($"Do you want to update {fieldName}? (yes/no): ");
+                string? response = Console.ReadLine()?.Trim().ToLower();
+                return response == "yes" || response == "y";
             }
 
-            var existingVolunteer = s_dalVolunteer!.Read(id);
-            if (existingVolunteer != null)
+            string GetValidInput(string prompt)
             {
-                Console.WriteLine($"Current Name: {existingVolunteer.Name}");
-                Console.WriteLine("Enter new Name (leave empty to keep current):");
-                string? newName = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(newName))
-                    existingVolunteer = existingVolunteer with { Name = newName };
-                s_dalVolunteer.Update(existingVolunteer);
-                Console.WriteLine("Volunteer updated successfully!");
+                string? input;
+                do
+                {
+                    Console.Write(prompt);
+                    input = Console.ReadLine()?.Trim();
+                    if (string.IsNullOrEmpty(input))
+                        Console.WriteLine("Input cannot be empty. Please try again.");
+                } while (string.IsNullOrEmpty(input));
+
+                return input!;
+            }
+
+            if (volunteer != null)
+            {
+                Volunteer newVolunteer = new()
+                {
+                    Name = AskUserIfUpdate("Volunteer name") ? GetValidInput("Enter Volunteer name: ") : volunteer.Name,
+                    Phone = AskUserIfUpdate("Cellphone number") ? GetValidInput("Enter Cellphone number: ") : volunteer.Phone,
+                    Email = AskUserIfUpdate("Email") ? GetValidInput("Enter Email: ") : volunteer.Email,
+                    Address = AskUserIfUpdate("Full Address") ? GetValidInput("Enter Full Address: ") : volunteer.Address,
+                    Latitude = AskUserIfUpdate("Latitude") && double.TryParse(GetValidInput("Enter Latitude: "), out double parsedLatitude) ? parsedLatitude : volunteer.Latitude,
+                    Longitude = AskUserIfUpdate("Longitude") && double.TryParse(GetValidInput("Enter Longitude: "), out double parsedLongitude) ? parsedLongitude : volunteer.Longitude,
+                    Role = AskUserIfUpdate("Volunteer Role") && Enum.TryParse(GetValidInput("Enter Volunteer Role (manager/volunteer): "), out DO.Role parsedRole) ? parsedRole : volunteer.Role,
+                    IsActive = AskUserIfUpdate("Active") && bool.TryParse(GetValidInput("Enter Active (true/false): "), out bool parsedIsActive) ? parsedIsActive : volunteer.IsActive,
+                    DistanceType = AskUserIfUpdate("Distance Type") && Enum.TryParse(GetValidInput("Enter Distance Type (aerial_distance, walking_distance, driving_distance): "), out DO.DistanceType parsedDistanceTypes) ? parsedDistanceTypes : volunteer.DistanceType,
+                    MaxDistanceForCall = AskUserIfUpdate("Max Distance") && double.TryParse(GetValidInput("Enter Max Distance: "), out double parsedMaxDistance) ? parsedMaxDistance : volunteer.MaxDistanceForCall,
+                    Password = AskUserIfUpdate("Password") ? GetValidInput("Enter Password: ") : volunteer.Password,
+                };
+
+                s_dalVolunteer?.Update(newVolunteer);
+                Console.WriteLine("Volunteer updated successfully.");
+                Console.WriteLine(newVolunteer!.ToString());
             }
             else
             {
@@ -1548,72 +668,93 @@ namespace DalTest
             Console.WriteLine("All volunteers deleted successfully!");
         }
 
-        private static void ManageConfiguration()
+        private static void ConfigurationMenu()
         {
-            while (true)
+            Console.Clear();
+            Console.WriteLine("\nConfiguration Menu:");
+            Console.WriteLine("0. Back to Main Menu");
+            Console.WriteLine("1. Advance Clock by 1 minute");
+            Console.WriteLine("2. Advance Clock by 1 hour");
+            Console.WriteLine("3. Advance Clock by 1 month");
+            Console.WriteLine("4. Advance Clock by 1 year");
+            Console.WriteLine("5. Display current Clock value");
+            Console.WriteLine("6. Set a new value for any configuration variable");
+            Console.WriteLine("7. Show current value for any configuration variable");
+            Console.WriteLine("8. Reset Configuration");
+
+            bool isRunning = true;
+
+            do
             {
-                Console.WriteLine("\nConfiguration Menu:");
-                Console.WriteLine("1. Advance Clock by 1 minute");
-                Console.WriteLine("2. Advance Clock by 1 hour");
-                Console.WriteLine("3. Display current Clock value");
-                Console.WriteLine("4. Reset Configuration");
-                Console.WriteLine("Press 'exit' to return to main menu.");
-                Console.Write("Enter your choice: ");
-
-                string? choice = Console.ReadLine();
-
-                if (choice == null || choice.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                    break;
-
                 try
                 {
+                    Console.Write("Enter your choice: ");
+                    int choice = TryGetValidChoice();
                     switch (choice)
                     {
-                        case "1":
-                            s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
-                            Console.WriteLine("Clock advanced by 1 minute.");
-                            break;
-                        case "2":
-                            s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1);
-                            Console.WriteLine("Clock advanced by 1 hour.");
-                            break;
-                        case "3":
-                            Console.WriteLine($"Current Clock: {s_dalConfig!.Clock}");
-                            break;
-                        case "4":
-                            s_dalConfig!.Reset();
-                            Console.WriteLine("Configuration reset successfully!");
-                            break;
-                        default:
-                            Console.WriteLine("Invalid choice. Please try again.");
-                            break;
+                        case 0: isRunning = false; break;
+                        case 1: s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1); Console.WriteLine("Clock advanced by 1 minute."); break;
+                        case 2: s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1); Console.WriteLine("Clock advanced by 1 hour."); break;
+                        case 3: s_dalConfig!.Clock = s_dalConfig.Clock.AddMonths(1); Console.WriteLine("Clock advanced by 1 month."); break;
+                        case 4: s_dalConfig!.Clock = s_dalConfig.Clock.AddYears(1); Console.WriteLine("Clock advanced by 1 year."); break;
+                        case 5: Console.WriteLine($"Current Clock: {s_dalConfig!.Clock}"); break;
+                        case 6: SetClockOrRiskRange(); ; break;
+                        case 7: ShowClockOrRiskRange(); break;
+                        case 8: s_dalConfig!.Reset(); Console.WriteLine("Configuration reset successfully!"); break;
+                        default: Console.WriteLine("Invalid choice. Please try again."); break;
                     }
+
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                 }
+            } while (isRunning);
+        }
+        private static void SetClockOrRiskRange()
+        {
+            Console.WriteLine("Enter C/R for to choose Clock or RiskRange: ");
+            if (!char.TryParse(Console.ReadLine(), out char choice))
+                throw new FormatException("Invalid input. Please enter a single character.");
+            switch (choice)
+            {
+                case 'C':
+                    Console.WriteLine("Enter new Date: ");
+                    if (!DateTime.TryParse(Console.ReadLine(), out DateTime newClock))
+                    {
+                        throw new FormatException("Invalid input. Please enter a single character.");
+                    }
+                    s_dalConfig!.Clock = newClock;
+                    break;
+                case 'R':
+                    Console.WriteLine("Enter new Time Span: ");
+                    if (!TimeSpan.TryParse(Console.ReadLine(), out TimeSpan newRiskRange))
+                    {
+                        throw new FormatException("Invalid input. Please enter a single character.");
+                    }
+                    s_dalConfig!.RiskRange = newRiskRange;
+                    break;
+                default:
+                    Console.WriteLine("Wrong choice!");
+                    break;
             }
         }
-        private static void DisplayAllData()
+        private static void ShowClockOrRiskRange()
         {
-            try
+            Console.WriteLine("Enter C/R for to choose Clock or RiskRange: ");
+            if (!char.TryParse(Console.ReadLine(), out char choice))
+                throw new FormatException("Invalid input. Please enter a single character.");
+            switch (choice)
             {
-                Console.WriteLine("\nAll Assignments:");
-                foreach (var assignment in s_dalAssignment!.ReadAll())
-                    Console.WriteLine(assignment);
-
-                Console.WriteLine("\nAll Calls:");
-                foreach (var call in s_dalCall!.ReadAll())
-                    Console.WriteLine(call);
-
-                Console.WriteLine("\nAll Volunteers:");
-                foreach (var volunteer in s_dalVolunteer!.ReadAll())
-                    Console.WriteLine(volunteer);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error displaying data: {ex.Message}");
+                case 'C':
+                    Console.WriteLine(s_dalConfig!.Clock);
+                    break;
+                case 'R':
+                    Console.WriteLine(s_dalConfig!.RiskRange);
+                    break;
+                default:
+                    Console.WriteLine("Wrong choice!");
+                    break;
             }
         }
 
