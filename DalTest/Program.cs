@@ -1,8 +1,6 @@
 ﻿using Dal;
 using DalApi;
 using DO;
-using System.Security.Cryptography;
-using System.Xml.Linq;
 
 namespace DalTest
 {
@@ -18,7 +16,8 @@ namespace DalTest
             try
             {
                 bool isRunning = true;
-                do {
+                do
+                {
                     PrintMainMenu();
                     int choice = TryGetValidChoice();
 
@@ -207,38 +206,51 @@ namespace DalTest
                 Console.WriteLine("No assignments found.");
         }
 
-        private static void UpdateAssignment() {
+        private static void UpdateAssignment()
+        {
+
+            bool AskUserIfUpdate(string fieldName)
+            {
+                Console.WriteLine($"Do you want to update {fieldName}? (y/n): ");
+                string response = Console.ReadLine()?.Trim().ToLower()!;
+                return response == "y" || response == "yes";
+            }
+
+
+            string GetValidInput(string prompt)
+            {
+                string? input;
+                do
+                {
+                    Console.Write(prompt);
+                    input = Console.ReadLine()?.Trim();
+                    if (string.IsNullOrEmpty(input))
+                        Console.WriteLine("Input cannot be empty. Please try again.");
+                } while (string.IsNullOrEmpty(input));
+
+                return input!;
+            }
             Console.Write("Enter Assignment ID to update: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
                 throw new FormatException("Call ID is invalid!");
             var assignment = s_dalAssignment?.Read(id);
             if (assignment != null)
             {
-                Console.WriteLine(assignment);
-                Console.Write("Enter volunteer id:  ");
-                string volunteerIdInput = Console.ReadLine()!;
-                int volunteerId = string.IsNullOrEmpty(volunteerIdInput) || !int.TryParse(volunteerIdInput, out int vId) ? assignment.VolunteerId : vId;
-                Console.Write("Enter call id:  ");
-                string callIdInput = Console.ReadLine()!;
-                int callId = string.IsNullOrEmpty(callIdInput) || !int.TryParse(callIdInput, out int cId) ? assignment.CallId : cId;
-                Console.Write("Enter Start time:(dd/mm/yy hh:mm:ss) ");
-                string startTimeInput = Console.ReadLine()!;
-                DateTime? startTime = string.IsNullOrEmpty(startTimeInput) || !DateTime.TryParse(startTimeInput, out DateTime ent) ? assignment.EntryTimeForTreatment : ent;
-                Console.Write("Enter end time (dd/mm/yy hh:mm:ss): ");
-                string endTimeInput = Console.ReadLine()!;
-                DateTime? endTime = string.IsNullOrEmpty(endTimeInput) || !DateTime.TryParse(endTimeInput, out DateTime end) ? assignment.EndTimeForTreatment : end;
-                Console.Write("Enter end type(was_treated, self_cancellation, manager_cancellation, expired): ");
-                string endTypeInput = Console.ReadLine()!;
-                DO.TypeOfFinishTreatment? endType = string.IsNullOrEmpty(endTypeInput) || !Enum.TryParse(endTypeInput, out DO.TypeOfFinishTreatment eType) ? assignment.TypeOfFinishTreatment : eType;
                 Assignment newAssignment = new()
                 {
                     ID = assignment.ID,
-                    VolunteerId = volunteerId,
-                    CallId = callId,
-                    EntryTimeForTreatment = startTime ?? assignment.EntryTimeForTreatment,
-                    EndTimeForTreatment = endTime ?? assignment.EndTimeForTreatment,
-                    TypeOfFinishTreatment = (endType != DO.TypeOfFinishTreatment.OutOfRangeCancellation) && (endType != DO.TypeOfFinishTreatment.ManagerCancellation) && (endType != DO.TypeOfFinishTreatment.SelfCancellation) && (endType != DO.TypeOfFinishTreatment.Treated) ? assignment.TypeOfFinishTreatment : endType
+                    VolunteerId = AskUserIfUpdate("Volunteer ID") && int.TryParse(GetValidInput("Enter volunteer ID: "), out int parsedVolunteerId)
+        ? parsedVolunteerId : assignment.VolunteerId,
+                    CallId = AskUserIfUpdate("Call ID") && int.TryParse(GetValidInput("Enter call ID: "), out int parsedCallId)
+        ? parsedCallId : assignment.CallId,
+                    EntryTimeForTreatment = AskUserIfUpdate("Start Time") && DateTime.TryParse(GetValidInput("Enter Start Time (dd/mm/yy hh:mm:ss): "), out DateTime parsedStartTime)
+        ? parsedStartTime : assignment.EntryTimeForTreatment,
+                    EndTimeForTreatment = AskUserIfUpdate("End Time") && DateTime.TryParse(GetValidInput("Enter End Time (dd/mm/yy hh:mm:ss): "), out DateTime parsedEndTime)
+        ? parsedEndTime : assignment.EndTimeForTreatment,
+                    TypeOfFinishTreatment = AskUserIfUpdate("End Type") && Enum.TryParse(GetValidInput("Enter End Type ( Treated(0),  SelfCancellation(1),  ManagerCancellation(2),  OutOfRangeCancellation(3)): "), out DO.TypeOfFinishTreatment parsedEndType)
+        ? parsedEndType : assignment.TypeOfFinishTreatment
                 };
+
                 s_dalAssignment?.Update(newAssignment);
                 Console.WriteLine("Assignment updated successfully.");
                 Console.WriteLine(newAssignment);
@@ -246,7 +258,7 @@ namespace DalTest
             else
                 Console.WriteLine("Assignment not found.");
         }
-private static void DeleteAssignment()
+        private static void DeleteAssignment()
         {
             Console.Write("Enter Assignment ID to delete: ");
             int id = int.Parse(Console.ReadLine()!);
@@ -301,7 +313,7 @@ private static void DeleteAssignment()
 
         private static void CreateCall()
         {
-            Console.Write("Enter Call Type (transportation, car_accident, vehicle_breakdown, search_and_rescue): ");
+            Console.Write("Enter Call Type ( ToPrepareFood(0),   ToCarryFood(1),  ToPackageFood(2),   ToDonateRawMaterials(3),   ToCommunityCookingNights(4)): ");
             if (!Enum.TryParse(Console.ReadLine()!, out DO.TypeOfCall call_type))
                 throw new FormatException("Call Type is invalid!");
             Console.Write("Enter Call Description: ");
@@ -319,11 +331,11 @@ private static void DeleteAssignment()
                 throw new FormatException("End time is invalid!");
             Call newCall = new()
             {
-                TypeOfCall = call_type,                   
-                CallDescription = verbal_description,    
-                Address = full_address,                
-                Latitude = latitude,                      
-                Longitude = longitude,                     
+                TypeOfCall = call_type,
+                CallDescription = verbal_description,
+                Address = full_address,
+                Latitude = latitude,
+                Longitude = longitude,
                 MaxTimeForClosing = endTime
             };
             s_dalCall?.Create(newCall);
@@ -399,9 +411,9 @@ private static void DeleteAssignment()
 
             Call newCall = new()
             {
-                ID = call.ID, // ID אינו משתנה
+                ID = call.ID,
                 TypeOfCall = AskUserIfUpdate("Call Type")
-                    && Enum.TryParse(GetValidInput("Enter Call Type (transportation, car_accident, vehicle_breakdown, search_and_rescue): "), out DO.TypeOfCall cType)
+                    && Enum.TryParse(GetValidInput("Enter Call Type (ToPrepareFood(0),   ToCarryFood(1),  ToPackageFood(2),  ToDonateRawMaterials(3),   ToCommunityCookingNights(4)): "), out DO.TypeOfCall cType)
                     ? cType : call.TypeOfCall,
                 CallDescription = AskUserIfUpdate("Call Description")
                     ? GetValidInput("Enter Call Description: ")
@@ -421,7 +433,6 @@ private static void DeleteAssignment()
             Console.WriteLine("Call updated successfully.");
             Console.WriteLine(newCall);
         }
-
 
         private static void DeleteCall()
         {
@@ -499,13 +510,13 @@ private static void DeleteAssignment()
             Console.Write("Enter Longitude: ");
             if (!double.TryParse(Console.ReadLine(), out double longitude))
                 throw new FormatException("Longitude is invalid!");
-            Console.Write("Enter Role (manager/volunteer): ");
+            Console.Write("Enter Role (Manager/Volunteer): ");
             if (!Enum.TryParse(Console.ReadLine(), out Role role))
                 throw new FormatException("Role is invalid!");
-            Console.Write("Enter if Is Active (true/false): ");
+            Console.Write("Enter if Is Active (True/False): ");
             if (!bool.TryParse(Console.ReadLine(), out bool isActive))
                 throw new FormatException("IsActive is invalid!");
-            Console.Write("Enter Distance Type (AirDistance,WalkingDistance,DrivingDistance: ");
+            Console.Write("Enter Distance Type (AirDistance (0),WalkingDistance (1),DrivingDistance (2): ");
             if (!Enum.TryParse(Console.ReadLine(), out DistanceType distanceType))
                 throw new FormatException("DistanceType is invalid!");
             Console.Write("Enter Max Distance (km): ");
@@ -605,7 +616,7 @@ private static void DeleteAssignment()
             {
                 Console.WriteLine($"Do you want to update {fieldName}? (yes/no): ");
                 string? response = Console.ReadLine()?.Trim().ToLower();
-                return response == "yes" || response == "y";
+                return response == "yes" || response == "y" || response == "0";
             }
 
             string GetValidInput(string prompt)
@@ -626,19 +637,19 @@ private static void DeleteAssignment()
             {
                 Volunteer newVolunteer = new()
                 {
+                    ID = AskUserIfUpdate("Volunteer ID") && int.TryParse(GetValidInput("Enter volunteer ID: "), out int parsedID) ? parsedID : volunteer.ID,
                     Name = AskUserIfUpdate("Volunteer name") ? GetValidInput("Enter Volunteer name: ") : volunteer.Name,
                     Phone = AskUserIfUpdate("Cellphone number") ? GetValidInput("Enter Cellphone number: ") : volunteer.Phone,
                     Email = AskUserIfUpdate("Email") ? GetValidInput("Enter Email: ") : volunteer.Email,
                     Address = AskUserIfUpdate("Full Address") ? GetValidInput("Enter Full Address: ") : volunteer.Address,
                     Latitude = AskUserIfUpdate("Latitude") && double.TryParse(GetValidInput("Enter Latitude: "), out double parsedLatitude) ? parsedLatitude : volunteer.Latitude,
                     Longitude = AskUserIfUpdate("Longitude") && double.TryParse(GetValidInput("Enter Longitude: "), out double parsedLongitude) ? parsedLongitude : volunteer.Longitude,
-                    Role = AskUserIfUpdate("Volunteer Role") && Enum.TryParse(GetValidInput("Enter Volunteer Role (manager/volunteer): "), out DO.Role parsedRole) ? parsedRole : volunteer.Role,
-                    IsActive = AskUserIfUpdate("Active") && bool.TryParse(GetValidInput("Enter Active (true/false): "), out bool parsedIsActive) ? parsedIsActive : volunteer.IsActive,
+                    Role = AskUserIfUpdate("Volunteer Role") && Enum.TryParse(GetValidInput("Enter Volunteer Role (Manager/Volunteer): "), out DO.Role parsedRole) ? parsedRole : volunteer.Role,
+                    IsActive = AskUserIfUpdate("Active") && bool.TryParse(GetValidInput("Enter Active (True/False): "), out bool parsedIsActive) ? parsedIsActive : volunteer.IsActive,
                     DistanceType = AskUserIfUpdate("Distance Type") && Enum.TryParse(GetValidInput("Enter Distance Type (aerial_distance, walking_distance, driving_distance): "), out DO.DistanceType parsedDistanceTypes) ? parsedDistanceTypes : volunteer.DistanceType,
                     MaxDistanceForCall = AskUserIfUpdate("Max Distance") && double.TryParse(GetValidInput("Enter Max Distance: "), out double parsedMaxDistance) ? parsedMaxDistance : volunteer.MaxDistanceForCall,
                     Password = AskUserIfUpdate("Password") ? GetValidInput("Enter Password: ") : volunteer.Password,
                 };
-
                 s_dalVolunteer?.Update(newVolunteer);
                 Console.WriteLine("Volunteer updated successfully.");
                 Console.WriteLine(newVolunteer!.ToString());

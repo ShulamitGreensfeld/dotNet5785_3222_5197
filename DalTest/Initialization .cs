@@ -2,26 +2,27 @@
 using DalApi;
 using DO;
 //using System.Security.Cryptography.X509Certificates;
-
+/// <summary>
+/// A class that initializes the DB lists with some data for the test class.
+/// </summary>
 public static class Initialization
 {
     private static IAssignment? s_dalAssignment; //stage 1
     private static ICall? s_dalCall; //stage 1
     private static IVolunteer? s_dalVolunteer; //stage 1
     private static IConfig? s_dalConfig; //stage 1
-
     private static readonly Random s_rand = new();
 
+    /// <summary>
+    /// To fill up the assignment list in the DataSource with assignments.
+    /// </summary>
     private static void CreateAssignments()
     {
         List<Volunteer> volunteersList = s_dalVolunteer!.ReadAll();
         List<Call> callsList = s_dalCall!.ReadAll();
         foreach (var call in callsList)
         {
-            // התעלמות מקריאות ללא זמן סיום מקסימלי
             if (call.MaxTimeForClosing == null) continue;
-
-            // וידוא שיש מתנדבים ברשימה
             if (!volunteersList.Any()) continue;
 
             DateTime minTime = call.OpeningTime;
@@ -30,20 +31,15 @@ public static class Initialization
 
             if (diff.TotalMinutes <= 0) continue;
 
-            // יצירת זמן אקראי
             DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)diff.TotalMinutes));
 
-            // בחירת מתנדב אקראי
             Volunteer randomVolunteer = volunteersList[s_rand.Next(volunteersList.Count)];
 
-            // סוג טיפול רנדומלי
             TypeOfFinishTreatment finishType = (TypeOfFinishTreatment)s_rand.Next(Enum.GetValues(typeof(TypeOfFinishTreatment)).Length - 1);
 
-            // בדיקה אם ההקצאה קיימת
             if (s_dalAssignment!.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID))
                 continue;
 
-            // יצירת הקצאה
             s_dalAssignment.Create(new Assignment
             {
                 CallId = call.ID,
@@ -331,7 +327,7 @@ public static class Initialization
         Console.WriteLine("Reset Configuration values and List values...");
         s_dalConfig.Reset(); //stage 1
         s_dalVolunteer.DeleteAll(); //stage 1
-        Console.WriteLine("Initializing Students list ...");
+        Console.WriteLine("Initializing Volanteer list ...");
         createCall();
         CreateAssignments();
         createVolunteer();
