@@ -6,9 +6,9 @@ namespace DalTest
 {
     public static class Program
     {
-        private static IAssignment? s_dalAssignment = new AssignmentImplementation();
         private static ICall? s_dalCall = new CallImplementation();
         private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();
+        private static IAssignment? s_dalAssignment = new AssignmentImplementation();
         private static IConfig? s_dalConfig = new ConfigImplementation();
 
         public static void Main()
@@ -72,9 +72,9 @@ namespace DalTest
             {
                 try
                 {
-                    s_dalAssignment!.DeleteAll();
                     s_dalCall!.DeleteAll();
                     s_dalVolunteer!.DeleteAll();
+                    s_dalAssignment!.DeleteAll();
                     s_dalConfig!.Reset();
                     Console.WriteLine("Database and configuration reset successfully!");
                 }

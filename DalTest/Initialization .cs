@@ -1,21 +1,14 @@
 ﻿namespace DalTest;
 using DalApi;
 using DO;
-//using System.Security.Cryptography.X509Certificates;
-/// <summary>
-/// A class that initializes the DB lists with some data for the test class.
-/// </summary>
 public static class Initialization
 {
-    private static IAssignment? s_dalAssignment; //stage 1
     private static ICall? s_dalCall; //stage 1
     private static IVolunteer? s_dalVolunteer; //stage 1
+    private static IAssignment? s_dalAssignment; //stage 1
     private static IConfig? s_dalConfig; //stage 1
     private static readonly Random s_rand = new();
 
-    /// <summary>
-    /// To fill up the assignment list in the DataSource with assignments.
-    /// </summary>
     private static void CreateAssignments()
     {
         List<Volunteer> volunteersList = s_dalVolunteer!.ReadAll();
