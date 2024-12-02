@@ -19,7 +19,6 @@ public record Call
    double Latitude,
    double Longitude,
    DateTime OpeningTime,
-   DateTime ClosingTime,
    DateTime? MaxTimeForClosing=null,
    string? CallDescription = null
 )
@@ -28,5 +27,5 @@ public record Call
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Call() : this( TypeOfCall.ToCarryFood, "", 0, 0, DateTime.Now, DateTime.Now) { }
+    public Call() : this( TypeOfCall.ToCarryFood, "", 0, 0, DateTime.Now) { }
 }
