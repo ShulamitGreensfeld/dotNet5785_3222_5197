@@ -6,10 +6,11 @@ namespace DalTest
 {
     public static class Program
     {
-        private static ICall? s_dalCall = new CallImplementation();
-        private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();
-        private static IAssignment? s_dalAssignment = new AssignmentImplementation();
-        private static IConfig? s_dalConfig = new ConfigImplementation();
+        //private static ICall? s_dalCall = new CallImplementation();  //stage 1
+        //private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();  //stage 1
+        //private static IAssignment? s_dalAssignment = new AssignmentImplementation();  //stage 1
+        //private static IConfig? s_dalConfig = new ConfigImplementation();  //stage 1
+        static readonly IDal s_dal = new DalList(); //stage 2
 
         public static void Main()
         {
@@ -72,10 +73,14 @@ namespace DalTest
             {
                 try
                 {
-                    s_dalCall!.DeleteAll();
-                    s_dalVolunteer!.DeleteAll();
-                    s_dalAssignment!.DeleteAll();
-                    s_dalConfig!.Reset();
+                    //s_dalCall!.DeleteAll(); //stage1
+                    //s_dalVolunteer!.DeleteAll(); //stage1
+                    //s_dalAssignment!.DeleteAll(); //stage1
+                    //s_dalConfig!.Reset(); //stage1
+                    s_dal!.Call.DeleteAll(); //stage2
+                    s_dal!.Volunteer.DeleteAll(); //stage2
+                    s_dal!.Assignment.DeleteAll(); //stage2
+                    s_dal!.Config.Reset(); //stage2
                     Console.WriteLine("Database and configuration reset successfully!");
                 }
                 catch (Exception ex)
@@ -93,7 +98,8 @@ namespace DalTest
         {
             try
             {
-                Initialization.Do(s_dalCall, s_dalAssignment, s_dalVolunteer, s_dalConfig);
+                //Initialization.Do(s_dalCall, s_dalAssignment, s_dalVolunteer, s_dalConfig); //stage1
+                Initialization.Do(s_dal); //stage 2
                 Console.WriteLine("Database initialized successfully!");
             }
             catch (Exception ex)
@@ -165,13 +171,16 @@ namespace DalTest
         private static void CreateAssignment()
         {
             Console.WriteLine("Enter Volunteer ID: ");
-            if (!int.TryParse(Console.ReadLine()!, out int volunteerId) || (s_dalVolunteer!.Read(volunteerId) == null))
+            //if (!int.TryParse(Console.ReadLine()!, out int volunteerId) || (s_dalVolunteer!.Read(volunteerId) == null)) //stage1
+            if (!int.TryParse(Console.ReadLine()!, out int volunteerId) || (s_dal!.Volunteer.Read(volunteerId) == null)) //stage2
                 throw new FormatException("Volunteer ID is invalid!");
             Console.WriteLine("Enter Call ID: ");
-            if (!int.TryParse(Console.ReadLine()!, out int callId) || (s_dalCall!.Read(callId) == null))
+            //if (!int.TryParse(Console.ReadLine()!, out int callId) || (s_dalCall!.Read(callId) == null)) //stage1
+            if (!int.TryParse(Console.ReadLine()!, out int callId) || (s_dal!.Call.Read(callId) == null)) //stage1
                 throw new FormatException("Call ID is invalid!");
             Assignment newAssignment = new() { VolunteerId = volunteerId, CallId = callId, };
-            s_dalAssignment!.Create(newAssignment);
+            //s_dalAssignment!.Create(newAssignment); //stage1
+            s_dal!.Assignment.Create(newAssignment); //stage2
             Console.WriteLine("An Assignment was successfully created.");
         }
 
@@ -179,7 +188,8 @@ namespace DalTest
         {
             Console.Write("Enter Assignment ID to read: ");
             int id = int.Parse(Console.ReadLine()!);
-            var assignment = s_dalAssignment?.Read(id);
+            //var assignment = s_dalAssignment?.Read(id); //stage1
+            var assignment = s_dal?.Assignment.Read(id); //stage2
             if (assignment != null)
             {
                 Console.WriteLine($"Assignment ID: {assignment.ID}, Volunteer ID: {assignment.VolunteerId}, " +
@@ -192,7 +202,8 @@ namespace DalTest
 
         private static void ReadAllAssignments()
         {
-            var assignments = s_dalAssignment?.ReadAll();
+            //var assignments = s_dalAssignment?.ReadAll(); //stage1
+            var assignments = s_dal?.Assignment.ReadAll(); //stage2
             if (assignments != null)
             {
                 foreach (var assignment in assignments)
@@ -233,7 +244,8 @@ namespace DalTest
             Console.Write("Enter Assignment ID to update: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
                 throw new FormatException("Call ID is invalid!");
-            var assignment = s_dalAssignment?.Read(id);
+            //var assignment = s_dalAssignment?.Read(id); //stage1
+            var assignment = s_dal?.Assignment.Read(id); //stage2
             if (assignment != null)
             {
                 Assignment newAssignment = new()
@@ -251,7 +263,8 @@ namespace DalTest
         ? parsedEndType : assignment.TypeOfFinishTreatment
                 };
 
-                s_dalAssignment?.Update(newAssignment);
+                //s_dalAssignment?.Update(newAssignment); //stage1
+                s_dal?.Assignment.Update(newAssignment); //stage2
                 Console.WriteLine("Assignment updated successfully.");
                 Console.WriteLine(newAssignment);
             }
@@ -262,13 +275,15 @@ namespace DalTest
         {
             Console.Write("Enter Assignment ID to delete: ");
             int id = int.Parse(Console.ReadLine()!);
-            s_dalAssignment?.Delete(id);
+            //s_dalAssignment?.Delete(id); //stage1
+            s_dal?.Assignment.Delete(id); //stage2
             Console.WriteLine("Call deleted successfully.");
         }
 
         private static void DeleteAllAssignments()
         {
-            s_dalAssignment!.DeleteAll();
+            //s_dalAssignment!.DeleteAll(); //stage1
+            s_dal?.Assignment.DeleteAll(); //stage2
             Console.WriteLine("All assignments deleted successfully!");
         }
 
@@ -338,7 +353,8 @@ namespace DalTest
                 Longitude = longitude,
                 MaxTimeForClosing = endTime
             };
-            s_dalCall?.Create(newCall);
+            //s_dalCall?.Create(newCall); //stage1
+            s_dal?.Call.Create(newCall); //stage2
             Console.WriteLine("Call created successfully.");
         }
 
@@ -346,7 +362,8 @@ namespace DalTest
         {
             Console.Write("Enter Call ID to read: ");
             int id = int.Parse(Console.ReadLine()!);
-            var call = s_dalCall?.Read(id);
+            //var call = s_dalCall?.Read(id); //stage1
+            var call = s_dal?.Call.Read(id); //stage2
             if (call != null)
             {
                 Console.WriteLine($"Call ID: {call.ID}, Call Type: {call.TypeOfCall}, " +
@@ -360,7 +377,8 @@ namespace DalTest
 
         private static void ReadAllCalls()
         {
-            var calls = s_dalCall?.ReadAll();
+            //var calls = s_dalCall?.ReadAll(); //stage1
+            var calls = s_dal?.Call.ReadAll(); //stage2
             if (calls != null)
                 foreach (var call in calls)
                 {
@@ -379,7 +397,8 @@ namespace DalTest
             if (!int.TryParse(Console.ReadLine(), out int id))
                 throw new FormatException("Call ID is invalid!");
 
-            var call = s_dalCall?.Read(id);
+            //var call = s_dalCall?.Read(id); //stage1
+            var call = s_dal?.Call.Read(id); //stage2
             if (call == null)
             {
                 Console.WriteLine("Call not found.");
@@ -429,7 +448,8 @@ namespace DalTest
                     ? longitude : call.Longitude,
             };
 
-            s_dalCall?.Update(newCall);
+            //s_dalCall?.Update(newCall); //stage1
+            s_dal?.Call.Update(newCall); //stage2
             Console.WriteLine("Call updated successfully.");
             Console.WriteLine(newCall);
         }
@@ -438,13 +458,15 @@ namespace DalTest
         {
             Console.Write("Enter Call ID to delete: ");
             int id = int.Parse(Console.ReadLine()!);
-            s_dalCall?.Delete(id);
+            //s_dalCall?.Delete(id); //stage1
+            s_dal?.Call.Delete(id); //stage2
             Console.WriteLine("Call deleted successfully.");
         }
 
         private static void DeleteAllCalls()
         {
-            s_dalCall!.DeleteAll();
+            //s_dalCall!.DeleteAll(); //stage1
+            s_dal?.Call.DeleteAll(); //stage2
             Console.WriteLine("All calls deleted successfully!");
         }
 
@@ -559,7 +581,8 @@ namespace DalTest
                     MaxDistanceForCall = maxDistance,
                     Password = password,
                 };
-            s_dalVolunteer?.Create(newVolunteer);
+            //s_dalVolunteer?.Create(newVolunteer); //stage1
+            s_dal?.Volunteer.Create(newVolunteer); //stage2
             Console.WriteLine("Volunteer created successfully.");
         }
 
@@ -572,7 +595,8 @@ namespace DalTest
                 Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
                 return;
             }
-            var volunteer = s_dalVolunteer?.Read(id);
+            //var volunteer = s_dalVolunteer?.Read(id); //stage1
+            var volunteer = s_dal?.Volunteer.Read(id); //stage2
             if (volunteer != null)
             {
                 Console.WriteLine($"Volunteer ID: {volunteer.ID}, Full Name: {volunteer.Name}, Cellphone: {volunteer.Phone}, Email: {volunteer.Email}, " +
@@ -586,7 +610,8 @@ namespace DalTest
 
         private static void ReadAllVolunteers()
         {
-            var volunteers = s_dalVolunteer?.ReadAll();
+            //var volunteers = s_dalVolunteer?.ReadAll(); //stage1
+            var volunteers = s_dal?.Volunteer.ReadAll(); //stage2
             if (volunteers != null)
             {
                 int i = 1;
@@ -609,7 +634,8 @@ namespace DalTest
             if (!int.TryParse(Console.ReadLine(), out int id))
                 throw new FormatException("Volunteer ID is invalid!");
 
-            var volunteer = s_dalVolunteer?.Read(id);
+            //var volunteer = s_dalVolunteer?.Read(id); //stage1
+            var volunteer = s_dal?.Volunteer.Read(id); //stage2
             Console.WriteLine(volunteer);
 
             bool AskUserIfUpdate(string fieldName)
@@ -650,7 +676,8 @@ namespace DalTest
                     MaxDistanceForCall = AskUserIfUpdate("Max Distance") && double.TryParse(GetValidInput("Enter Max Distance: "), out double parsedMaxDistance) ? parsedMaxDistance : volunteer.MaxDistanceForCall,
                     Password = AskUserIfUpdate("Password") ? GetValidInput("Enter Password: ") : volunteer.Password,
                 };
-                s_dalVolunteer?.Update(newVolunteer);
+                //s_dalVolunteer?.Update(newVolunteer); //stage1
+                s_dal?.Volunteer.Update(newVolunteer); //stage2
                 Console.WriteLine("Volunteer updated successfully.");
                 Console.WriteLine(newVolunteer!.ToString());
             }
@@ -669,13 +696,15 @@ namespace DalTest
                 return;
             }
 
-            s_dalVolunteer!.Delete(id);
+            //s_dalVolunteer!.Delete(id); //stage1
+            s_dal!.Volunteer.Delete(id); //stage2
             Console.WriteLine("Volunteer deleted successfully!");
         }
 
         private static void DeleteAllVolunteers()
         {
-            s_dalVolunteer!.DeleteAll();
+            //s_dalVolunteer!.DeleteAll(); //stage1
+            s_dal!.Volunteer.DeleteAll(); //stage2
             Console.WriteLine("All volunteers deleted successfully!");
         }
 
@@ -704,14 +733,20 @@ namespace DalTest
                     switch (choice)
                     {
                         case 0: isRunning = false; break;
-                        case 1: s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1); Console.WriteLine("Clock advanced by 1 minute."); break;
-                        case 2: s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1); Console.WriteLine("Clock advanced by 1 hour."); break;
-                        case 3: s_dalConfig!.Clock = s_dalConfig.Clock.AddMonths(1); Console.WriteLine("Clock advanced by 1 month."); break;
-                        case 4: s_dalConfig!.Clock = s_dalConfig.Clock.AddYears(1); Console.WriteLine("Clock advanced by 1 year."); break;
-                        case 5: Console.WriteLine($"Current Clock: {s_dalConfig!.Clock}"); break;
+                        //case 1: s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1); Console.WriteLine("Clock advanced by 1 minute."); break; //stage1
+                        //case 2: s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1); Console.WriteLine("Clock advanced by 1 hour."); break; //stage1
+                        //case 3: s_dalConfig!.Clock = s_dalConfig.Clock.AddMonths(1); Console.WriteLine("Clock advanced by 1 month."); break; //stage1
+                        //case 4: s_dalConfig!.Clock = s_dalConfig.Clock.AddYears(1); Console.WriteLine("Clock advanced by 1 year."); break; //stage1
+                        //case 5: Console.WriteLine($"Current Clock: {s_dalConfig!.Clock}"); break; //stage1
+                        case 1: s_dal!.Config.Clock = s_dal!.Config.Clock.AddMinutes(1); Console.WriteLine("Clock advanced by 1 minute."); break; //stage2
+                        case 2: s_dal!.Config.Clock = s_dal!.Config.Clock.AddHours(1); Console.WriteLine("Clock advanced by 1 hour."); break; //stage2
+                        case 3: s_dal!.Config.Clock = s_dal!.Config.Clock.AddMonths(1); Console.WriteLine("Clock advanced by 1 month."); break; //stage2
+                        case 4: s_dal!.Config.Clock = s_dal!.Config.Clock.AddYears(1); Console.WriteLine("Clock advanced by 1 year."); break; //stage2
+                        case 5: Console.WriteLine($"Current Clock: {s_dal!.Config.Clock}"); break; //stage2
                         case 6: SetClockOrRiskRange(); ; break;
                         case 7: ShowClockOrRiskRange(); break;
-                        case 8: s_dalConfig!.Reset(); Console.WriteLine("Configuration reset successfully!"); break;
+                        //case 8: s_dalConfig!.Reset(); Console.WriteLine("Configuration reset successfully!"); break; //stage1
+                        case 8: s_dal!.Config.Reset(); Console.WriteLine("Configuration reset successfully!"); break; //stage2
                         default: Console.WriteLine("Invalid choice. Please try again."); break;
                     }
 
@@ -735,7 +770,8 @@ namespace DalTest
                     {
                         throw new FormatException("Invalid input. Please enter a single character.");
                     }
-                    s_dalConfig!.Clock = newClock;
+                    //s_dalConfig!.Clock = newClock;  //stage1
+                    s_dal!.Config.Clock = newClock;  //stage2
                     break;
                 case 'R':
                     Console.WriteLine("Enter new Time Span: ");
@@ -743,7 +779,8 @@ namespace DalTest
                     {
                         throw new FormatException("Invalid input. Please enter a single character.");
                     }
-                    s_dalConfig!.RiskRange = newRiskRange;
+                    //s_dalConfig!.RiskRange = newRiskRange; //stage1
+                    s_dal!.Config.RiskRange = newRiskRange; //stage2
                     break;
                 default:
                     Console.WriteLine("Wrong choice!");
@@ -758,10 +795,12 @@ namespace DalTest
             switch (choice)
             {
                 case 'C':
-                    Console.WriteLine(s_dalConfig!.Clock);
+                    //Console.WriteLine(s_dalConfig!.Clock); //stage1
+                    Console.WriteLine(s_dal!.Config.Clock); //stage2
                     break;
                 case 'R':
-                    Console.WriteLine(s_dalConfig!.RiskRange);
+                    //Console.WriteLine(s_dalConfig!.RiskRange); //stage1
+                    Console.WriteLine(s_dal!.Config.RiskRange); //stage2
                     break;
                 default:
                     Console.WriteLine("Wrong choice!");

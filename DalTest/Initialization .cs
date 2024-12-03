@@ -1,34 +1,36 @@
 ﻿using DalApi;
 using DO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DalTest
 {
     public static class Initialization
     {
-        private static ICall? s_dalCall;
-        private static IVolunteer? s_dalVolunteer;
-        private static IAssignment? s_dalAssignment;
-        private static IConfig? s_dalConfig;
+        //private static ICall? s_dalCall; //stage 1
+        //private static IVolunteer? s_dalVolunteer; //stage 1
+        //private static IAssignment? s_dalAssignment; //stage 1
+        //private static IConfig? s_dalConfig; //stage 1
+        private static IDal? s_dal; //stage 2
         private static readonly Random s_rand = new();
 
         /// <summary>
         /// Initializes the database with random data.
         /// </summary>
-        public static void Do(ICall? dalCall, IAssignment? dalAssignment, IVolunteer? dalVolunteer, IConfig? dalConfig)
+
+        //public static void Do(IStudent? dalStudent, ICourse? dalCourse, ILink? dalStudentInCourse, IConfig? dalConfig) // stage 1
+        public static void Do(IDal dal)
         {
-            s_dalCall = dalCall ?? throw new NullReferenceException("DAL for Calls cannot be null!");
-            s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL for Assignments cannot be null!");
-            s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL for Volunteers cannot be null!");
-            s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL for Config cannot be null!");
+            //s_dalCall = dalCall ?? throw new NullReferenceException("DAL for Calls cannot be null!"); //stage 1
+            //s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL for Assignments cannot be null!"); //stage 1
+            //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL for Volunteers cannot be null!"); //stage 1
+            //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL for Config cannot be null!"); //stage 1
+            s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
 
             Console.WriteLine("Resetting configuration and clearing data...");
-            s_dalConfig.Reset();
-            s_dalCall.DeleteAll();
-            s_dalVolunteer.DeleteAll();
-            s_dalAssignment.DeleteAll();
+            //s_dalConfig.Reset(); //stage 1
+            //s_dalCall.DeleteAll();//stage 1
+            //s_dalVolunteer.DeleteAll(); //stage 1
+            //s_dalAssignment.DeleteAll(); //stage 1
+            s_dal.ResetDB();//stage 2
 
             Console.WriteLine("Creating data...");
             createCall();
@@ -218,8 +220,10 @@ namespace DalTest
             TypeOfCall.ToDonateRawMaterials
         };
 
-            DateTime start = s_dalConfig!.Clock.AddHours(-7);
-            int range = (int)(s_dalConfig.Clock - start).TotalMinutes;
+            //DateTime start = s_dalConfig!.Clock.AddHours(-7); //stage 1
+            //int range = (int)(s_dalConfig.Clock - start).TotalMinutes; //stage 1
+            DateTime start = s_dal!.Config.Clock.AddHours(-7); //stage 2
+            int range = (int)(s_dal.Config.Clock - start).TotalMinutes; //stage 2
 
             for (int i = 0; i < 50; i++)
             {
@@ -237,10 +241,9 @@ namespace DalTest
                     CallDescription: CallDescriptions[index]
                 );
 
-                if (s_dalCall!.Read(newCall.ID) == null)
-                {
-                    s_dalCall.Create(newCall);
-                }
+                //if (s_dalCall!.Read(newCall.ID) == null){ s_dalCall.Create(newCall); }//stage 1
+                if (s_dal!.Call.Read(newCall.ID) == null) { s_dal.Call.Create(newCall); }//stage 2
+
             }
         }
 
@@ -297,10 +300,9 @@ namespace DalTest
                     MaxDistanceForCall = s_rand.Next(1, 100)
                 };
 
-                if (s_dalVolunteer!.Read(newVolunteer.ID) == null)
-                {
-                    s_dalVolunteer.Create(newVolunteer);
-                }
+                //if (s_dalVolunteer!.Read(newVolunteer.ID) == null){s_dalVolunteer.Create(newVolunteer);}//stage 1
+                if (s_dal!.Volunteer.Read(newVolunteer.ID) == null) { s_dal.Volunteer.Create(newVolunteer); }//stage 2
+
             }
         }
 
@@ -309,8 +311,10 @@ namespace DalTest
         /// </summary>
         private static void createAssignments()
         {
-            var volunteers = s_dalVolunteer!.ReadAll();
-            var calls = s_dalCall!.ReadAll();
+            //var volunteers = s_dalVolunteer!.ReadAll();//stage 1
+            //var calls = s_dalCall!.ReadAll();//stage 1
+            var volunteers = s_dal!.Volunteer.ReadAll();//stage 2
+            var calls = s_dal!.Call.ReadAll();//stage 2
 
             foreach (var call in calls)
             {
@@ -327,12 +331,13 @@ namespace DalTest
                 DateTime randomTime = minTime.AddMinutes(s_rand.Next((int)(maxTime - minTime).TotalMinutes));
                 TypeOfFinishTreatment finishType = (TypeOfFinishTreatment)s_rand.Next(Enum.GetValues(typeof(TypeOfFinishTreatment)).Length);
 
-                if (s_dalAssignment!.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID))
-                {
-                    continue;
-                }
+                //if (s_dalAssignment!.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID)){continue;} //stage1
+                if (s_dal!.Assignment.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID)) { continue; } //stage2
 
-                s_dalAssignment.Create(new Assignment
+
+                //s_dalAssignment.Create //stage1
+                s_dal.Assignment.Create //stage2
+                (new Assignment
                 {
                     CallId = call.ID,
                     VolunteerId = randomVolunteer.ID,
