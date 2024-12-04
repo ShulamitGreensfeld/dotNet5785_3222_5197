@@ -24,7 +24,7 @@ internal class CallImplementation : ICall
     {
         Call? newCall = Read(id);
         if (newCall == null)
-            throw new Exception($"Call with ID={id} does Not exist");
+            throw new DalDeletionImpossibleException($"Call with ID={id} does Not exist");
         else
             DataSource.Calls.Remove(newCall);
     }
@@ -50,12 +50,16 @@ internal class CallImplementation : ICall
     {
         Call? existingCall = Read(item.ID);
         if (existingCall == null)
-            throw new Exception($"Call with ID={item.ID} does Not exist");
+            throw new DalDoesNotExistException($"Call with ID={item.ID} does Not exist");
         else
         {
             Delete(item.ID); 
             Create(item); 
                           
         }
+    }
+    public Call? Read(Func<Call, bool> filter)
+    {
+        return DataSource.Calls.FirstOrDefault(filter!);
     }
 }
