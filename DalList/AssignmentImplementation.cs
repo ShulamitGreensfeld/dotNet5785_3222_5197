@@ -5,9 +5,19 @@ using System.Collections.Generic;
 
 internal class AssignmentImplementation : IAssignment
 {
+	public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) //stage 2
+	{ 
+		return filter != null
+			? from item in DataSource.Assignments
+			  where filter(item)
+			  select item
+			: from item in DataSource.Assignments
+			  select item;
+	}
+
 	public void Create(Assignment item)
 	{
-		Assignment copy = item with { ID = Config.NextAssignmentId };//hkhkj
+		Assignment copy = item with { ID = Config.NextAssignmentId };
 		DataSource.Assignments.Add(copy);
 	}
 
@@ -27,19 +37,21 @@ internal class AssignmentImplementation : IAssignment
 
 	public Assignment? Read(int id)
 	{
-		Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.ID == id);
-		return newAssignment;
-	}
+        //Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.ID == id); //stage1
+        //return newAssignment; //stage1
+         Assignment ? newAssignment= DataSource.Assignments.FirstOrDefault(assignment => assignment!.ID == id); //stage 2
+		return newAssignment; //stage2
+    }
 
-	public List<Assignment> ReadAll()
-	{
-		return new List<Assignment>(DataSource.Assignments!);
-	}
+ //   public List<Assignment> ReadAll() //stage1
+	//{
+	//	return new List<Assignment>(DataSource.Assignments!);
+	//}
 
 	public void Update(Assignment item)
 	{
-		Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.ID == item.ID);
-		if (newAssignment == null)
+        Assignment? newAssignment = Read(item.ID);
+        if (newAssignment == null)
 			throw new Exception($"Assignment with ID={item.ID} does Not exist");
 		else
 		{

@@ -5,6 +5,14 @@ using System.Collections.Generic;
 
 internal class VolunteerImplementation : IVolunteer
 {
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
+        => filter != null
+            ? from item in DataSource.Volunteers
+              where filter(item)
+              select item
+            : from item in DataSource.Volunteers
+              select item;
+
     public void Create(Volunteer item)
     {
         Volunteer? v = Read(item.ID);
@@ -30,18 +38,20 @@ internal class VolunteerImplementation : IVolunteer
 
     public Volunteer? Read(int id)
     {
-        Volunteer? newvolunteer = DataSource.Volunteers.Find(volunteer => volunteer!.ID == id);
-        return newvolunteer;
+        //Volunteer? newvolunteer = DataSource.Volunteers.Find(volunteer => volunteer!.ID == id); //stage1
+        //return newvolunteer; //stage1
+        Volunteer? newvolunteer = DataSource.Volunteers.FirstOrDefault(volunteer => volunteer!.ID == id); //stage 2
+        return newvolunteer; //stage2
     }
 
-    public List<Volunteer> ReadAll()
-    {
-        return new List<Volunteer>(DataSource.Volunteers!);
-    }
+    //public List<Volunteer> ReadAll() //stage1
+    //{
+    //    return new List<Volunteer>(DataSource.Volunteers!);
+    //}
 
     public void Update(Volunteer item)
     {
-        Volunteer? newVolunteer = DataSource.Volunteers.Find(volunteer => volunteer!.ID == item.ID);
+        Volunteer? newVolunteer = Read(item.ID);
         if (newVolunteer == null)
             throw new Exception($"Volunteer with ID={item.ID} does Not exist");
         else

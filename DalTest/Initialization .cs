@@ -10,7 +10,8 @@ namespace DalTest
         //private static IAssignment? s_dalAssignment; //stage 1
         //private static IConfig? s_dalConfig; //stage 1
         private static IDal? s_dal; //stage 2
-        private static readonly Random s_rand = new();
+        private static readonly Random s_rand = new ();
+
 
         /// <summary>
         /// Initializes the database with random data.
@@ -242,7 +243,7 @@ namespace DalTest
                 );
 
                 //if (s_dalCall!.Read(newCall.ID) == null){ s_dalCall.Create(newCall); }//stage 1
-                if (s_dal!.Call.Read(newCall.ID) == null) { s_dal.Call.Create(newCall); }//stage 2
+                if (s_dal?.Call.Read(newCall.ID) == null) { s_dal?.Call.Create(newCall); }//stage 2
 
             }
         }
@@ -313,8 +314,9 @@ namespace DalTest
         {
             //var volunteers = s_dalVolunteer!.ReadAll();//stage 1
             //var calls = s_dalCall!.ReadAll();//stage 1
-            var volunteers = s_dal!.Volunteer.ReadAll();//stage 2
-            var calls = s_dal!.Call.ReadAll();//stage 2
+            var volunteers = s_dal!.Volunteer.ReadAll().ToList();//stage 2
+            var calls = s_dal!.Call.ReadAll().ToList();//stage 2
+
 
             foreach (var call in calls)
             {
@@ -324,6 +326,7 @@ namespace DalTest
                 }
 
                 Volunteer randomVolunteer = volunteers[s_rand.Next(volunteers.Count)];
+
                 DateTime minTime = call.OpeningTime;
                 DateTime maxTime = (DateTime)call.MaxTimeForClosing;
                 if (minTime >= maxTime) continue;
@@ -332,7 +335,7 @@ namespace DalTest
                 TypeOfFinishTreatment finishType = (TypeOfFinishTreatment)s_rand.Next(Enum.GetValues(typeof(TypeOfFinishTreatment)).Length);
 
                 //if (s_dalAssignment!.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID)){continue;} //stage1
-                if (s_dal!.Assignment.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID)) { continue; } //stage2
+                if (s_dal!.Assignment.ReadAll().ToList().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID)) { continue; } //stage2
 
 
                 //s_dalAssignment.Create //stage1

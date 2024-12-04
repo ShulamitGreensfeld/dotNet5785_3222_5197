@@ -203,7 +203,7 @@ namespace DalTest
         private static void ReadAllAssignments()
         {
             //var assignments = s_dalAssignment?.ReadAll(); //stage1
-            var assignments = s_dal?.Assignment.ReadAll(); //stage2
+            var assignments = s_dal?.Assignment.ReadAll().ToList(); //stage2
             if (assignments != null)
             {
                 foreach (var assignment in assignments)
@@ -378,7 +378,7 @@ namespace DalTest
         private static void ReadAllCalls()
         {
             //var calls = s_dalCall?.ReadAll(); //stage1
-            var calls = s_dal?.Call.ReadAll(); //stage2
+            var calls = s_dal?.Call.ReadAll().ToList(); //stage2
             if (calls != null)
                 foreach (var call in calls)
                 {

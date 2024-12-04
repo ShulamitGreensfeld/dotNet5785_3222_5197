@@ -5,6 +5,15 @@ using System.Collections.Generic;
 
 internal class CallImplementation : ICall
 {
+    public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
+    { 
+        return filter != null
+            ? from item in DataSource.Calls
+              where filter(item)
+              select item
+            : from item in DataSource.Calls
+              select item;
+    }
     public void Create(Call item)
     {
         Call copy = item with { ID = Config.NextCallId };
@@ -27,14 +36,16 @@ internal class CallImplementation : ICall
 
     public Call? Read(int id)
     {
-        Call? newCall = DataSource.Calls.Find(call => call!.ID == id);
-        return newCall;
+        //Call? newCall = DataSource.Calls.Find(call => call!.ID == id); //stage1
+        //return newCall; //stage1
+        Call? newCall = DataSource.Calls.FirstOrDefault(call => call!.ID == id); //stage 2
+        return newCall; //stage2
     }
 
-    public List<Call> ReadAll()
-    {
-        return new List<Call>(DataSource.Calls!);
-    }
+    //public List<Call> ReadAll() //stage1
+    //{
+    //    return new List<Call>(DataSource.Calls!);
+    //}
     public void Update(Call item)
     {
         Call? existingCall = Read(item.ID);
