@@ -16,6 +16,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalList", "DalList\DalList.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalTest", "DalTest\DalTest.csproj", "{894A0145-0F17-4760-8130-B5FDF580CDA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalXml", "DalXml\DalXml.csproj", "{DAA33723-CACC-4452-94DD-97C139CDB915}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xml", "xml", "{CC3F541D-B5B2-4DA3-BC46-822341F7C568}"
+	ProjectSection(SolutionItems) = preProject
+		xml\assignments.xml = xml\assignments.xml
+		xml\calls.xml = xml\calls.xml
+		xml\configs.xml = xml\configs.xml
+		xml\data-config.xml = xml\data-config.xml
+		xml\volunteers.xml = xml\volunteers.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +49,10 @@ Global
 		{894A0145-0F17-4760-8130-B5FDF580CDA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{894A0145-0F17-4760-8130-B5FDF580CDA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{894A0145-0F17-4760-8130-B5FDF580CDA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAA33723-CACC-4452-94DD-97C139CDB915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAA33723-CACC-4452-94DD-97C139CDB915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAA33723-CACC-4452-94DD-97C139CDB915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAA33723-CACC-4452-94DD-97C139CDB915}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
