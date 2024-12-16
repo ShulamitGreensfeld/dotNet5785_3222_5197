@@ -19,6 +19,7 @@ public record Call
    double Latitude,
    double Longitude,
    DateTime OpeningTime,
+   TimeSpan? riskRange= null,
    DateTime? MaxTimeForClosing=null,
    string? CallDescription = null
 )

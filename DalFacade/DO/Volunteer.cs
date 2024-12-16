@@ -16,27 +16,6 @@ namespace DO;
 /// <param name="IsActive">If the volunteer has task right now</param>
 /// <param name="MaxDistanceForCall">The volunteer permition dictance</param>
 /// <param name="DistanceType">which kind of distance</param>
-//public record Volunteer
-//(
-//   int ID, 
-//   string Name,
-//   string Phone,
-//   string Email,
-//   Role Role,
-//   bool IsActive,
-//   DistanceType DistanceType,
-//   double? MaxDistanceForCall = null,
-//   string? Password = null,
-//   string? Address = null,
-//   double? Latitude = null,
-//   double? Longitude = null
-//)
-//{
-//    /// <summary>
-//    /// Default constructor for stage 3
-//    /// </summary>
-//    public Volunteer() : this(0, "", "", "", Role.Volunteer, false, DistanceType.AirDistance) { }
-//}
 public record Volunteer
 (
     int ID,

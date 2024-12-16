@@ -14,11 +14,23 @@ internal class CallImplementation : ICall
             : from item in DataSource.Calls
               select item;
     }
-    public void Create(Call item)
+    //public void Create(Call item)
+    //{
+    //    Call copy = item with { ID = Config.NextCallId };
+    //    DataSource.Calls.Add(copy);
+    //}
+    public int Create(Call item)
     {
-        Call copy = item with { ID = Config.NextCallId };
-        DataSource.Calls.Add(copy);
+        // בדיקה אם קיים כבר אובייקט עם אותו מזהה
+        Call? existingCall = DataSource.Calls.Find(element => element!.ID == item.ID);
+        if (existingCall != null)
+            throw new DalAlreadyExistsException($"An object of type Call with this ID {item.ID} already exists");
+        int newId = Dal.Config.NextCallId;
+        Call callCopy = item with { ID = newId };
+        DataSource.Calls.Add(callCopy);
+        return callCopy.ID;
     }
+
 
     public void Delete(int id)
     {
@@ -53,13 +65,21 @@ internal class CallImplementation : ICall
             throw new DalDoesNotExistException($"Call with ID={item.ID} does Not exist");
         else
         {
-            Delete(item.ID); 
-            Create(item); 
-                          
+            Delete(item.ID);
+            Create(item);
+
         }
     }
     public Call? Read(Func<Call, bool> filter)
     {
-        return DataSource.Calls.FirstOrDefault(filter!);
+        if (filter == null)
+            throw new NullException($"{nameof(filter)} Filter function cannot be null");
+
+        return DataSource.Calls.Cast<Call>().FirstOrDefault(filter);
+    }
+
+    void ICrud<Call>.Create(Call item)
+    {
+        throw new NotImplementedException();
     }
 }

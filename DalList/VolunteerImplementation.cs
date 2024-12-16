@@ -67,9 +67,11 @@ internal class VolunteerImplementation : IVolunteer
             DataSource.Volunteers.Add(item);
         }
     }
-
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
-        return DataSource.Volunteers.FirstOrDefault(filter!);
+        if (filter == null)
+            throw new NullException($"{nameof(filter)} Filter function cannot be null");
+
+        return DataSource.Volunteers.Cast<Volunteer>().FirstOrDefault(filter);
     }
 }

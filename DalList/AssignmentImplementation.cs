@@ -64,8 +64,12 @@ internal class AssignmentImplementation : IAssignment
 			DataSource.Assignments.Add(item);
 		}
 	}
+
     public Assignment? Read(Func<Assignment, bool> filter)
     {
-        return DataSource.Assignments.FirstOrDefault(filter!);
+        if (filter == null)
+            throw new NullException($"{nameof(filter)} Filter function cannot be null");
+
+        return DataSource.Assignments.Cast<Assignment>().FirstOrDefault(filter);
     }
 }

@@ -24,7 +24,7 @@ namespace DalTest
             //s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL for Assignments cannot be null!"); //stage 1
             //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL for Volunteers cannot be null!"); //stage 1
             //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL for Config cannot be null!"); //stage 1
-            s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
+            s_dal = dal ?? throw new NullException("DAL object can not be null!"); // stage 2
 
             Console.WriteLine("Resetting configuration and clearing data...");
             //s_dalConfig.Reset(); //stage 1
@@ -33,11 +33,13 @@ namespace DalTest
             //s_dalAssignment.DeleteAll(); //stage 1
             s_dal.ResetDB();//stage 2
 
-            Console.WriteLine("Creating data...");
+            Console.WriteLine("Initializing Volunteers list ...");
+            Console.WriteLine("Initializing Calls list ...");
+            Console.WriteLine("Initializing Assignments list ...");
             createCall();
             createVolunteer();
             createAssignments();
-            Console.WriteLine("Initialization completed successfully!");
+            //Console.WriteLine("Initialization completed successfully!");
         }
 
         /// <summary>
@@ -302,7 +304,7 @@ namespace DalTest
                 };
 
                 //if (s_dalVolunteer!.Read(newVolunteer.ID) == null){s_dalVolunteer.Create(newVolunteer);}//stage 1
-                if (s_dal!.Volunteer.Read(newVolunteer.ID) == null) { s_dal.Volunteer.Create(newVolunteer); }//stage 2
+                if (s_dal!.Volunteer.Read(newVolunteer.ID) == null) { s_dal!.Volunteer.Create(newVolunteer); }//stage 2
 
             }
         }

@@ -2,9 +2,10 @@
 
 public interface IDal
 {
-    IAssignment Assignment { get; }
     ICall Call { get; }
     IVolunteer Volunteer { get; }
+    IAssignment Assignment { get; }
+
     IConfig Config { get; }
     void ResetDB();
 }

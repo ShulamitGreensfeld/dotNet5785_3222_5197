@@ -10,8 +10,8 @@ namespace DalTest
         //private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();  //stage 1
         //private static IAssignment? s_dalAssignment = new AssignmentImplementation();  //stage 1
         //private static IConfig? s_dalConfig = new ConfigImplementation();  //stage 1
-        static readonly IDal s_dal = new DalList(); //stage 2
-
+        //static readonly IDal s_dal = new DalList(); //stage 2
+        static readonly IDal s_dal = new DalXml(); //stage 3
         public static void Main()
         {
             try
@@ -269,15 +269,30 @@ namespace DalTest
                 Console.WriteLine(newAssignment);
             }
             else
-                Console.WriteLine("Assignment not found.");
+                //Console.WriteLine("Assignment not found.");
+                throw new DalDoesNotExistException("This object with this id doesn't exist\n");
         }
+        //private static void DeleteAssignment()
+        //{
+        //    Console.Write("Enter Assignment ID to delete: ");
+        //    int id = int.Parse(Console.ReadLine()!);
+        //    //s_dalAssignment?.Delete(id); //stage1
+        //    Console.WriteLine("Call deleted successfully.");
+        //}
         private static void DeleteAssignment()
         {
-            Console.Write("Enter Assignment ID to delete: ");
+            Console.WriteLine("Enter Assignment ID:");
             int id = int.Parse(Console.ReadLine()!);
-            //s_dalAssignment?.Delete(id); //stage1
-            s_dal?.Assignment.Delete(id); //stage2
-            Console.WriteLine("Call deleted successfully.");
+
+            if (s_dal.Assignment!.Read(id) != null) //stage2
+            {
+                s_dal.Assignment.Delete(id);
+                Console.WriteLine("Assignment deleted successfully.");
+            }
+            else
+            {
+                throw new DalDoesNotExistException("An object with this ID does not exist.\n");
+            }
         }
 
         private static void DeleteAllAssignments()
@@ -454,13 +469,27 @@ namespace DalTest
             Console.WriteLine(newCall);
         }
 
+        //private static void DeleteCall()
+        //{
+        //    Console.Write("Enter Call ID to delete: ");
+        //    int id = int.Parse(Console.ReadLine()!);
+        //    //s_dalCall?.Delete(id); //stage1
+        //    Console.WriteLine("Call deleted successfully.");
+        //}
         private static void DeleteCall()
         {
             Console.Write("Enter Call ID to delete: ");
             int id = int.Parse(Console.ReadLine()!);
-            //s_dalCall?.Delete(id); //stage1
-            s_dal?.Call.Delete(id); //stage2
-            Console.WriteLine("Call deleted successfully.");
+
+            if (s_dal.Call!.Read(id) != null)  //stage2
+            {
+                s_dal.Call.Delete(id);
+                Console.WriteLine("Call deleted successfully.");
+            }
+            else
+            {
+                throw new DalDoesNotExistException("An object with this ID does not exist.\n");
+            }
         }
 
         private static void DeleteAllCalls()
@@ -692,8 +721,9 @@ namespace DalTest
             Console.WriteLine("Enter Volunteer ID to delete:");
             if (!int.TryParse(Console.ReadLine(), out int id))
             {
-                Console.WriteLine("Invalid ID. Please enter a valid number.");
-                return;
+                throw new DalDoesNotExistException("An object of type Volunteer with this Id does not exist");
+                //Console.WriteLine("Invalid ID. Please enter a valid number.");
+                //return;
             }
 
             //s_dalVolunteer!.Delete(id); //stage1
