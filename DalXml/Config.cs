@@ -1,4 +1,6 @@
-﻿namespace Dal;
+﻿using System.Xml.Linq;
+
+namespace Dal;
 internal static class Config
 {
     internal const string s_data_config_xml = "data-config.xml";
@@ -35,11 +37,19 @@ internal static class Config
         set => XMLTools.SetConfigDateVal(s_data_config_xml, "Clock", value);
     }
 
+    //internal static void Reset()
+    //{
+    //    NextCallId = 1000;
+    //    NextAssignmentId = 2000;
+    //    Clock = DateTime.Now;
+    //    RiskRange = TimeSpan.FromHours(2);
+    //}
     internal static void Reset()
     {
-        NextCallId = 1000;
-        NextAssignmentId = 2000;
-        Clock = DateTime.Now;
-        RiskRange = TimeSpan.FromHours(2);
+        XElement defaultConfig = XMLTools.LoadListFromXMLElement("default-config.xml");
+        NextCallId = defaultConfig.ToIntNullable("nextCallId") ?? 1000;
+        NextAssignmentId = defaultConfig.ToIntNullable("nextAssignmentId") ?? 2000;
+        Clock = defaultConfig.ToDateTimeNullable("Clock") ?? DateTime.Now;
+        RiskRange = defaultConfig.ToTimeSpanNullable("RiskRange") ?? TimeSpan.FromHours(2);
     }
 }

@@ -7,21 +7,37 @@ using System.Linq;
 
 internal class CallImplementation : ICall
 {
+    //public void Create(Call item)
+    //{
+    //    //בדיקה אם קיים כבר אובייקט עם אותו מזהה
+    //    int newId = Config.NextCallId;
+    //    List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
+    //    // בודקים אם יש אובייקט עם אותו ID
+    //    Call? existingCall = Calls.Find(element => element.ID == newId);
+    //    if (existingCall != null)
+    //        throw new DalAlreadyExistsException($"An object of type Call with this ID {newId} already exists");
+
+    //    Call callCopy = item with { ID = newId };
+    //    Calls.Add(callCopy);
+    //    XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml); // נשמור את הרשימה המעודכנת
+
+    //}
     public void Create(Call item)
     {
-        //בדיקה אם קיים כבר אובייקט עם אותו מזהה
-        int newId = Config.NextCallId;
-        List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-        // בודקים אם יש אובייקט עם אותו ID
-        Call? existingCall = Calls.Find(element => element.ID == newId);
-        if (existingCall != null)
-            throw new DalAlreadyExistsException($"An object of type Call with this ID {newId} already exists");
+        // שלב 1: שליפת ה-ID הבא מה-XML
+        int newId = XMLTools.GetAndIncreaseConfigIntVal("data-config.xml", "nextCallId");
 
+        // שלב 2: הגדרת ה-ID לאובייקט החדש
         Call callCopy = item with { ID = newId };
-        Calls.Add(callCopy);
-        XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml); // נשמור את הרשימה המעודכנת
 
+        // שלב 3: הוספת אובייקט הקריאה לרשימה
+        List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
+        Calls.Add(callCopy);
+
+        // שלב 4: שמירת הרשימה המעודכנת לקובץ XML
+        XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml);
     }
+
 
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
     {
