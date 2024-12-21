@@ -5,22 +5,6 @@ using System.Collections.Generic;
 
 internal class VolunteerImplementation : IVolunteer
 {
-    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
-        => filter != null
-            ? from item in DataSource.Volunteers
-              where filter(item)
-              select item
-            : from item in DataSource.Volunteers
-              select item;
-
-    //public void Create(Volunteer item)
-    //{
-    //    Volunteer? v = Read(item.ID);
-    //    if (v is not null)
-    //        throw new Exception($"Volunteer Object with {item.ID} already exists");
-    //    else
-    //        DataSource.Volunteers.Add(item);
-    //}
     public void Create(Volunteer item)
     {
         //for entities with normal id (not auto id)
@@ -55,6 +39,15 @@ internal class VolunteerImplementation : IVolunteer
     //{
     //    return new List<Volunteer>(DataSource.Volunteers!);
     //}
+
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
+    => filter != null
+        ? from item in DataSource.Volunteers
+          where filter(item)
+          select item
+        : from item in DataSource.Volunteers
+          select item;
+
 
     public void Update(Volunteer item)
     {

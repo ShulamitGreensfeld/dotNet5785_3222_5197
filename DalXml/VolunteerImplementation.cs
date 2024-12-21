@@ -8,8 +8,7 @@ using System.Xml.Linq;
 internal class VolunteerImplementation : IVolunteer
 {
     // Converts an XElement representing a volunteer to a Volunteer object.
-
-    static Volunteer getVolunteer(XElement v)
+    static Volunteer getVolunteer(XElement v)//stage 3
     {
         // Extract and parse the volunteer's ID.
         return new DO.Volunteer()
@@ -20,7 +19,7 @@ internal class VolunteerImplementation : IVolunteer
             Email = (string?)v.Element("Email") ?? "",
             IsActive = (bool?)v.Element("IsActive") ?? false,
             Role = Enum.TryParse<Role>((string)v.Element("Role")! ?? "", out var role) ? role : Role.Volunteer,
-            Password = (string?)v.Element("Password") ?? "",
+            Password = (string?)v.Element("Password") ?? null,
             Address = (string?)v.Element("Address") ?? "",
             Latitude = v.ToDoubleNullable("Latitude") ?? throw new FormatException("can't convert Latitude"),
             Longitude = v.ToDoubleNullable("Longitude") ?? throw new FormatException("can't convert Longitude"),
@@ -28,16 +27,18 @@ internal class VolunteerImplementation : IVolunteer
             DistanceType = Enum.TryParse<DistanceType>((string)v.Element("DistanceType")! ?? "", out var distance) ? distance : DistanceType.WalkingDistance,
         };
     }
+
     // Creates a new volunteer element in the XML file.
-    public void Create(Volunteer item)
+    public void Create(Volunteer item)//stage 3
     {
         XElement volunteerElement = CreateVolunteerElement(item);
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
         volunteersRootElem.Add(volunteerElement);
         XMLTools.SaveListToXMLElement(volunteersRootElem, Config.s_volunteers_xml);
     }
+
     // Helper method to convert a Volunteer object into an XElement.
-    private XElement CreateVolunteerElement(Volunteer item)
+    private XElement CreateVolunteerElement(Volunteer item)//stage 3
     {
         return new XElement("Volunteer",
             new XElement("Id", item.ID),
@@ -54,8 +55,9 @@ internal class VolunteerImplementation : IVolunteer
             new XElement("DistanceType", item.DistanceType.ToString())
         );
     }
+
     // Deletes a volunteer by their ID from the XML file.
-    public void Delete(int id)
+    public void Delete(int id)//stage 3
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
         XElement volunteerElem = volunteersRootElem.Elements("Volunteer")
@@ -70,26 +72,29 @@ internal class VolunteerImplementation : IVolunteer
 
     // Deletes all volunteers from the XML file.
 
-    public void DeleteAll()
+    public void DeleteAll()//stage 3
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
         volunteersRootElem.RemoveAll();
         XMLTools.SaveListToXMLElement(volunteersRootElem, Config.s_volunteers_xml);
     }
+
     // Reads a volunteer by their ID from the XML file.
-    public Volunteer? Read(int id)
+    public Volunteer? Read(int id)//stage 3
     {
         XElement? volunteerElem =
         XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(st => (int?)st.Element("Id") == id);
         return volunteerElem is null ? null : getVolunteer(volunteerElem);
     }
+
     // Reads a single volunteer that matches the given filter.
-    public Volunteer? Read(Func<Volunteer, bool> filter)
+    public Volunteer? Read(Func<Volunteer, bool> filter)//stage 3
     {
         return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v)).FirstOrDefault(filter);
     }
+
     // Reads all volunteers from the XML file, optionally filtering them.
-    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)//stage 3
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
         var volunteers = volunteersRootElem.Elements("Volunteer")
@@ -111,8 +116,9 @@ internal class VolunteerImplementation : IVolunteer
             .ToList();
         return filter == null ? volunteers : volunteers.Where(filter);
     }
+
     // Updates an existing volunteer in the XML file with new information.
-    public void Update(Volunteer item)
+    public void Update(Volunteer item)//stage 3
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
 

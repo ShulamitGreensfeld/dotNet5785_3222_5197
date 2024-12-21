@@ -7,21 +7,6 @@ using System.Linq;
 
 internal class CallImplementation : ICall
 {
-    //public void Create(Call item)
-    //{
-    //    //בדיקה אם קיים כבר אובייקט עם אותו מזהה
-    //    int newId = Config.NextCallId;
-    //    List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-    //    // בודקים אם יש אובייקט עם אותו ID
-    //    Call? existingCall = Calls.Find(element => element.ID == newId);
-    //    if (existingCall != null)
-    //        throw new DalAlreadyExistsException($"An object of type Call with this ID {newId} already exists");
-
-    //    Call callCopy = item with { ID = newId };
-    //    Calls.Add(callCopy);
-    //    XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml); // נשמור את הרשימה המעודכנת
-
-    //}
     public void Create(Call item)
     {
         // שלב 1: שליפת ה-ID הבא מה-XML

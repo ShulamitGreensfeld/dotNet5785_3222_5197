@@ -6,14 +6,14 @@ using System.Collections.Generic;
 internal class AssignmentImplementation : IAssignment
 {
     // Load all assignments from the XML file, optionally filtering them
-    public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
+    public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)//stage 3
     {
         List<Assignment> assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
         return filter != null ? assignments.Where(filter) : assignments;
     }
 
     // Create a new assignment and save it to the XML file
-    public void Create(Assignment item)
+    public void Create(Assignment item)//stage 3
     {
         // Assign a new unique ID to the assignment
         Assignment newAssignment = item with { ID = Config.NextAssignmentId };
@@ -27,7 +27,7 @@ internal class AssignmentImplementation : IAssignment
     }
 
     // Read a specific assignment by its ID
-    public Assignment? Read(int id)
+    public Assignment? Read(int id)//stage 3
     {
         Console.WriteLine($"Attempting to read assignment with ID: {id}");
 
@@ -42,7 +42,7 @@ internal class AssignmentImplementation : IAssignment
     }
 
     // Delete an assignment by its ID
-    public void Delete(int id)
+    public void Delete(int id)//stage 3
     {
         // Load assignments and find the one to delete
         List<Assignment> assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
@@ -59,14 +59,14 @@ internal class AssignmentImplementation : IAssignment
     }
 
     // Delete all assignments from the XML file
-    public void DeleteAll()
+    public void DeleteAll()//stage 3
     {
         XMLTools.SaveListToXMLSerializer(new List<Assignment>(), Config.s_assignments_xml);
         //Console.WriteLine("All assignments deleted successfully.");
     }
 
     // Update an existing assignment
-    public void Update(Assignment item)
+    public void Update(Assignment item)//stage 3
     {
         // Load assignments and find the one to update
         List<Assignment> assignments = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
@@ -83,7 +83,7 @@ internal class AssignmentImplementation : IAssignment
     }
 
     // Read a specific assignment using a filter function
-    public Assignment? Read(Func<Assignment, bool> filter)
+    public Assignment? Read(Func<Assignment, bool> filter)//stage 3
     {
         if (filter == null)
             throw new NullException("Filter function cannot be null.");
