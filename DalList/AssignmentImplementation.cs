@@ -1,7 +1,6 @@
 ﻿namespace Dal;
 using DalApi;
 using DO;
-//using System.Collections.Generic;
 using System.Linq;
 
 internal class AssignmentImplementation : IAssignment
@@ -15,11 +14,6 @@ internal class AssignmentImplementation : IAssignment
 			: from item in DataSource.Assignments
 			  select item;
 	}
-
-	//public Assignment? Read(int id)
-	//{
-	//    return DataSource.Assignments.FirstOrDefault(assignment => assignment!.ID == id);
-	//}
 	public void Create(Assignment item)
 	{
 		Assignment copy = item with { ID = Config.NextAssignmentId };
