@@ -38,7 +38,7 @@ internal class VolunteerImplementation : IVolunteer
     }
 
     // Helper method to convert a Volunteer object into an XElement.
-    private XElement CreateVolunteerElement(Volunteer item)//stage 3
+       private XElement CreateVolunteerElement(Volunteer item) // stage 3
     {
         return new XElement("Volunteer",
             new XElement("Id", item.ID),
@@ -47,14 +47,16 @@ internal class VolunteerImplementation : IVolunteer
             new XElement("Email", item.Email),
             new XElement("IsActive", item.IsActive),
             new XElement("Role", item.Role.ToString()),
-            new XElement("Password", item.Password),
             new XElement("Address", item.Address),
             new XElement("Latitude", item.Latitude),
             new XElement("Longitude", item.Longitude),
             new XElement("LargestDistance", item.MaxDistanceForCall),
-            new XElement("DistanceType", item.DistanceType.ToString())
+            new XElement("DistanceType", item.DistanceType.ToString()),
+            string.IsNullOrEmpty(item.Password) ? null : new XElement("Password", item.Password)
         );
     }
+
+
 
     // Deletes a volunteer by their ID from the XML file.
     public void Delete(int id)//stage 3
