@@ -1,8 +1,14 @@
 ﻿using DalApi;
 namespace Dal;
 
-sealed public class DalXml : IDal
+sealed internal class DalXml : IDal
 {
+    // Lazy<IDal> ensures lazy initialization and thread safety
+    private static readonly Lazy<IDal> lazyInstance = new Lazy<IDal>(() => new DalXml());
+
+    // Public static property to access the single instance
+    public static IDal Instance => lazyInstance.Value;
+    private DalXml() { }
     public ICall Call { get; } = new CallImplementation();  //stage 3
     public IVolunteer Volunteer { get; } = new VolunteerImplementation(); //stage 3
     public IAssignment Assignment { get; } = new AssignmentImplementation();//stage 3

@@ -10,7 +10,7 @@ namespace DalTest
         //private static IAssignment? s_dalAssignment; //stage 1
         //private static IConfig? s_dalConfig; //stage 1
         private static IDal? s_dal; //stage 2
-        private static readonly Random s_rand = new();
+        private static readonly Random s_rand = new();//stage 4
 
 
         /// <summary>
@@ -18,13 +18,15 @@ namespace DalTest
         /// </summary>
 
         //public static void Do(IStudent? dalStudent, ICourse? dalCourse, ILink? dalStudentInCourse, IConfig? dalConfig) // stage 1
-        public static void Do(IDal dal)
+        //public static void Do(IDal dal) //stage 2
+        public static void Do() //stage 4
         {
             //s_dalCall = dalCall ?? throw new NullReferenceException("DAL for Calls cannot be null!"); //stage 1
             //s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL for Assignments cannot be null!"); //stage 1
             //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL for Volunteers cannot be null!"); //stage 1
             //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL for Config cannot be null!"); //stage 1
-            s_dal = dal ?? throw new NullException("DAL object can not be null!"); // stage 2
+            //s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); //stage 2
+            s_dal = DalApi.Factory.Get; //stage 4
 
             Console.WriteLine("Resetting configuration and clearing data...");
             //s_dalConfig.Reset(); //stage 1
@@ -36,8 +38,8 @@ namespace DalTest
             Console.WriteLine("Initializing Volunteers list ...");
             Console.WriteLine("Initializing Calls list ...");
             Console.WriteLine("Initializing Assignments list ...");
-            createCall();
             createVolunteer();
+            createCall();
             createAssignments();
             //Console.WriteLine("Initialization completed successfully!");
         }

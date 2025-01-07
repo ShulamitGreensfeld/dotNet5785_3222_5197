@@ -1,7 +1,12 @@
 ﻿namespace Dal;
 using DalApi;
-sealed public class DalList : IDal
+sealed internal class DalList : IDal
 {
+    // Lazy<IDal> ensures lazy initialization and thread safety
+    private static readonly Lazy<IDal> lazyInstance = new Lazy<IDal>(() => new DalList());
+    // Public static property to access the single instance
+    public static IDal Instance => lazyInstance.Value;
+    private DalList() { }
     public IAssignment Assignment { get; } = new AssignmentImplementation();
 
     public ICall Call { get; } = new CallImplementation();
