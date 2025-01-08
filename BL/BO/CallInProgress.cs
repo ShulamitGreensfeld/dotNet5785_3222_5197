@@ -16,7 +16,7 @@ namespace BO
         public DateTime OpeningTime { get; set; }
         public DateTime? MaxTimeForClosing { get; set; }
         public DateTime EntraceTime { get; set; }
-        public double destination { get; set; }
-        public CallStatus CallStatus {  get; set; }
+        public double Distance { get; set; }
+        public CallTritingByVulanteerStatus CallTritingByVulanteerStatus {  get; set; }
     }
 }

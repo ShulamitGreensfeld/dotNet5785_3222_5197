@@ -8,5 +8,10 @@ namespace BO
 {
     public class CallAssignInList
     {
+        public int? VolunteerId { get; set; }
+        public string? VolunteerName { get; set; } = string.Empty;
+        public DateTime EntranceTime { get; set; }
+        public DateTime? FinishingTime { get; set; }
+        public TypeOfFinishTreatment? TypeOfFinishTreatment {  get; set; }
     }
 }

@@ -24,8 +24,8 @@ public enum TypeOfCall
 
 public enum TypeOfFinishTreatment
 {
-  Treated,
-  SelfCancellation,
-  ManagerCancellation,
-  OutOfRangeCancellation
+    Treated,
+    SelfCancellation,
+    ManagerCancellation,
+    OutOfRangeCancellation
 }

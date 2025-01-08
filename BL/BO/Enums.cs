@@ -18,7 +18,7 @@ public enum TypeOfCall
     ToDonateRawMaterials,
     ToCommunityCookingNights
 }
-public enum CallStatus
+public enum CallTritingByVulanteerStatus
 {
     Treating,
     NextToRange
@@ -29,4 +29,13 @@ public enum TypeOfFinishTreatment
     SelfCancellation,
     ManagerCancellation,
     OutOfRangeCancellation
+}
+public enum CallStatus
+{
+    open,
+    inTreat,
+    closed,
+    openInDanger,
+    inTreatInDanger,
+    OutOfRange
 }
