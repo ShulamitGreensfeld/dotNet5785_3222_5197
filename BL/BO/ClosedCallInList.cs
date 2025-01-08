@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BO
+{
+    public class ClosedCallInList
+    {
+        public int Id { get; init; }
+        public TypeOfCall TypeOfCall { get; set; }
+        public string Adress { get; set; } = string.Empty;
+        public DateTime OpeningTime { get; set; }
+        public DateTime EntraceTime { get; set; }
+        public DateTime? FinishTime { get; set; }
+        public TypeOfFinishTreatment? TypeOfFinishTreatment {  get; set; }
+    }
+}
