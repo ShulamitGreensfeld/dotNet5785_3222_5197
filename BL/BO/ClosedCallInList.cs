@@ -10,7 +10,7 @@ namespace BO
     {
         public int Id { get; init; }
         public TypeOfCall TypeOfCall { get; set; }
-        public string Adress { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
         public DateTime OpeningTime { get; set; }
         public DateTime EntraceTime { get; set; }
         public DateTime? FinishTime { get; set; }

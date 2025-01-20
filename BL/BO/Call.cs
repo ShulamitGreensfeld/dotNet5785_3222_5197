@@ -11,15 +11,12 @@ namespace BO
         public int Id {  get; set; }
         public TypeOfCall TypeOfCall { get; set; }
         public string? CallDescription { get; set; }
-        public string Adress { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public DateTime OpeningTime { get; set; }
         public DateTime? MaxTimeForClosing { get; set; }
         public CallStatus CallStatus { get; set; }
         public List<BO.CallAssignInList>? AssignmentList { get; set; } = null;
-
-
-
     }
 }

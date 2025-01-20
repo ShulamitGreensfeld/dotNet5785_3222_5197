@@ -11,7 +11,7 @@ namespace BO
         public int Id { get; init; }
         public TypeOfCall TypeOfCall { get; set; }
         public string? CallDescription { get; set; } 
-        public string Adress { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
         public DateTime OpeningTime { get; set; }
         public DateTime? MaxTimeForClosing { get; set; }
         public double Distance { get; set; }

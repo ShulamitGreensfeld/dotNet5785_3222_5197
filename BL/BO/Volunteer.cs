@@ -13,7 +13,7 @@ namespace BO
         public  string Phone {  get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string? Password { get; set; }
-        public string? Adress { get; set; }
+        public string? Address { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public Role Role { get; set; }
