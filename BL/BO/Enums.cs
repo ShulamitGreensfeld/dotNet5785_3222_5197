@@ -39,3 +39,12 @@ public enum CallStatus
     inTreatInDanger,
     OutOfRange
 }
+
+public enum TimeUnit 
+{ 
+    YEAR,
+    MONTH,
+    DAY,
+    HOUR,
+    MINUTE 
+}
