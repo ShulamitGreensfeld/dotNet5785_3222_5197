@@ -173,3 +173,28 @@ public class BlInternalErrorException : Exception
     public BlInternalErrorException(string message, Exception innerException)
         : base(message, innerException) { }
 }
+
+public class BlInvalidLoginException : Exception
+{
+    public BlInvalidLoginException(string message) : base(message) { }
+}
+
+public class BlEntityNotFoundException : Exception
+{
+    public BlEntityNotFoundException(string message, Exception innerException) : base(message, innerException) { }
+}
+
+
+public class BlUnauthorizedAccessException : Exception
+{
+    public BlUnauthorizedAccessException(string message) : base(message) { }
+}
+public class BlDuplicateEntityException : Exception
+{
+    public BlDuplicateEntityException(string message, Exception? innerException = null) : base(message, innerException) { }
+}
+
+public class BlDataAccessException : Exception
+{
+    public BlDataAccessException(string message, Exception innerException) : base(message, innerException) { }
+}
