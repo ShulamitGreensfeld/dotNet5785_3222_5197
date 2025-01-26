@@ -42,11 +42,6 @@ internal class AssignmentImplementation : IAssignment
 		return newAssignment; //stage2
 	}
 
-	//   public List<Assignment> ReadAll() //stage1
-	//{
-	//	return new List<Assignment>(DataSource.Assignments!);
-	//}
-
 	public void Update(Assignment item)
 	{
         Assignment? newAssignment = Read(item.ID);

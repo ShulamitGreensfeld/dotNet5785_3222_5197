@@ -2,11 +2,61 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
-
+/// <summary>
+/// The implementation class for the Calls. Implementing all the CRUD functions.
+/// </summary>
 internal class CallImplementation : ICall
 {
+    /// <summary>
+    /// A function that creates a new object.
+    /// </summary>
+    /// <param name="item">The new item</param>
+    public void Create(Call item)
+    {
+        int newId = Config.NextCallId;
+        Call copy = item with { ID = newId };
+        DataSource.Calls.Add(copy);
+    }
+
+    /// <summary>
+    /// A function that deletes a certain item.
+    /// </summary>
+    /// <param name="id">The item's id</param>
+    /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
+    public void Delete(int id)
+    {
+        Call? newCall = Read(id);
+        if (newCall is null)
+            throw new DalDoesNotExistException($"Call with ID={id} does Not exist");
+        else
+            DataSource.Calls.Remove(newCall);
+    }
+
+    /// <summary>
+    /// Delete all the items of this entity.
+    /// </summary>
+    public void DeleteAll()
+    {
+        DataSource.Calls.Clear();
+    }
+
+    /// <summary>
+    /// Find an item according to it's id.
+    /// </summary>
+    /// <param name="id">The item's id</param>
+    /// <returns>The item</returns>
+    public Call? Read(int id)
+    {
+        return DataSource.Calls.FirstOrDefault(item => item!.ID == id); //stage 2
+    }
+
+    /// <summary>
+    /// A function that reads all the items of this entity with or without a filtering function.
+    /// </summary>
+    /// <param name="filter">the filtering function.</param>
+    /// <returns>All the items of this entity that match the filter.</returns>
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
-    { 
+    {
         return filter != null
             ? from item in DataSource.Calls
               where filter(item)
@@ -14,72 +64,28 @@ internal class CallImplementation : ICall
             : from item in DataSource.Calls
               select item;
     }
-    //public void Create(Call item)
-    //{
-    //    Call copy = item with { ID = Config.NextCallId };
-    //    DataSource.Calls.Add(copy);
-    //}
-    public int Create(Call item)
-    {
-        // בדיקה אם קיים כבר אובייקט עם אותו מזהה
-        Call? existingCall = DataSource.Calls.Find(element => element!.ID == item.ID);
-        if (existingCall != null)
-            throw new DalAlreadyExistsException($"An object of type Call with this ID {item.ID} already exists");
-        int newId = Dal.Config.NextCallId;
-        Call callCopy = item with { ID = newId };
-        DataSource.Calls.Add(callCopy);
-        return callCopy.ID;
-    }
 
-
-    public void Delete(int id)
-    {
-        Call? newCall = Read(id);
-        if (newCall == null)
-            throw new DalDeletionImpossibleException($"Call with ID={id} does Not exist");
-        else
-            DataSource.Calls.Remove(newCall);
-    }
-
-    public void DeleteAll()
-    {
-        DataSource.Calls.Clear();
-    }
-
-    public Call? Read(int id)
-    {
-        //Call? newCall = DataSource.Calls.Find(call => call!.ID == id); //stage1
-        //return newCall; //stage1
-        Call? newCall = DataSource.Calls.FirstOrDefault(call => call!.ID == id); //stage 2
-        return newCall; //stage2
-    }
-
-    //public List<Call> ReadAll() //stage1
-    //{
-    //    return new List<Call>(DataSource.Calls!);
-    //}
+    /// <summary>
+    /// A function for updating items.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <exception cref="DalDoesNotExistException">An exception in case of attempting to update an item that does not exist</exception>
     public void Update(Call item)
     {
-        Call? existingCall = Read(item.ID);
-        if (existingCall == null)
+        Call? newCall = Read(item.ID);
+        if (newCall is null)
             throw new DalDoesNotExistException($"Call with ID={item.ID} does Not exist");
         else
         {
-            Delete(item.ID);
-            Create(item);
-
+            DataSource.Calls.Remove(newCall);
+            DataSource.Calls.Add(item);
         }
     }
+    /// <summary>
+    /// A function for reading an item with a filter.
+    /// </summary>
+    /// <param name="filter">The filter function</param>
+    /// <returns>The first item of this entity that meets the filter.</returns>
     public Call? Read(Func<Call, bool> filter)
-    {
-        if (filter == null)
-            throw new NullException($"{nameof(filter)} Filter function cannot be null");
-
-        return DataSource.Calls.Cast<Call>().FirstOrDefault(filter);
-    }
-
-    void ICrud<Call>.Create(Call item)
-    {
-        throw new NotImplementedException();
-    }
+    => DataSource.Calls.FirstOrDefault(filter!);
 }
