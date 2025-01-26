@@ -1,209 +1,252 @@
-﻿using BlApi;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using BlApi;
+using BO;
 using DalApi;
 
 namespace BlImplementation
 {
-    internal class VolunteerImplementation : BlApi.IVolunteer
+    internal class VolunteerImplementation : IVolunteer
     {
-        private readonly IDal _dal = DalApi.Factory.Get;
+        private readonly IDal _dal = Factory.Get;
 
-        public BO.Role Login(string name, string password)
+        // Login method
+        public Role Login(string name, string password)
         {
             try
             {
-                var volunteer = _dal.Volunteer.GetAll()
-                    .FirstOrDefault(v => v.Name == name && v.Password == password)
-                    ?? throw new BO.BlMissingEntityException("Volunteer not found or invalid credentials");
+                var volunteer = _dal.Volunteer.GetByName(name);
+                if (volunteer == null || volunteer.Password != password)
+                    throw new BlInvalidLoginException("Invalid username or password");
 
                 return volunteer.Role;
             }
-            catch (DO.DalException ex)
+            catch (DO.DalEntityNotFoundException ex)
             {
-                throw new BO.BlException("Login failed", ex);
+                throw new BlEntityNotFoundException("Volunteer not found", ex);
             }
         }
 
-        public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive, BO.TypeOfCall? callType)
+        // Get Volunteers List method
+        public IEnumerable<Volunteer> GetVolunteersList(bool? isActive, TypeOfCall? callType)
         {
             try
             {
+                // Get all volunteers from DAL
                 var volunteers = _dal.Volunteer.ReadAll();
 
                 // Filter by active status if specified
                 if (isActive.HasValue)
                     volunteers = volunteers.Where(v => v.IsActive == isActive.Value);
 
-                // Convert to BO.VolunteerInList with LINQ
-                var result = from v in volunteers
-                             let currentCall = _dal.Call.ReadAll()
-                                 .FirstOrDefault(c => c.AssignmentList != null &&
-                                     c..Any(a => a.VolunteerId == v.ID && !a.FinishingTime.HasValue))
-                             select new BO.VolunteerInList
-                             {
-                                 Id = v.Id,
-                                 Name = v.Name,
-                                 IsActive = v.IsActive,
-                                 TreatedCallNum = v.TreatedCallNum,
-                                 CenteledCallNum = v.CenteledCallNum,
-                                 OutOfRangeCallNum = v.OutOfRangeCallNum,
-                                 CallId = currentCall?.Id ?? 0,
-                                 TypeOfCall = currentCall?.TypeOfCall ?? default
-                             };
-
                 // Filter by call type if specified
                 if (callType.HasValue)
-                    result = result.Where(v => v.TypeOfCall == callType.Value);
+                    volunteers = volunteers.Where(v =>
+                        v.CallInProgress != null &&
+                        v.CallInProgress.TypeOfCall == callType.Value);
 
-                return result;
+                // Convert to Business Logic Volunteers
+                return volunteers.Select(v => new Volunteer
+                {
+                    // Map DAL Volunteer to BO Volunteer
+                    Id = v.ID,
+                    Name = v.Name,
+                    Phone = v.Phone,
+                    Email = v.Email,
+                    IsActive = v.IsActive,
+                    Role = v.Role,
+                });
             }
-            catch (DO.DalException ex)
+            catch (Exception ex)
             {
-                throw new BO.BlException("Failed to retrieve volunteers list", ex);
+                throw new BlDataAccessException("Error retrieving volunteers", ex);
             }
         }
 
-        public BO.Volunteer GetVolunteerDetails(int volunteerId)
+        // Get Volunteer Details method
+        public Volunteer GetVolunteerDetails(int volunteerId)
         {
             try
             {
-                var volunteer = _dal.Volunteer.Get(volunteerId);
-                var currentCall = _dal.Call.GetAll()
-                    .FirstOrDefault(c => c.AssignmentList != null &&
-                        c.AssignmentList.Any(a => a.VolunteerId == volunteerId && !a.FinishingTime.HasValue));
+                var dalVolunteer = _dal.Volunteer.Get(volunteerId);
+                var dalCall = _dal.Call.GetVolunteerCurrentCall(volunteerId);
 
-                return new BO.Volunteer
+                return new Volunteer
                 {
-                    Id = volunteer.Id,
-                    Name = volunteer.Name,
-                    Phone = volunteer.Phone,
-                    Email = volunteer.Email,
-                    Password = volunteer.Password,
-                    Address = volunteer.Address,
-                    Latitude = volunteer.Latitude,
-                    Longitude = volunteer.Longitude,
-                    Role = volunteer.Role,
-                    IsActive = volunteer.IsActive,
-                    MaxDistanceForCall = volunteer.MaxDistanceForCall,
-                    DistanceType = volunteer.DistanceType,
-                    TreatedCallNum = volunteer.TreatedCallNum,
-                    CenteledCallNum = volunteer.CenteledCallNum,
-                    OutOfRangeCallNum = volunteer.OutOfRangeCallNum,
-                    CallInProgress = currentCall != null ? new BO.CallInProgress
+                    Id = dalVolunteer.Id,
+                    Name = dalVolunteer.Name,
+                    Phone = dalVolunteer.Phone,
+                    Email = dalVolunteer.Email,
+                    Address = dalVolunteer.Address,
+                    Latitude = dalVolunteer.Latitude,
+                    Longitude = dalVolunteer.Longitude,
+                    Role = dalVolunteer.Role,
+                    IsActive = dalVolunteer.IsActive,
+                    CallInProgress = dalCall != null ? new CallInProgress
                     {
-                        Id = currentCall.Id,
-                        CallId = currentCall.Id,
-                        TypeOfCall = currentCall.TypeOfCall,
-                        CallDescription = currentCall.CallDescription,
-                        Address = currentCall.Address,
-                        OpeningTime = currentCall.OpeningTime,
-                        MaxTimeForClosing = currentCall.MaxTimeForClosing,
-                        EntraceTime = currentCall.AssignmentList.First(a => a.VolunteerId == volunteerId).EntranceTime,
-                        Distance = CalculateDistance(volunteer.Latitude ?? 0, volunteer.Longitude ?? 0,
-                            currentCall.Latitude, currentCall.Longitude),
-                        CallTritingByVulanteerStatus = BO.CallTritingByVulanteerStatus.Treating
+                        Id = dalCall.Id,
+                        TypeOfCall = dalCall.CallType
                     } : null
                 };
             }
-            catch (DO.DalException ex)
+            catch (DO.DalEntityNotFoundException ex)
             {
-                throw new BO.BlException($"Failed to retrieve volunteer details for ID: {volunteerId}", ex);
+                throw new BlEntityNotFoundException("Volunteer not found", ex);
             }
         }
 
-        public void UpdateVolunteerDetails(int requesterId, BO.Volunteer volunteer)
+        // Update Volunteer Details method
+        public void UpdateVolunteerDetails(int requesterId, Volunteer volunteer)
         {
             try
             {
-                // Verify requester has permission
-                var requester = _dal.Volunteer.Get(requesterId);
-                if (requester.Role != BO.Role.Manager && requesterId != volunteer.Id)
-                    throw new BO.BlSecurityException("Unauthorized to update volunteer details");
+                // Validate requester
+                var requester = _dal.Volunteer.Read(requesterId);
+                var existingVolunteer = _dal.Volunteer.Read(volunteer.Id);
 
+                // Check if requester is admin or the volunteer themselves
+                if (requester.Role != Role.Manager && requester.ID != volunteer.Id)
+                    throw new BlUnauthorizedAccessException("Not authorized to update volunteer details");
+
+                // Validate email format
+                if (!IsValidEmail(volunteer.Email))
+                    throw new BlInvalidInputException("Invalid email format");
+
+                // Validate ID format (assuming Israeli ID validation)
+                if (!IsValidIsraeliId(volunteer.Id.ToString()))
+                    throw new BlInvalidInputException("Invalid ID number");
+
+                // Check which fields can be updated based on requester
+                var updatableFields = GetUpdatableFields(requester, existingVolunteer, volunteer);
+
+                // Update DAL volunteer
                 _dal.Volunteer.Update(new DO.Volunteer
                 {
-                    Id = volunteer.Id,
-                    Name = volunteer.Name,
-                    Phone = volunteer.Phone,
-                    Email = volunteer.Email,
-                    Password = volunteer.Password,
-                    Address = volunteer.Address,
-                    Latitude = volunteer.Latitude,
-                    Longitude = volunteer.Longitude,
-                    Role = volunteer.Role,
-                    IsActive = volunteer.IsActive,
-                    MaxDistanceForCall = volunteer.MaxDistanceForCall,
-                    DistanceType = volunteer.DistanceType,
-                    TreatedCallNum = volunteer.TreatedCallNum,
-                    CenteledCallNum = volunteer.CenteledCallNum,
-                    OutOfRangeCallNum = volunteer.OutOfRangeCallNum
+                    ID = volunteer.Id,
+                    Name = updatableFields.Contains(nameof(volunteer.Name)) ? volunteer.Name : existingVolunteer.Name,
+                    Phone = updatableFields.Contains(nameof(volunteer.Phone)) ? volunteer.Phone : existingVolunteer.Phone,
+                    Email = updatableFields.Contains(nameof(volunteer.Email)) ? volunteer.Email : existingVolunteer.Email,
+                    Address = updatableFields.Contains(nameof(volunteer.Address)) ? volunteer.Address : existingVolunteer.Address,
+                    Role = updatableFields.Contains(nameof(volunteer.Role)) ? volunteer.Role : existingVolunteer.Role,
+                    IsActive = updatableFields.Contains(nameof(volunteer.IsActive)) ? volunteer.IsActive : existingVolunteer.IsActive
                 });
             }
-            catch (DO.DalException ex)
+            catch (DO.DalEntityNotFoundException ex)
             {
-                throw new BO.BlException($"Failed to update volunteer details for ID: {volunteer.Id}", ex);
+                throw new BlEntityNotFoundException("Volunteer not found", ex);
             }
         }
 
+        // Delete Volunteer method
         public void DeleteVolunteer(int volunteerId)
         {
             try
             {
+                // Check if volunteer has any active or past calls
+                var hasActiveCalls = _dal.Call.GetVolunteerCalls(volunteerId).Any();
+                if (hasActiveCalls)
+                    throw new BlInvalidOperationException("Cannot delete volunteer with call history");
+
+                // Attempt to delete
                 _dal.Volunteer.Delete(volunteerId);
             }
-            catch (DO.DalException ex)
+            catch (DO.DalEntityNotFoundException ex)
             {
-                throw new BO.BlException($"Failed to delete volunteer with ID: {volunteerId}", ex);
+                throw new BlEntityNotFoundException("Volunteer not found", ex);
             }
         }
 
-        public void AddVolunteer(BO.Volunteer volunteer)
+        // Add Volunteer method
+        public void AddVolunteer(Volunteer volunteer)
         {
             try
             {
-                // Validate required fields
-                if (string.IsNullOrEmpty(volunteer.Name))
-                    throw new BO.BlInvalidInputException("Volunteer name is required");
-                if (string.IsNullOrEmpty(volunteer.Phone))
-                    throw new BO.BlInvalidInputException("Volunteer phone is required");
-                if (string.IsNullOrEmpty(volunteer.Email))
-                    throw new BO.BlInvalidInputException("Volunteer email is required");
+                // Validate input
+                if (!IsValidEmail(volunteer.Email))
+                    throw new BlInvalidInputException("Invalid email format");
 
-                _dal.Volunteer.Add(new DO.Volunteer
+                if (!IsValidIsraeliId(volunteer.Id.ToString()))
+                    throw new BlInvalidInputException("Invalid ID number");
+
+                // Check if volunteer already exists
+                try
                 {
+                    _dal.Volunteer.Read(volunteer.Id);
+                    throw new BlDuplicateEntityException("Volunteer with this ID already exists");
+                }
+                catch (DO.DalEntityNotFoundException)
+                {
+                    // This is good - volunteer doesn't exist
+                }
+
+                // Convert to DAL Volunteer
+                _dal.Volunteer.Create(new DO.Volunteer
+                {
+                    ID = volunteer.Id,
                     Name = volunteer.Name,
                     Phone = volunteer.Phone,
                     Email = volunteer.Email,
-                    Password = volunteer.Password,
                     Address = volunteer.Address,
-                    Latitude = volunteer.Latitude,
-                    Longitude = volunteer.Longitude,
                     Role = volunteer.Role,
-                    IsActive = volunteer.IsActive,
-                    MaxDistanceForCall = volunteer.MaxDistanceForCall,
-                    DistanceType = volunteer.DistanceType,
-                    TreatedCallNum = 0,
-                    CenteledCallNum = 0,
-                    OutOfRangeCallNum = 0
+                    IsActive = volunteer.IsActive
                 });
             }
-            catch (DO.DalException ex)
+            catch (DO.DalEntityAlreadyExistsException ex)
             {
-                throw new BO.BlException("Failed to add volunteer", ex);
+                throw new BlDuplicateEntityException("Volunteer already exists", ex);
             }
         }
 
-        private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        // Helper Methods
+        private bool IsValidEmail(string email)
         {
-            const double R = 6371; // Earth's radius in kilometers
-            var dLat = ToRad(lat2 - lat1);
-            var dLon = ToRad(lon2 - lon1);
-            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                    Math.Cos(ToRad(lat1)) * Math.Cos(ToRad(lat2)) *
-                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            return R * c;
+            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
         }
 
-        private double ToRad(double degrees) => degrees * Math.PI / 180;
+        private bool IsValidIsraeliId(string id)
+        {
+            // Basic Israeli ID validation with check digit
+            if (id.Length != 9 || !id.All(char.IsDigit))
+                return false;
+
+            int sum = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                int digit = int.Parse(id[i].ToString());
+                sum += (i % 2 == 0) ? digit : ((digit * 2 > 9) ? digit * 2 - 9 : digit * 2);
+            }
+
+            int checkDigit = int.Parse(id[8].ToString());
+            return (sum + checkDigit) % 10 == 0;
+        }
+
+        private List<string> GetUpdatableFields(DO.Volunteer requester, DO.Volunteer existingVolunteer, Volunteer newVolunteer)
+        {
+            var updatableFields = new List<string>();
+
+            // Fields always updatable
+            if (newVolunteer.Name != existingVolunteer.Name)
+                updatableFields.Add(nameof(newVolunteer.Name));
+            if (newVolunteer.Phone != existingVolunteer.Phone)
+                updatableFields.Add(nameof(newVolunteer.Phone));
+            if (newVolunteer.Email != existingVolunteer.Email)
+                updatableFields.Add(nameof(newVolunteer.Email));
+            if (newVolunteer.Address != existingVolunteer.Address)
+                updatableFields.Add(nameof(newVolunteer.Address));
+
+            // Admin-only fields
+            if (requester.Role == Role.Admin)
+            {
+                if (newVolunteer.Role != existingVolunteer.Role)
+                    updatableFields.Add(nameof(newVolunteer.Role));
+                if (newVolunteer.IsActive != existingVolunteer.IsActive)
+                    updatableFields.Add(nameof(newVolunteer.IsActive));
+            }
+
+            return updatableFields;
+        }
     }
+
 }

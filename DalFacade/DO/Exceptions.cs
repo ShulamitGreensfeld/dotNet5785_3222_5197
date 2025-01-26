@@ -29,3 +29,20 @@ public class NullException : Exception
 {
     public NullException(string? message) : base(message) { }
 }
+
+[Serializable]
+
+public class DataAccessException : Exception
+{
+    public DataAccessException(string? message) : base(message) { }
+}
+
+public class DalEntityNotFoundException : Exception
+{
+    public DalEntityNotFoundException(string? message) : base(message) { }
+}
+
+public class DalEntityAlreadyExistsException : Exception
+{
+    public DalEntityAlreadyExistsException(string? message) : base(message) { }
+}
