@@ -29,3 +29,11 @@ public class NullException : Exception
 {
     public NullException(string? message) : base(message) { }
 }
+
+[Serializable]
+
+public class DataAccessException : Exception
+{
+    public DataAccessException(string? message) : base(message) { }
+}
+

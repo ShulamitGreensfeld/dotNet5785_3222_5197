@@ -31,7 +31,7 @@ namespace BlImplementation
                 boCall.Latitude = lat;
                 boCall.Longitude = lon;
 
-                if (boCall.CallStatus == BO.CallStatus.Closed && boCall.OpeningTime > DateTime.Now)
+                if (boCall.CallStatus == BO.CallStatus.closed && boCall.OpeningTime > DateTime.Now)
                     throw new BO.BlInvalidOperationException("A closed call cannot have a start time in the future.");
             }
             catch (BO.BlNullPropertyException ex)
@@ -147,7 +147,7 @@ namespace BlImplementation
                 {
                     Call_dal.Call.Delete(id);
                 }
-                catch (DO.DalException ex)
+                catch (DO.DalDoesNotExistException ex)
                 {
                     throw new BO.BlInternalErrorException("An error occurred while deleting the call.", ex);
                 }

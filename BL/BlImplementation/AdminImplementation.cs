@@ -18,7 +18,7 @@ namespace BlImplementation
         // מתודת קידום שעון
         public void PromotionClock(BO.TimeUnit timeUnit)
         {
-            DateTime newTime;
+            //DateTime newTime;
             // קידום השעון בהתאם ליחידת הזמן
             switch (timeUnit)
             {

@@ -109,3 +109,67 @@ public class BlGeneralException : Exception
     public BlGeneralException(string message, Exception innerException)
         : base(message, innerException) { }
 }
+
+[Serializable]
+public class InvalidOperationException : Exception
+{
+    public InvalidOperationException(string? message) : base(message) { }
+    public InvalidOperationException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
+[Serializable]
+public class DataAccessException : Exception
+{
+    public DataAccessException(string? message) : base(message) { }
+    public DataAccessException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
+[Serializable]
+public class NotFoundException : Exception
+{
+    public NotFoundException(string? message) : base(message) { }
+    public NotFoundException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
+[Serializable]
+public class ValidationException : Exception
+{
+    public ValidationException(string? message) : base(message) { }
+    public ValidationException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
+[Serializable]
+public class InvalidCredentialsException : Exception
+{
+    public InvalidCredentialsException(string? message) : base(message) { }
+    public InvalidCredentialsException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
+[Serializable]
+public class BlInvalidArgumentException : Exception
+{
+    public BlInvalidArgumentException(string? message) : base(message) { }
+    public BlInvalidArgumentException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
+[Serializable]
+public class BlInvalidOperationException : Exception
+{
+    public BlInvalidOperationException(string? message) : base(message) { }
+    public BlInvalidOperationException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
+[Serializable]
+public class BlInternalErrorException : Exception
+{
+    public BlInternalErrorException(string? message) : base(message) { }
+    public BlInternalErrorException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
