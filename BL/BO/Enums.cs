@@ -48,3 +48,25 @@ public enum TimeUnit
     HOUR,
     MINUTE 
 }
+public enum VolunteerInListField
+{
+    Id,
+    Name,
+    TotalHandledCalls,
+    TotalCanceledCalls,
+    TotalOutOfRangeCall,
+    CallId,
+    TypeOfCall
+}
+public enum CallField
+{
+    Id,
+    CallId,
+    TypeOfCall,
+    OpeningTime,
+    TimeForClosing,
+    LastVolunteerName,
+    TimeForTreating,
+    CallStatus,
+    TotalAssiignment
+}

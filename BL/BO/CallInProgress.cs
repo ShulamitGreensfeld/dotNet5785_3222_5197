@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
+
 
 namespace BO
 {
@@ -18,5 +20,6 @@ namespace BO
         public DateTime EntraceTime { get; set; }
         public double Distance { get; set; }
         public CallTritingByVulanteerStatus CallTritingByVulanteerStatus {  get; set; }
+        public override string ToString() => this.ToStringProperty();
     }
 }

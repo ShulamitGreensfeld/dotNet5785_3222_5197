@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
+
 
 namespace BO
 {
@@ -24,5 +26,6 @@ namespace BO
         public int CenteledCallNum { get; set; }
         public int OutOfRangeCallNum { get; set; }
         public BO.CallInProgress? CallInProgress {  get; set; }
+        public override string ToString() => this.ToStringProperty();
     }
 }

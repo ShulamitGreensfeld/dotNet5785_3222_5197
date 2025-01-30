@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
 
 namespace BO
 {
@@ -18,5 +19,6 @@ namespace BO
         public DateTime? MaxTimeForClosing { get; set; }
         public CallStatus CallStatus { get; set; }
         public List<BO.CallAssignInList>? AssignmentList { get; set; } = null;
+        public override string ToString() => this.ToStringProperty();
     }
 }

@@ -7,47 +7,6 @@ namespace BlImplementation
     {
         private readonly DalApi.IDal Call_dal = DalApi.Factory.Get;
 
-        private void ValidateCall(BO.Call boCall)
-        {
-            try
-            {
-                if (boCall == null)
-                    throw new BO.BlNullPropertyException("The call object cannot be null.");
-
-                if (boCall.Id <= 0)
-                    throw new BO.BlInvalidArgumentException("Call ID must be a positive number.");
-
-                if (boCall.MaxTimeForClosing.HasValue && boCall.MaxTimeForClosing.Value <= boCall.OpeningTime)
-                    throw new BO.BlInvalidArgumentException("End time must be greater than the start time.");
-
-                if (string.IsNullOrWhiteSpace(boCall.Address))
-                    throw new BO.BlInvalidArgumentException("Address cannot be null or empty.");
-
-                (double lat, double lon) = CallManager.GetCoordinates(boCall.Address);
-
-                if (lat == 0 || lon == 0)
-                    throw new BO.BlInvalidArgumentException("Address is invalid or could not be found.");
-
-                boCall.Latitude = lat;
-                boCall.Longitude = lon;
-
-                if (boCall.CallStatus == BO.CallStatus.closed && boCall.OpeningTime > DateTime.Now)
-                    throw new BO.BlInvalidOperationException("A closed call cannot have a start time in the future.");
-            }
-            catch (BO.BlNullPropertyException ex)
-            {
-                throw new BO.BlNullPropertyException("Error during call validation: " + ex.Message, ex);
-            }
-            catch (BO.BlInvalidArgumentException ex)
-            {
-                throw new BO.BlInvalidArgumentException("Error during call validation: " + ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new BO.BlGeneralException("An unexpected error occurred while validating the call.", ex);
-            }
-        }
-
         public void ChoosingACallForTreatment(int volunteerId, int callId)
         {
             try
@@ -89,11 +48,11 @@ namespace BlImplementation
             }
         }
 
-        public void Create(BO.Call boCall)
+        public void AddCall(BO.Call boCall)
         {
             try
             {
-                ValidateCall(boCall);
+                ValidateCall(boCall);//הפונקציה הזאת מיורקת למטה אם משתמשים איתה צריך להעביר אותה למנגר
 
                 var doCall = new DO.Call
                 {
@@ -209,7 +168,7 @@ namespace BlImplementation
             }
         }
 
-        public IEnumerable<int> GetCallsCount()
+        public int[] GetCallsCount()
         {
             try
             {
@@ -224,5 +183,77 @@ namespace BlImplementation
                 throw new BO.BlGeneralException("An error occurred while getting the call counts.", ex);
             }
         }
+
+        public IEnumerable<BO.CallInList> GetCallsList(BO.CallField? filterBy, object? filterValue, BO.CallField? sortBy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateCallDetails(BO.Call boCall)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByTheVolunteer(int volunteerId, BO.TypeOfCall? callTypeFilter, BO.CallField? sortBy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BO.OpenCallInList> GetOpenCallsCanBeSelectedByAVolunteer(int volunteerId, BO.TypeOfCall? callTypeFilter, BO.CallField? sortBy)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TreatmentCompletionUpdate(int volunteerId, int AssignmentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TreatmentCancellationUpdate(int volunteerId, int AssignmentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        //פרטית, אם צריך לשים בCallManager!!!
+        //private void ValidateCall(BO.Call boCall)
+        //{
+        //    try
+        //    {
+        //        if (boCall == null)
+        //            throw new BO.BlNullPropertyException("The call object cannot be null.");
+
+        //        if (boCall.Id <= 0)
+        //            throw new BO.BlInvalidArgumentException("Call ID must be a positive number.");
+
+        //        if (boCall.MaxTimeForClosing.HasValue && boCall.MaxTimeForClosing.Value <= boCall.OpeningTime)
+        //            throw new BO.BlInvalidArgumentException("End time must be greater than the start time.");
+
+        //        if (string.IsNullOrWhiteSpace(boCall.Address))
+        //            throw new BO.BlInvalidArgumentException("Address cannot be null or empty.");
+
+        //        (double lat, double lon) = CallManager.GetCoordinates(boCall.Address);
+
+        //        if (lat == 0 || lon == 0)
+        //            throw new BO.BlInvalidArgumentException("Address is invalid or could not be found.");
+
+        //        boCall.Latitude = lat;
+        //        boCall.Longitude = lon;
+
+        //        if (boCall.CallStatus == BO.CallStatus.closed && boCall.OpeningTime > DateTime.Now)
+        //            throw new BO.BlInvalidOperationException("A closed call cannot have a start time in the future.");
+        //    }
+        //    catch (BO.BlNullPropertyException ex)
+        //    {
+        //        throw new BO.BlNullPropertyException("Error during call validation: " + ex.Message, ex);
+        //    }
+        //    catch (BO.BlInvalidArgumentException ex)
+        //    {
+        //        throw new BO.BlInvalidArgumentException("Error during call validation: " + ex.Message, ex);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new BO.BlGeneralException("An unexpected error occurred while validating the call.", ex);
+        //    }
+        //}
     }
 }

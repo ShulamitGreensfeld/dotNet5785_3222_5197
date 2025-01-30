@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
+
 
 namespace BO
 {
@@ -15,5 +17,6 @@ namespace BO
         public DateTime EntraceTime { get; set; }
         public DateTime? FinishTime { get; set; }
         public TypeOfFinishTreatment? TypeOfFinishTreatment {  get; set; }
+        public override string ToString() => this.ToStringProperty();
     }
 }

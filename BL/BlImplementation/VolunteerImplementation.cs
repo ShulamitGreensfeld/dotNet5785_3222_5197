@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using BlApi;
-using BO;
-using DalApi;
-
-namespace BlImplementation
+﻿namespace BlImplementation
 {
-    internal class VolunteerImplementation : IVolunteer
+    internal class VolunteerImplementation : BlApi.IVolunteer
     {
-        private readonly IDal _dal = Factory.Get;
+        private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
         // Login method
-        public Role Login(string name, string password)
+        public BO.Role Login(string name, string password)
         {
             try
             {
@@ -30,7 +22,7 @@ namespace BlImplementation
         }
 
         // Get Volunteers List method
-        public IEnumerable<Volunteer> GetVolunteersList(bool? isActive, TypeOfCall? callType)
+        public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive, BO.VolunteerInListField? sortBy, BO.TypeOfCall? callTypeFilter)
         {
             try
             {
@@ -66,7 +58,7 @@ namespace BlImplementation
         }
 
         // Get Volunteer Details method
-        public Volunteer GetVolunteerDetails(int volunteerId)
+        public BO.Volunteer GetVolunteerDetails(int volunteerId)
         {
             try
             {
@@ -98,7 +90,7 @@ namespace BlImplementation
         }
 
         // Update Volunteer Details method
-        public void UpdateVolunteerDetails(int requesterId, Volunteer volunteer)
+        public void UpdateVolunteerDetails(int requesterId, BO.Volunteer volunteer)
         {
             try
             {
@@ -159,7 +151,7 @@ namespace BlImplementation
         }
 
         // Add Volunteer method
-        public void AddVolunteer(Volunteer volunteer)
+        public void AddVolunteer(BO.Volunteer volunteer)
         {
             try
             {
@@ -199,54 +191,56 @@ namespace BlImplementation
             }
         }
 
-        // Helper Methods
-        private bool IsValidEmail(string email)
-        {
-            return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-        }
+        //מה שצריך לשים בValunteerManager
 
-        private bool IsValidIsraeliId(string id)
-        {
-            // Basic Israeli ID validation with check digit
-            if (id.Length != 9 || !id.All(char.IsDigit))
-                return false;
+        //// Helper Methods
+        //private bool IsValidEmail(string email)
+        //{
+        //    return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+        //}
 
-            int sum = 0;
-            for (int i = 0; i < 8; i++)
-            {
-                int digit = int.Parse(id[i].ToString());
-                sum += (i % 2 == 0) ? digit : ((digit * 2 > 9) ? digit * 2 - 9 : digit * 2);
-            }
+        //private bool IsValidIsraeliId(string id)
+        //{
+        //    // Basic Israeli ID validation with check digit
+        //    if (id.Length != 9 || !id.All(char.IsDigit))
+        //        return false;
 
-            int checkDigit = int.Parse(id[8].ToString());
-            return (sum + checkDigit) % 10 == 0;
-        }
+        //    int sum = 0;
+        //    for (int i = 0; i < 8; i++)
+        //    {
+        //        int digit = int.Parse(id[i].ToString());
+        //        sum += (i % 2 == 0) ? digit : ((digit * 2 > 9) ? digit * 2 - 9 : digit * 2);
+        //    }
 
-        private List<string> GetUpdatableFields(DO.Volunteer requester, DO.Volunteer existingVolunteer, Volunteer newVolunteer)
-        {
-            var updatableFields = new List<string>();
+        //    int checkDigit = int.Parse(id[8].ToString());
+        //    return (sum + checkDigit) % 10 == 0;
+        //}
 
-            // Fields always updatable
-            if (newVolunteer.Name != existingVolunteer.Name)
-                updatableFields.Add(nameof(newVolunteer.Name));
-            if (newVolunteer.Phone != existingVolunteer.Phone)
-                updatableFields.Add(nameof(newVolunteer.Phone));
-            if (newVolunteer.Email != existingVolunteer.Email)
-                updatableFields.Add(nameof(newVolunteer.Email));
-            if (newVolunteer.Address != existingVolunteer.Address)
-                updatableFields.Add(nameof(newVolunteer.Address));
+        //private List<string> GetUpdatableFields(DO.Volunteer requester, DO.Volunteer existingVolunteer, Volunteer newVolunteer)
+        //{
+        //    var updatableFields = new List<string>();
 
-            // Admin-only fields
-            if (requester.Role == Role.Admin)
-            {
-                if (newVolunteer.Role != existingVolunteer.Role)
-                    updatableFields.Add(nameof(newVolunteer.Role));
-                if (newVolunteer.IsActive != existingVolunteer.IsActive)
-                    updatableFields.Add(nameof(newVolunteer.IsActive));
-            }
+        //    // Fields always updatable
+        //    if (newVolunteer.Name != existingVolunteer.Name)
+        //        updatableFields.Add(nameof(newVolunteer.Name));
+        //    if (newVolunteer.Phone != existingVolunteer.Phone)
+        //        updatableFields.Add(nameof(newVolunteer.Phone));
+        //    if (newVolunteer.Email != existingVolunteer.Email)
+        //        updatableFields.Add(nameof(newVolunteer.Email));
+        //    if (newVolunteer.Address != existingVolunteer.Address)
+        //        updatableFields.Add(nameof(newVolunteer.Address));
 
-            return updatableFields;
-        }
+        //    // Admin-only fields
+        //    if (requester.Role == Role.Admin)
+        //    {
+        //        if (newVolunteer.Role != existingVolunteer.Role)
+        //            updatableFields.Add(nameof(newVolunteer.Role));
+        //        if (newVolunteer.IsActive != existingVolunteer.IsActive)
+        //            updatableFields.Add(nameof(newVolunteer.IsActive));
+        //    }
+
+        //    return updatableFields;
+        //}
     }
 
 }

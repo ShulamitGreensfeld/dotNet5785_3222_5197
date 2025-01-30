@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
+
 
 namespace BO
 {
@@ -16,6 +18,7 @@ namespace BO
         public string? LastVolunteerName { get; set; } 
         public TimeSpan? TimeForTreating {  get; set; }
         public CallStatus CallStatus { get; set; }
-        public int AssingmentNum {  get; set; }
+        public int TotalAssiignment {  get; set; }
+        public override string ToString() => this.ToStringProperty();
     }
 }
