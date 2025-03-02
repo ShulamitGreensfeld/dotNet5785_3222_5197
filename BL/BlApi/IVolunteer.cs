@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace BlApi
+﻿namespace BlApi
 {
     public interface IVolunteer
     {
-        BO.Role Login(string name, string password);
-        IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive, BO.VolunteerInListField? sortBy, BO.TypeOfCall? callTypeFilter);
-        BO.Volunteer GetVolunteerDetails(int volunteerId);
-        void UpdateVolunteerDetails(int Id, BO.Volunteer volunteer);
-        void DeleteVolunteer(int volunteerId);
+        BO.Enums.Role EnterSystem(string name, string pass);
+        IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive = null, BO.Enums.VolunteerInListFields? fieldFilter = null);
+        BO.Volunteer GetVolunteerDetails(int id);
+        void UpdateVolunteerDetails(int id, BO.Volunteer volunteer);
+        void DeleteVolunteer(int id);
         void AddVolunteer(BO.Volunteer volunteer);
+        void GetVolunteerDetails(string volunteerId);
     }
 }
-

@@ -703,7 +703,7 @@ namespace DalTest
                     Longitude = AskUserIfUpdate("Longitude") && double.TryParse(GetValidInput("Enter Longitude: "), out double parsedLongitude) ? parsedLongitude : volunteer.Longitude,
                     Role = AskUserIfUpdate("Volunteer Role") && Enum.TryParse(GetValidInput("Enter Volunteer Role (Manager/Volunteer): "), out DO.Role parsedRole) ? parsedRole : volunteer.Role,
                     IsActive = AskUserIfUpdate("Active") && bool.TryParse(GetValidInput("Enter Active (True/False): "), out bool parsedIsActive) ? parsedIsActive : volunteer.IsActive,
-                    DistanceType = AskUserIfUpdate("Distance Type") && Enum.TryParse(GetValidInput("Enter Distance Type (aerial_distance, walking_distance, driving_distance): "), out DO.DistanceType parsedDistanceTypes) ? parsedDistanceTypes : volunteer.DistanceType,
+                    DistanceType = AskUserIfUpdate("Distance Type") && Enum.TryParse(GetValidInput("Enter Distance Type (AirDistance, WalkingDistance, DrivingDistance): "), out DO.DistanceType parsedDistanceTypes) ? parsedDistanceTypes : volunteer.DistanceType,
                     MaxDistanceForCall = AskUserIfUpdate("Max Distance") && double.TryParse(GetValidInput("Enter Max Distance: "), out double parsedMaxDistance) ? parsedMaxDistance : volunteer.MaxDistanceForCall,
                     Password = AskUserIfUpdate("Password") ? GetValidInput("Enter Password: ") : volunteer.Password,
                 };

@@ -1,13 +1,13 @@
-﻿using BO;
-
-namespace BlApi;
-
-public interface IAdmin
+﻿namespace BlApi
 {
-    DateTime Clock();
-    void PromotionClock(TimeUnit timeUnit);
-    TimeSpan GetRiskRange();
-    void SetRiskRange(TimeSpan riskRange);
-    void ResetDB();
-    void InitializeDB();
+    public interface IAdmin
+    {
+        DateTime GetClock();
+        void PromoteClock(BO.Enums.TimeUnit timeUnit);
+        TimeSpan GetRiskTimeRange();
+        void SetRiskTimeRange(TimeSpan riskTimeRange);
+        void ResetDatabase();
+        void InitializeDatabase();
+    }
+
 }

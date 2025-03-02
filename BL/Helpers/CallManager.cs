@@ -1,117 +1,108 @@
-﻿using DalApi;
-using System;
+﻿
+using DalApi;
+using static BO.Enums;
 
 namespace Helpers;
-//לסדר את השגיאות בפונקציות
+
 internal static class CallManager
 {
-    private static IDal s_dal = Factory.Get; //stage 4
-    /// <summary>
-    /// מקבלת מזהה קריאה ומחזירה את הסטטוס העדכני שלה לפי הנתונים בבסיס הנתונים ושעון המערכת.
-    /// </summary>
-    public static BO.CallStatus GetCallStatus(int callId)
-    {
-        var call = s_dal.Call.Read(callId);
-        if (call == null) throw new ArgumentException("קריאה לא נמצאה");
+    private static IDal s_dal = Factory.Get;
 
-        return call.CallStatus;
+    public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
+    {
+        List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.ID).ToList()!;
+        var lastAssignment = assignments.LastOrDefault(a => a!.CallId == call.ID);
+        // אם עבר זמן מקסימלי לסיום הקריאה
+        if (call.MaxTimeForClosing < DateTime.Now)
+            return BO.Enums.CallStatus.expired;
+        // אם הקריאה פתוחה ומסיימת בזמן הסיכון
+        if ((DateTime.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
+            return BO.Enums.CallStatus.opened_at_risk;
+        // אם הקריאה בטיפול
+        if (lastAssignment != null)
+            //בטיפול בסיכון
+            if ((DateTime.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+                return BO.Enums.CallStatus.treated_at_risk;
+            //רק בטיפול      
+            else
+                return BO.Enums.CallStatus.is_treated;
+        if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
+            return BO.Enums.CallStatus.closed;
+        return BO.Enums.CallStatus.opened;
     }
-        //  public static string GetCallStatus(int callId)
-        //{
-        //    var call = s_dal.Call.GetById(callId); // שימוש ב-s_dal להגעה לנתונים
-        //    if (call == null)
-        //        throw new ArgumentException("קריאה לא נמצאה");
-
-        //    DateTime systemTime = ClockManager.GetCurrentTime(); // מניח ששעון המערכת מנוהל על ידי ClockManager
-
-        //    if (call.EndTime < systemTime && call.Assignment == null)
-        //    {
-        //        return "פג תוקף";
-        //    }
-
-        //    if (call.Assignment != null && call.Assignment.ActualEndTime == null)
-        //    {
-        //        return "בהמתנה לסיום";
-        //    }
-
-        //    return "סגור";
-        //}
-
-
-/// <summary>
-/// מעדכנת את כל הקריאות שפג תוקפן.
-/// </summary>
-//public static void UpdateExpiredCalls()
-//    {
-//        var expiredCalls = s_dal.Call.ReadAll()
-//            .Where(c => c.ExpirationTime < DateTime.Now && c.CallStatus != DO.CallStatus.Closed)
-//            .ToList();
-
-//        foreach (var call in expiredCalls)
-//        {
-//            var assignment = s_dal.Assignment.ReadAll()
-//                .FirstOrDefault(a => a.CallId == call.CallId && a.EndTime == null);
-
-//            if (assignment == null)
-//            {
-//                // יצירת ישות הקצאה חדשה לקריאה שפג תוקפה
-//                s_dal.Assignment.Add(new DO.Assignment
-//                {
-//                    CallId = call.CallId,
-//                    VolunteerId = 0, // מתנדב לא מוקצה
-//                    EndTime = DateTime.Now,
-//                    CompletionType = DO.CompletionType.Expired
-//                });
-//            }
-//            else
-//            {
-//                // עדכון הקצאה קיימת עם זמן סיום טיפול בפועל
-//                assignment.EndTime = DateTime.Now;
-//                assignment.CompletionType = DO.CompletionType.Expired;
-//                s_dal.Assignment.Update(assignment);
-//            }
-
-//            call.Status = DO.CallStatus.Closed;
-//            s_dal.Call.Update(call);
-//        }
-         public static void UpdateExpiredCalls()
+    public static IEnumerable<BO.CallInList> ConvertToCallInList(IEnumerable<DO.Call> calls)
     {
-        DateTime systemTime = ClockManager.GetCurrentTime();
-
-        foreach (var call in s_dal.Call.GetAll().Where(c => c?.EndTime < systemTime && c.Assignment == null))
+        return calls.Select(call =>
         {
-            // הוספת הקצאה חדשה
-            s_dal.Assignment.Add(new DO.Assignment
+            List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.ID).ToList()!;
+            var lastAssignment = assignments.LastOrDefault(a => a!.CallId == call.ID);
+            var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)!.Name : null;
+            TimeSpan? timeLeft = call.MaxTimeForClosing> DateTime.Now ? call.MaxTimeForClosing - DateTime.Now : null;
+            BO.Enums.CallStatus callStatus = CalculateCallStatus(call);
+            TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.closed ? (call.MaxTimeForClosing - call.OpeningTime) : null;
+            return new BO.CallInList
             {
-                CallId = call.Id,
-                ActualEndTime = systemTime,
-                CompletionStatus = "ביטול פג תוקף",
-                VolunteerId = 0 // ת.ז מתנדב = 0
-            });
-        }
+                Id = lastAssignment?.ID,
+                CallId = call.ID,
+                CallType = (BO.Enums.CallType)call.TypeOfCall,
+                Opening_time = call.OpeningTime,
+                TimeLeft = timeLeft,
+                LastVolunteerName = lastVolunteerName,
+                TotalTime = totalTime,
+                CallStatus = callStatus,
+                TotalAssignments = assignments.Count()
+            };
+        }).ToList();
 
-        foreach (var call in s_dal.Call.GetAll().Where(c => c?.EndTime < systemTime && c.Assignment?.ActualEndTime == null))
-        {
-            // עדכון הקצאה קיימת
-            call.Assignment.ActualEndTime = systemTime;
-            call.Assignment.CompletionStatus = "ביטול פג תוקף";
-        }
-
-        // שליחה על עדכון הקריאות
-        SendCallUpdateNotifications();
     }
 
-    private static void SendCallUpdateNotifications()
+    public static void ValidateCall(BO.Call call)
     {
-        // שליחה לכל המשקיפים על עדכון הקריאה
-        foreach (var call in s_dal.Call.GetAll())
-        {
-            // כאן תוכל לשלוח את ההודעות לכל המשקיפים
-            // לדוגמה:
-            ObserverManager.NotifyObservers(call);
-        }
+        if (call is null)
+            throw new BO.BlInvalidFormatException("Call cannot be null!");
 
-        // שליחה להודעה על עדכון כל הרשימה
-        ObserverManager.NotifyAllObservers();
+        // בדיקת תקינות הכתובת
+        if (string.IsNullOrWhiteSpace(call.FullAddress))
+            throw new BO.BlInvalidFormatException("Invalid address!");
+
+        if (!string.IsNullOrWhiteSpace(call.Verbal_description))
+            throw new BO.BlInvalidFormatException("Invalid description!");
+
+        // בדיקת זמני קריאה
+        if (call.Opening_time == default)
+            throw new BO.BlInvalidFormatException("Invalid opening time!");
+
+        if (call.Max_finish_time != default && call.Max_finish_time <= call.Opening_time)
+            throw new BO.BlInvalidFormatException("Invalid max finish time! Finish time has to be bigger than opening time.");
+
+        // בדיקת מזהה מספרי
+        if (call.Id <= 0)
+            throw new BO.BlInvalidFormatException("Invalid id number! Id number has to be positive.");
+
+        // בדיקת ENUM לשדות שאינם מספרים
+        if (!Enum.IsDefined(typeof(CallStatus), call.CallStatus))
+            throw new BO.BlInvalidFormatException("סInvalid status!");
+
+        if (!Enum.IsDefined(typeof(DO.TypeOfCall), call.CallType))
+            throw new BO.BlInvalidFormatException("Invalid call type!");
+
+        // בדיקת רשימה
+        if (call.AssignmentsList != null && call.AssignmentsList.Exists(a => a == null))
+            throw new BO.BlInvalidFormatException("Invalid assignments list!");
     }
+
+    public static DO.Call ConvertBoCallToDoCall(BO.Call call)
+    {
+        return new DO.Call
+        {
+            ID = call.Id,
+            TypeOfCall = (DO.TypeOfCall)call.CallType,
+            //Verbal_description = call.Verbal_description, //כנ"ל לבדוק למה צריך את תהמשתנה הזה........
+            Address = call.FullAddress!,
+            Latitude = call.Latitude ?? 0.0,
+            Longitude = call.Longitude ?? 0.0,
+            OpeningTime = call.Opening_time,
+            MaxTimeForClosing = call.Max_finish_time,
+        };
     }
+}

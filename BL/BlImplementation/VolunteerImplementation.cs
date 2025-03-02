@@ -1,246 +1,159 @@
-﻿namespace BlImplementation
+﻿using BlApi;
+using Helpers;
+
+namespace BlImplementation;
+
+internal class VolunteerImplementation : IVolunteer
 {
-    internal class VolunteerImplementation : BlApi.IVolunteer
+
+    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+    public BO.Enums.Role EnterSystem(string name, string pass)
     {
-        private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-
-        // Login method
-        public BO.Role Login(string name, string password)
+        try
         {
-            try
-            {
-                var volunteer = _dal.Volunteer.GetByName(name);
-                if (volunteer == null || volunteer.Password != password)
-                    throw new BlInvalidLoginException("Invalid username or password");
-
-                return volunteer.Role;
-            }
-            catch (DO.DalEntityNotFoundException ex)
-            {
-                throw new BlEntityNotFoundException("Volunteer not found", ex);
-            }
+            var volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.Name == name && VolunteerManager.VerifyPassword(pass, v.Password!));
+            return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid username or password") : (BO.Enums.Role)volunteer.Role;
         }
-
-        // Get Volunteers List method
-        public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive, BO.VolunteerInListField? sortBy, BO.TypeOfCall? callTypeFilter)
+        catch (DO.DalDoesNotExistException ex)
         {
-            try
-            {
-                // Get all volunteers from DAL
-                var volunteers = _dal.Volunteer.ReadAll();
-
-                // Filter by active status if specified
-                if (isActive.HasValue)
-                    volunteers = volunteers.Where(v => v.IsActive == isActive.Value);
-
-                // Filter by call type if specified
-                if (callType.HasValue)
-                    volunteers = volunteers.Where(v =>
-                        v.CallInProgress != null &&
-                        v.CallInProgress.TypeOfCall == callType.Value);
-
-                // Convert to Business Logic Volunteers
-                return volunteers.Select(v => new Volunteer
-                {
-                    // Map DAL Volunteer to BO Volunteer
-                    Id = v.ID,
-                    Name = v.Name,
-                    Phone = v.Phone,
-                    Email = v.Email,
-                    IsActive = v.IsActive,
-                    Role = v.Role,
-                });
-            }
-            catch (Exception ex)
-            {
-                throw new BlDataAccessException("Error retrieving volunteers", ex);
-            }
+            throw new BO.BlDoesNotExistException("Error accessing volunteers.", ex);
         }
-
-        // Get Volunteer Details method
-        public BO.Volunteer GetVolunteerDetails(int volunteerId)
+        catch (Exception ex)
         {
-            try
-            {
-                var dalVolunteer = _dal.Volunteer.Get(volunteerId);
-                var dalCall = _dal.Call.GetVolunteerCurrentCall(volunteerId);
-
-                return new Volunteer
-                {
-                    Id = dalVolunteer.Id,
-                    Name = dalVolunteer.Name,
-                    Phone = dalVolunteer.Phone,
-                    Email = dalVolunteer.Email,
-                    Address = dalVolunteer.Address,
-                    Latitude = dalVolunteer.Latitude,
-                    Longitude = dalVolunteer.Longitude,
-                    Role = dalVolunteer.Role,
-                    IsActive = dalVolunteer.IsActive,
-                    CallInProgress = dalCall != null ? new CallInProgress
-                    {
-                        Id = dalCall.Id,
-                        TypeOfCall = dalCall.CallType
-                    } : null
-                };
-            }
-            catch (DO.DalEntityNotFoundException ex)
-            {
-                throw new BlEntityNotFoundException("Volunteer not found", ex);
-            }
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
-
-        // Update Volunteer Details method
-        public void UpdateVolunteerDetails(int requesterId, BO.Volunteer volunteer)
-        {
-            try
-            {
-                // Validate requester
-                var requester = _dal.Volunteer.Read(requesterId);
-                var existingVolunteer = _dal.Volunteer.Read(volunteer.Id);
-
-                // Check if requester is admin or the volunteer themselves
-                if (requester.Role != Role.Manager && requester.ID != volunteer.Id)
-                    throw new BlUnauthorizedAccessException("Not authorized to update volunteer details");
-
-                // Validate email format
-                if (!IsValidEmail(volunteer.Email))
-                    throw new BlInvalidInputException("Invalid email format");
-
-                // Validate ID format (assuming Israeli ID validation)
-                if (!IsValidIsraeliId(volunteer.Id.ToString()))
-                    throw new BlInvalidInputException("Invalid ID number");
-
-                // Check which fields can be updated based on requester
-                var updatableFields = GetUpdatableFields(requester, existingVolunteer, volunteer);
-
-                // Update DAL volunteer
-                _dal.Volunteer.Update(new DO.Volunteer
-                {
-                    ID = volunteer.Id,
-                    Name = updatableFields.Contains(nameof(volunteer.Name)) ? volunteer.Name : existingVolunteer.Name,
-                    Phone = updatableFields.Contains(nameof(volunteer.Phone)) ? volunteer.Phone : existingVolunteer.Phone,
-                    Email = updatableFields.Contains(nameof(volunteer.Email)) ? volunteer.Email : existingVolunteer.Email,
-                    Address = updatableFields.Contains(nameof(volunteer.Address)) ? volunteer.Address : existingVolunteer.Address,
-                    Role = updatableFields.Contains(nameof(volunteer.Role)) ? volunteer.Role : existingVolunteer.Role,
-                    IsActive = updatableFields.Contains(nameof(volunteer.IsActive)) ? volunteer.IsActive : existingVolunteer.IsActive
-                });
-            }
-            catch (DO.DalEntityNotFoundException ex)
-            {
-                throw new BlEntityNotFoundException("Volunteer not found", ex);
-            }
-        }
-
-        // Delete Volunteer method
-        public void DeleteVolunteer(int volunteerId)
-        {
-            try
-            {
-                // Check if volunteer has any active or past calls
-                var hasActiveCalls = _dal.Call.GetVolunteerCalls(volunteerId).Any();
-                if (hasActiveCalls)
-                    throw new BlInvalidOperationException("Cannot delete volunteer with call history");
-
-                // Attempt to delete
-                _dal.Volunteer.Delete(volunteerId);
-            }
-            catch (DO.DalEntityNotFoundException ex)
-            {
-                throw new BlEntityNotFoundException("Volunteer not found", ex);
-            }
-        }
-
-        // Add Volunteer method
-        public void AddVolunteer(BO.Volunteer volunteer)
-        {
-            try
-            {
-                // Validate input
-                if (!IsValidEmail(volunteer.Email))
-                    throw new BlInvalidInputException("Invalid email format");
-
-                if (!IsValidIsraeliId(volunteer.Id.ToString()))
-                    throw new BlInvalidInputException("Invalid ID number");
-
-                // Check if volunteer already exists
-                try
-                {
-                    _dal.Volunteer.Read(volunteer.Id);
-                    throw new BlDuplicateEntityException("Volunteer with this ID already exists");
-                }
-                catch (DO.DalEntityNotFoundException)
-                {
-                    // This is good - volunteer doesn't exist
-                }
-
-                // Convert to DAL Volunteer
-                _dal.Volunteer.Create(new DO.Volunteer
-                {
-                    ID = volunteer.Id,
-                    Name = volunteer.Name,
-                    Phone = volunteer.Phone,
-                    Email = volunteer.Email,
-                    Address = volunteer.Address,
-                    Role = volunteer.Role,
-                    IsActive = volunteer.IsActive
-                });
-            }
-            catch (DO.DalEntityAlreadyExistsException ex)
-            {
-                throw new BlDuplicateEntityException("Volunteer already exists", ex);
-            }
-        }
-
-        //מה שצריך לשים בValunteerManager
-
-        //// Helper Methods
-        //private bool IsValidEmail(string email)
-        //{
-        //    return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-        //}
-
-        //private bool IsValidIsraeliId(string id)
-        //{
-        //    // Basic Israeli ID validation with check digit
-        //    if (id.Length != 9 || !id.All(char.IsDigit))
-        //        return false;
-
-        //    int sum = 0;
-        //    for (int i = 0; i < 8; i++)
-        //    {
-        //        int digit = int.Parse(id[i].ToString());
-        //        sum += (i % 2 == 0) ? digit : ((digit * 2 > 9) ? digit * 2 - 9 : digit * 2);
-        //    }
-
-        //    int checkDigit = int.Parse(id[8].ToString());
-        //    return (sum + checkDigit) % 10 == 0;
-        //}
-
-        //private List<string> GetUpdatableFields(DO.Volunteer requester, DO.Volunteer existingVolunteer, Volunteer newVolunteer)
-        //{
-        //    var updatableFields = new List<string>();
-
-        //    // Fields always updatable
-        //    if (newVolunteer.Name != existingVolunteer.Name)
-        //        updatableFields.Add(nameof(newVolunteer.Name));
-        //    if (newVolunteer.Phone != existingVolunteer.Phone)
-        //        updatableFields.Add(nameof(newVolunteer.Phone));
-        //    if (newVolunteer.Email != existingVolunteer.Email)
-        //        updatableFields.Add(nameof(newVolunteer.Email));
-        //    if (newVolunteer.Address != existingVolunteer.Address)
-        //        updatableFields.Add(nameof(newVolunteer.Address));
-
-        //    // Admin-only fields
-        //    if (requester.Role == Role.Admin)
-        //    {
-        //        if (newVolunteer.Role != existingVolunteer.Role)
-        //            updatableFields.Add(nameof(newVolunteer.Role));
-        //        if (newVolunteer.IsActive != existingVolunteer.IsActive)
-        //            updatableFields.Add(nameof(newVolunteer.IsActive));
-        //    }
-
-        //    return updatableFields;
-        //}
     }
 
+    public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActiveFilter = null, BO.Enums.VolunteerInListFields? fieldSort = null)
+    {
+        try
+        {
+            var volunteers = _dal.Volunteer.ReadAll();
+            if (isActiveFilter is not null)
+                volunteers = volunteers.Where(v => v?.IsActive == isActiveFilter.Value);
+            var allVolunteersInList = VolunteerManager.GetVolunteerList(volunteers!);
+            var sortedVolunteers = fieldSort is not null ? fieldSort switch
+            {
+                BO.Enums.VolunteerInListFields.FullName => allVolunteersInList.OrderBy(v => v?.FullName).ToList(),
+                BO.Enums.VolunteerInListFields.TotalHandledCalls => allVolunteersInList.OrderBy(v => v?.TotalHandledCalls).ToList(),
+                BO.Enums.VolunteerInListFields.TotalCanceledCalls => allVolunteersInList.OrderBy(v => v?.TotalCanceledCalls).ToList(),
+                BO.Enums.VolunteerInListFields.TotalExpiredCalls => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
+                BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
+                BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),/// למה כתוב שצריך פונקציה נפרדת??
+                _ => allVolunteersInList.OrderBy(v => v?.Id).ToList(),
+            } : allVolunteersInList.OrderBy(v => v?.Id).ToList();
+            return sortedVolunteers;
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Error accessing Volunteers.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+        }
+    }
+
+    public BO.Volunteer GetVolunteerDetails(int id)
+    {
+        try
+        {
+            var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
+            return Helpers.VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Error accessing Volunteers.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+        }
+    }
+
+    public void UpdateVolunteerDetails(int requesterId, BO.Volunteer boVolunteer)
+    {
+        try
+        {
+            DO.Volunteer? requester = _dal.Volunteer.Read(requesterId) ?? throw new BO.BlDoesNotExistException("Requester does not exist!");
+            if (requester.ID != boVolunteer.Id || requester.Role != DO.Role.Manager)
+                throw new BO.BlUnauthorizedException("Requester is not authorized!");
+            var existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
+            VolunteerManager.ValidateVolunteer(boVolunteer);
+            if (!VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
+                throw new BO.BlInvalidFormatException("Password is not strong!");
+            if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
+                throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
+            var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+            if (latitude is null || longitude is null)
+                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+            boVolunteer.Latitude = latitude;
+            boVolunteer.Longitude = longitude;
+
+            DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
+            _dal.Volunteer.Update(updatedVolunteer);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+        }
+    }
+
+    public void DeleteVolunteer(int id)
+    {
+        try
+        {
+            var volunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist");
+            if (_dal.Assignment.ReadAll(a => a!.VolunteerId == id).Any())
+                throw new BO.BlDeletionException($"Cannot delete volunteer with ID={id} as he is handling calls.");
+            _dal.Volunteer.Delete(id);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+        }
+    }
+
+    public void AddVolunteer(BO.Volunteer boVolunteer)
+    {
+        try
+        {
+            if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
+                throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exist");
+            Helpers.VolunteerManager.ValidateVolunteer(boVolunteer);
+            if (!string.IsNullOrEmpty(boVolunteer.Password))
+                boVolunteer.Password = VolunteerManager.GenerateStrongPassword();
+            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+            if (latitude is null || longitude is null)
+                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+            boVolunteer.Latitude = latitude;
+            boVolunteer.Longitude = longitude;
+
+
+            DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
+
+            _dal.Volunteer.Create(doVolunteer);
+        }
+        catch (DO.DalAlreadyExistsException ex)
+        {
+            throw new BO.BlAlreadyExistException($"Volunteer with ID={boVolunteer.Id} already exists", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+        }
+    }
+
+    public void GetVolunteerDetails(string volunteerId)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Helpers;
+﻿using Helpers;
+using static BO.Enums;
+namespace BO;
 
-
-namespace BO
+public class CallAssignInList
 {
-    public class CallAssignInList
-    {
-        public int? VolunteerId { get; set; }
-        public string? VolunteerName { get; set; } = string.Empty;
-        public DateTime EntranceTime { get; set; }
-        public DateTime? FinishingTime { get; set; }
-        public TypeOfFinishTreatment? TypeOfFinishTreatment {  get; set; }
-        public override string ToString() => this.ToStringProperty();
-    }
+    public int? VolunteerId { get; set; }
+    public string VolunteerFullName { get; set; }
+    public DateTime Start_time { get; set; }
+    public DateTime? End_time { get; set; }
+    public EndType? EndType { get; set; }
+    public override string ToString() => this.ToStringProperty();
 }

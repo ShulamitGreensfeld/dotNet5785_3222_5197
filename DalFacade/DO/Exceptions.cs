@@ -46,3 +46,23 @@ public class DalEntityAlreadyExistsException : Exception
 {
     public DalEntityAlreadyExistsException(string? message) : base(message) { }
 }
+
+public class NotFoundException : Exception
+{
+    public NotFoundException(string? message) : base(message) { }
+}
+
+public class DataUpdateException : Exception
+{
+    public DataUpdateException(string? message) : base(message) { }
+}
+
+public class DuplicateIdException : Exception
+{
+    public DuplicateIdException(string? message) : base(message) { }
+}
+
+public class DalDeletionImpossible : Exception
+{
+    public DalDeletionImpossible(string? message) : base(message) { }
+}

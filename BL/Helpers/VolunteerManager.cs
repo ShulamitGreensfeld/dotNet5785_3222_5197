@@ -1,52 +1,211 @@
 ﻿using DalApi;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Helpers;
-//לל
+
 internal static class VolunteerManager
 {
-    private static IDal s_dal = Factory.Get; //stage 4
-    /// <summary>
-    /// מחזירה קואורדינטות של כתובת (רוחב ואורך) באמצעות API של LocationIQ.
-    /// </summary>
-    public static (double Latitude, double Longitude) GetCoordinates(string address)
+    private static IDal s_dal = Factory.Get;
+    public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
-        if (string.IsNullOrWhiteSpace(address))
-            throw new ArgumentException("כתובת לא תקינה");
+        try
+        {
+            var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.ID);
+            var totalHandled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
+            var totalCanceled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation || a!.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation);
+            var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
+            var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTimeForTreatment == null)?.CallId;
+            var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.ID && a.EndTimeForTreatment == null).FirstOrDefault();
+            BO.CallInProgress? callInProgress = null;
+            if (currentAssignment is not null)
+            {
+                var callDetails = s_dal.Call.Read(currentAssignment.CallId);
+                if (callDetails is not null)
+                {
+                    callInProgress = new BO.CallInProgress
+                    {
+                        Id = currentAssignment.ID,
+                        CallId = currentAssignment.CallId,
+                        CallType = (BO.Enums.CallType)callDetails.TypeOfCall,
+                        //Verbal_description = callDetails.Verbal_description, //לבדוק למה צריך את המשתנה הזה בכלל.....
+                        FullAddress = callDetails.Address,
+                        Opening_time = callDetails.OpeningTime,
+                        Max_finish_time = (DateTime)callDetails.MaxTimeForClosing!,
+                        Start_time = currentAssignment.EntryTimeForTreatment,
+                        CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude),
+                        CallStatus = CallManager.CalculateCallStatus(callDetails)
+                    };
+                }
+            }
+            return new BO.Volunteer
+            {
+                Id = doVolunteer.ID,
+                FullName = doVolunteer.Name,
+                CellphoneNumber = doVolunteer.Phone,
+                Email = doVolunteer.Email,
+                Password = doVolunteer.Password,
+                FullAddress = doVolunteer.Address,
+                Latitude = doVolunteer?.Latitude,
+                Longitude = doVolunteer?.Longitude,
+                Role = (BO.Enums.Role)doVolunteer!.Role,
+                IsActive = doVolunteer.IsActive,
+                DistanceType = (BO.Enums.DistanceTypes)doVolunteer.DistanceType,
+                MaxDistance = doVolunteer.MaxDistanceForCall,
+                TotalHandledCalls = totalHandled,
+                TotalCanceledCalls = totalCanceled,
+                TotalExpiredCalls = totalExpired,
 
-        using var client = new HttpClient();
-        string apiKey = "YOUR_LOCATIONIQ_API_KEY";  // השתמש ב-API key שלך
-        string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
-        var response = client.GetStringAsync(url).Result;
-        var json = System.Text.Json.JsonSerializer.Deserialize<dynamic>(response);
-        if (json == null || json[0] == null)
-            throw new Exception("כתובת לא נמצאה");
-
-        return (double.Parse(json[0]["lat"].ToString()), double.Parse(json[0]["lon"].ToString()));
+            };
+        }
+        catch (DO.DalDoesNotExistException ex)  //never used we have to check this error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        {
+            return null!;
+        }
     }
 
-    /// <summary>
-    /// מחשבת את המרחק האווירי בין שתי כתובות.
-    /// </summary>
-    public static double CalculateAirDistance(string address1, string address2)
+    public static DO.Volunteer ConvertBoVolunteerToDoVolunteer(BO.Volunteer boVolunteer)
     {
-        var (lat1, lon1) = GetCoordinates(address1);
-        var (lat2, lon2) = GetCoordinates(address2);
-
-        double R = 6371; // רדיוס כדור הארץ בק"מ
-        double dLat = DegreesToRadians(lat2 - lat1);
-        double dLon = DegreesToRadians(lon2 - lon1);
-        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                   Math.Cos(DegreesToRadians(lat1)) * Math.Cos(DegreesToRadians(lat2)) *
-                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-        return R * c;
+        return new DO.Volunteer(
+    boVolunteer.Id,
+    boVolunteer.FullName,
+    boVolunteer.CellphoneNumber,
+    boVolunteer.Email,
+    (DO.Role)boVolunteer.Role,
+    boVolunteer.IsActive,
+    (DO.DistanceType)boVolunteer.DistanceType,
+    boVolunteer.MaxDistance,
+    boVolunteer.Password,
+    boVolunteer.FullAddress,
+    boVolunteer.Latitude,
+    boVolunteer.Longitude
+    );
     }
 
-    private static double DegreesToRadians(double degrees) => degrees * Math.PI / 180;
-    public static void ChooseCallForVolunteer()
+    public static BO.VolunteerInList ConvertDoVolunteerToBoVolunteerInList(DO.Volunteer doVolunteer)
     {
+        var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.ID);
 
+        var totalHandled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
+        var totalCanceled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation || a!.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation);
+        var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
+        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTimeForTreatment == null)?.CallId;
+
+        return new BO.VolunteerInList
+        {
+            Id = doVolunteer.ID,
+            FullName = doVolunteer.Name,
+            IsActive = doVolunteer.IsActive,
+            TotalHandledCalls = totalHandled,
+            TotalCanceledCalls = totalCanceled,
+            TotalExpiredCalls = totalExpired,
+            CallId = assignedCallId,
+            CallType = assignedCallId is not null
+                ? (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.TypeOfCall ?? DO.TypeOfCall.ToPackageFood)
+                : BO.Enums.CallType.transportation
+        };
+    }
+    public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
+        => volunteers.Select(v => ConvertDoVolunteerToBoVolunteerInList(v)).ToList();
+    internal static bool VerifyPassword(string enteredPassword, string storedPassword)
+    {
+        var encryptedPassword = EncryptPassword(enteredPassword);
+        return encryptedPassword == storedPassword;
+    }
+    internal static string EncryptPassword(string password)
+    {
+        using var sha256 = SHA256.Create();
+        var hashedBytes = sha256?.ComputeHash(Encoding.UTF8.GetBytes(password));
+        return Convert.ToBase64String(hashedBytes!);
     }
 
+    internal static string GenerateStrongPassword()
+    {
+        var random = new Random();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
+        return new string(Enumerable.Repeat(chars, 12).Select(s => s[random.Next(s.Length)]).ToArray());
+    }
+
+    public static bool IsValidId(int id)
+    {
+        string idStr = id.ToString().PadLeft(9, '0');
+        int sum = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            int digit = idStr[i] - '0';
+            int weight = (i % 2 == 0) ? 1 : 2;
+            int product = digit * weight;
+
+            sum += (product > 9) ? product - 9 : product;
+        }
+        return sum % 10 == 0;
+    }
+
+    public static void ValidateVolunteer(BO.Volunteer volunteer)
+    {
+        if (volunteer.Id <= 0 || !IsValidId(volunteer.Id))
+            throw new BO.BlInvalidFormatException("Invalid Id number!");
+
+        if (string.IsNullOrWhiteSpace(volunteer.FullName) || !volunteer.FullName.Contains(" "))
+            throw new BO.BlInvalidFormatException("Invalid name!");
+
+        if (!Regex.IsMatch(volunteer.CellphoneNumber, @"^\d{10}$"))
+            throw new BO.BlInvalidFormatException("Invalid cellphone number!");
+
+        if (!Regex.IsMatch(volunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            throw new BO.BlInvalidFormatException("Invalid email!");
+
+        if ((volunteer.Password!.Length < 8 ||
+             !Regex.IsMatch(volunteer.Password, "[A-Z]") ||
+             !Regex.IsMatch(volunteer.Password, "[0-9]") ||
+             !Regex.IsMatch(volunteer.Password, "[!@#$%^&*]")))
+            throw new BO.BlInvalidFormatException("Invalid password!");
+
+        if (!string.IsNullOrEmpty(volunteer.FullAddress))
+            throw new BO.BlInvalidFormatException("Invalid address!");
+
+        if (volunteer.Role != BO.Enums.Role.volunteer || volunteer.Role != BO.Enums.Role.manager)
+            throw new BO.BlInvalidFormatException("Invalid role!");
+
+        if (volunteer.MaxDistance.HasValue && volunteer.MaxDistance <= 0)
+            throw new BO.BlInvalidFormatException("Invalid distance!");
+
+        if (!Enum.IsDefined(typeof(BO.Enums.DistanceTypes), volunteer.DistanceType))
+            throw new BO.BlInvalidFormatException("Invalid distance type!");
+
+        if (volunteer.TotalHandledCalls < 0)
+            throw new BO.BlInvalidFormatException("Invalid sum of handled calls!");
+
+        if (volunteer.TotalCanceledCalls < 0)
+            throw new BO.BlInvalidFormatException("Invalid sum of canceled calls!");
+
+        if (volunteer.TotalExpiredCalls < 0)
+            throw new BO.BlInvalidFormatException("Invalid sum of expired calls!");
+    }
+    internal static bool IsPasswordStrong(string password)
+    {
+        if (password.Length < 8)
+            return false;
+        if (!password.Any(char.IsUpper))
+            return false;
+        if (!password.Any(char.IsLower))
+            return false;
+        if (!password.Any(char.IsDigit))
+            return false;
+        if (!password.Any(c => "@#$%^&*".Contains(c)))
+            return false;
+        return true;
+    }
+
+    internal static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal static void SimulateCourseRegistrationAndGrade()
+    {
+        throw new NotImplementedException();
+    }
 }

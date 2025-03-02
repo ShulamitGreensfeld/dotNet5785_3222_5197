@@ -1,31 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Helpers;
+﻿using Helpers;
+using static BO.Enums;
+namespace BO;
 
-
-namespace BO
+public class Volunteer
 {
-    public class Volunteer
-    {
-        public int Id { get; init; }
-        public string Name { get; set; } = string.Empty;
-        public  string Phone {  get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string? Password { get; set; }
-        public string? Address { get; set; }
-        public double? Latitude { get; set; }
-        public double? Longitude { get; set; }
-        public Role Role { get; set; }
-        public bool IsActive {  get; set; }
-        public double? MaxDistanceForCall {  get; set; }
-        public DistanceType DistanceType { get; set; }
-        public int TreatedCallNum {  get; set; }
-        public int CenteledCallNum { get; set; }
-        public int OutOfRangeCallNum { get; set; }
-        public BO.CallInProgress? CallInProgress {  get; set; }
-        public override string ToString() => this.ToStringProperty();
-    }
+    public int Id { get; init; }
+    public string FullName { get; set; }
+    public string CellphoneNumber { get; set; }
+    public string Email { get; set; }
+    public string? Password { get; set; }/////////////////////////לשים לב לתוספת
+    public string? FullAddress { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+    public Role Role { get; set; }
+    public bool IsActive { get; set; }
+    public DistanceTypes DistanceType { get; set; }
+    public double? MaxDistance { get; set; }
+    public int TotalHandledCalls { get; set; }
+    public int TotalCanceledCalls { get; set; }
+    public int TotalExpiredCalls { get; set; }
+    public BO.CallInProgress? CallInProgress { get; set; }
+    public override string ToString() => this.ToStringProperty();
 }

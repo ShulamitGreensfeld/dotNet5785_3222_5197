@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Helpers;
+﻿using Helpers;
+using Microsoft.VisualBasic;
+using static BO.Enums;
+namespace BO;
 
-
-namespace BO
+public class CallInProgress
 {
-    public class CallInProgress
-    {
-        public int Id { get; init; }
-        public int CallId { get; init; }
-        public TypeOfCall TypeOfCall { get; set; }
-        public string? CallDescription { get; set; }
-        public string Address { get; set; } = string.Empty;
-        public DateTime OpeningTime { get; set; }
-        public DateTime? MaxTimeForClosing { get; set; }
-        public DateTime EntraceTime { get; set; }
-        public double Distance { get; set; }
-        public CallTritingByVulanteerStatus CallTritingByVulanteerStatus {  get; set; }
-        public override string ToString() => this.ToStringProperty();
-    }
+    public int Id { get; set; }
+    public int CallId { get; set; }
+    public Enums.CallType CallType { get; set; }
+    public string? Verbal_description { get; set; }
+    public string? FullAddress { get; set; }
+    public DateTime Opening_time { get; set; }
+    public DateTime Max_finish_time { get; set; }
+    public DateTime Start_time { get; set; }
+    public double CallDistance { get; set; }
+    public CallStatus CallStatus { get; set; }
+    public override string ToString() => this.ToStringProperty();
 }
