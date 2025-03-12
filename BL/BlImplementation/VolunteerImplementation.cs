@@ -39,7 +39,7 @@ internal class VolunteerImplementation : IVolunteer
                 BO.Enums.VolunteerInListFields.TotalCanceledCalls => allVolunteersInList.OrderBy(v => v?.TotalCanceledCalls).ToList(),
                 BO.Enums.VolunteerInListFields.TotalExpiredCalls => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
                 BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
-                BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),/// למה כתוב שצריך פונקציה נפרדת??
+                BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),
                 _ => allVolunteersInList.OrderBy(v => v?.Id).ToList(),
             } : allVolunteersInList.OrderBy(v => v?.Id).ToList();
             return sortedVolunteers;
@@ -59,7 +59,7 @@ internal class VolunteerImplementation : IVolunteer
         try
         {
             var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
-            return Helpers.VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
+            return VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -84,7 +84,7 @@ internal class VolunteerImplementation : IVolunteer
                 throw new BO.BlInvalidFormatException("Password is not strong!");
             if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
-            var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
             if (latitude is null || longitude is null)
                 throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
             boVolunteer.Latitude = latitude;
@@ -128,7 +128,7 @@ internal class VolunteerImplementation : IVolunteer
         {
             if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
                 throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exist");
-            Helpers.VolunteerManager.ValidateVolunteer(boVolunteer);
+            VolunteerManager.ValidateVolunteer(boVolunteer);
             if (!string.IsNullOrEmpty(boVolunteer.Password))
                 boVolunteer.Password = VolunteerManager.GenerateStrongPassword();
             var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
@@ -150,10 +150,5 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
-    }
-
-    public void GetVolunteerDetails(string volunteerId)
-    {
-        throw new NotImplementedException();
     }
 }

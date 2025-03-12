@@ -34,5 +34,5 @@ public record Volunteer
 {
     public Volunteer() : this(0, "", "", "", Role.Volunteer, false, DistanceType.AirDistance){}
 
-    public object BO { get; set; }
+    //public object BO { get; set; }
 }

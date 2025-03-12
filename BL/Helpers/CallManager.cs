@@ -1,6 +1,5 @@
 ﻿
 using DalApi;
-using static BO.Enums;
 
 namespace Helpers;
 
@@ -80,7 +79,7 @@ internal static class CallManager
             throw new BO.BlInvalidFormatException("Invalid id number! Id number has to be positive.");
 
         // בדיקת ENUM לשדות שאינם מספרים
-        if (!Enum.IsDefined(typeof(CallStatus), call.CallStatus))
+        if (!Enum.IsDefined(typeof(BO.Enums.CallStatus), call.CallStatus))
             throw new BO.BlInvalidFormatException("סInvalid status!");
 
         if (!Enum.IsDefined(typeof(DO.TypeOfCall), call.CallType))

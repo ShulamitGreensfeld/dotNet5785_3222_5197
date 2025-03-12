@@ -7,7 +7,7 @@ namespace Helpers;
 
 internal static class VolunteerManager
 {
-    private static IDal s_dal = Factory.Get;
+    private readonly static IDal s_dal = Factory.Get;
     public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
         try
@@ -203,9 +203,31 @@ internal static class VolunteerManager
     {
         throw new NotImplementedException();
     }
+    //internal static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
+    //{
+    //    var assignments = s_dal.Assignment.ReadAll().ToList(); // שליפת כל המטלות הפעילות
 
-    internal static void SimulateCourseRegistrationAndGrade()
-    {
-        throw new NotImplementedException();
-    }
+    //    foreach (var assignment in assignments)
+    //    {
+    //        var call = s_dal.Call.Read(assignment.CallId); // שליפת הקריאה מתוך מסד הנתונים
+
+    //        if (call != null && assignment.EndTimeForTreatment == null) // אם הקריאה עדיין פתוחה
+    //        {
+    //            // חישוב הזמן שנשאר לטיפול
+    //            TimeSpan remainingTime = (call.MaxTimeForClosing ?? newClock) - (newClock);
+
+    //            // עדכון הזמן שנותר לטיפול במטלה
+    //            //assignment.RemainingTime = remainingTime.TotalMinutes > 0 ? remainingTime : TimeSpan.Zero;
+
+    //            // בדיקה אם הקריאה בסיכון (אם הזמן שנותר קטן מהטווח המוגדר בסיכון)
+    //            bool isAtRisk = remainingTime <= (call.RiskRange ?? TimeSpan.Zero);
+
+    //            // עדכון אם הקריאה בסיכון
+    //            assignment.IsAtRisk = isAtRisk;
+
+    //            // עדכון במטלה
+    //            s_dal.Assignment.Update(assignment);
+    //        }
+    //    }
+    //}
 }

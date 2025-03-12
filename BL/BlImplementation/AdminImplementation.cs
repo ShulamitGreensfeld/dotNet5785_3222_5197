@@ -1,7 +1,5 @@
 ﻿using BlApi;
-using BO;
 using Helpers;
-using static BO.Enums;
 
 namespace BlImplementation;
 
@@ -29,11 +27,11 @@ internal class AdminImplementation : IAdmin
     {
         DateTime newClock = timeUnit switch
         {
-            TimeUnit.Minute => ClockManager.Now.AddMinutes(1),
-            TimeUnit.Hour => ClockManager.Now.AddHours(1),
-            TimeUnit.Day => ClockManager.Now.AddDays(1),
-            TimeUnit.Month => ClockManager.Now.AddMonths(1),
-            TimeUnit.Year => ClockManager.Now.AddYears(1),
+            BO.Enums.TimeUnit.Minute => ClockManager.Now.AddMinutes(1),
+            BO.Enums.TimeUnit.Hour => ClockManager.Now.AddHours(1),
+            BO.Enums.TimeUnit.Day => ClockManager.Now.AddDays(1),
+            BO.Enums.TimeUnit.Month => ClockManager.Now.AddMonths(1),
+            BO.Enums.TimeUnit.Year => ClockManager.Now.AddYears(1),
             _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), "Invalid time unit")
         };
 

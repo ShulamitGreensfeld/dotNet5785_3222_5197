@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-//﻿using Helpers;
+
 namespace BlImplementation;
 
 internal class CallImplementation : BlApi.ICall
 {
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    private bool RequesterVolunteer;
+    private readonly bool RequesterVolunteer;
 
     public int[] GetCallQuantitiesByStatus()
     {
@@ -59,14 +59,14 @@ internal class CallImplementation : BlApi.ICall
         catch (Exception ex)
         {
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
-        }
+        };  
     }
 
     public BO.Call GetCallDetails(int callId)
     {
         try
         {
-            DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Student with ID={callId} does Not exist");
+            DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
             var callAssignInLists = _dal.Assignment.ReadAll(a => a.CallId == callId)
                                                .Select(a => new BO.CallAssignInList
                                                {
@@ -95,7 +95,7 @@ internal class CallImplementation : BlApi.ICall
         {
             throw new BO.BlDoesNotExistException("Can not access calls", ex);
         }
-           catch (Exception ex)
+        catch (Exception ex)
         {
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
@@ -118,7 +118,7 @@ internal class CallImplementation : BlApi.ICall
         {
             throw new BO.BlDoesNotExistException("Can not access calls", ex);
         }
-           catch (Exception ex)
+        catch (Exception ex)
         {
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
@@ -268,9 +268,6 @@ internal class CallImplementation : BlApi.ICall
         }
     }
 
-
-
-
     public void MarkCallCompletion(int volunteerId, int assignmentId)
     {
         try
@@ -296,7 +293,6 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-
 
     public void SelectCallForTreatment(int volunteerId, int callId)
     {
@@ -329,86 +325,4 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-
-
 }
-
-
-
-
-
-
-//public int[] GetCallQuantitiesByStatus()
-//{
-//    var calls = _dal.Call.ReadAll();
-
-//    // יצירת מערך בגודל של מספר הסטטוסים (מומלץ שיהיה גודל של Enum)
-//    int[] callQuantities = new int[Enum.GetValues(typeof(CallStatus)).Length];
-
-//    // סינון הקריאות על פי סטטוס וחישוב הכמויות
-//    var groupedCalls = calls
-//        .GroupBy(c => c.CalculateCallStatus())  // קיבוץ לפי סטטוס
-//        .ToArray();  // ממיר את הקבוצות למערך
-
-//    foreach (var group in groupedCalls)
-//    {
-//        // עדכון המערך עם כמות הקריאות לכל סטטוס
-//        callQuantities[(int)group.Key] = group.Count();
-//    }
-
-
-
-
-
-//if (fieldFilter is not null)
-//    calls = calls.Where(call =>
-//        fieldFilter.Value switch
-//        {
-//            BO.Enums.CallInListFields.CallId => call.CallId.Equals(filterValue),
-//            BO.Enums.CallInListFields.CallType => call.CallType.Equals(filterValue),
-//            BO.Enums.CallInListFields.Opening_time => call.Opening_time.Equals(filterValue),
-//            BO.Enums.CallInListFields.TimeLeft => call.TimeLeft.Equals(filterValue),
-//            BO.Enums.CallInListFields.LastVolunteerName => call.LastVolunteerName.Contains((string)filterValue),
-//            BO.Enums.CallInListFields.TotalTime => call.TotalTime.Equals(filterValue),
-//            BO.Enums.CallInListFields.CallStatus => call.CallStatus.Equals(filterValue),
-//            BO.Enums.CallInListFields.TotalAssignments => call.TotalAssignments.Equals(filterValue),
-//            _ => true
-//        });
-//if (sortField.HasValue)
-//{
-//    calls = calls.OrderBy(call =>
-//        sortField.Value switch
-//        {
-//            BO.Enums.CallInListFields.CallId => call.CallId,
-//            BO.Enums.CallInListFields.CallType => call.CallType,
-//            BO.Enums.CallInListFields.Opening_time => call.Opening_time,
-//            BO.Enums.CallInListFields.TimeLeft => call.TimeLeft,
-//            BO.Enums.CallInListFields.LastVolunteerName => call.LastVolunteerName,
-//            BO.Enums.CallInListFields.TotalTime => call.TotalTime,
-//            BO.Enums.CallInListFields.CallStatus => call.CallStatus,
-//            BO.Enums.CallInListFields.TotalAssignments => call.TotalAssignments,
-//            _ => call.CallId
-//        });
-//}
-//else
-//{
-//    calls = calls.OrderBy(call => call.CallId);
-//}
-
-
-//if (fieldFilter.HasValue && filterValue != null)
-//{
-//    calls = calls.Where(call =>
-//        fieldFilter.Value switch
-//        {
-//            BO.Enums.CallFields.CallId => call.CallId.Equals(filterValue),
-//            BO.Enums.CallFields.CallType => call.CallType.Equals(filterValue),
-//            BO.Enums.CallFields.Opening_time => call.Opening_time.Equals(filterValue),
-//            BO.Enums.CallFields.TimeLeft => call.TimeLeft.Equals(filterValue),
-//            BO.Enums.CallFields.LastVolunteerName => call.LastVolunteerName.Contains((string)filterValue),
-//            BO.Enums.CallFields.TotalTime => call.TotalTime.Equals(filterValue),
-//            BO.Enums.CallFields.CallStatus => call.CallStatus.Equals(filterValue),
-//            BO.Enums.CallFields.TotalAssignments => call.TotalAssignments.Equals(filterValue),
-//            _ => true
-//        });
-//}

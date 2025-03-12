@@ -71,7 +71,7 @@ internal static class Tools
 
         try
         {
-            // יצירת חיבור ל-API
+            // connection to-API
             using (HttpClient client = new HttpClient())
             {
                 // מבצע קריאה סינכרונית (בלי async/await)

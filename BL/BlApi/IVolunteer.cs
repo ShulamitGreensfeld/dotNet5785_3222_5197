@@ -8,6 +8,5 @@
         void UpdateVolunteerDetails(int id, BO.Volunteer volunteer);
         void DeleteVolunteer(int id);
         void AddVolunteer(BO.Volunteer volunteer);
-        void GetVolunteerDetails(string volunteerId);
     }
 }
