@@ -108,7 +108,8 @@ public class Enums
         Hour,
         Day,
         Month,
-        Year
+        Year,
+        none
     }
 }
 
