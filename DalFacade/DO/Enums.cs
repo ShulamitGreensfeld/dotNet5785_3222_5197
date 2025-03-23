@@ -27,5 +27,6 @@ public enum TypeOfFinishTreatment
     Treated,
     SelfCancellation,
     ManagerCancellation,
-    OutOfRangeCancellation
+    OutOfRangeCancellation,
+    none
 }

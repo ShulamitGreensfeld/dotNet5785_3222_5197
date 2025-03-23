@@ -50,6 +50,7 @@ internal class CallImplementation : ICall
         return DataSource.Calls.FirstOrDefault(item => item!.ID == id); //stage 2
     }
 
+
     /// <summary>
     /// A function that reads all the items of this entity with or without a filtering function.
     /// </summary>

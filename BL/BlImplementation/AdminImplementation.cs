@@ -1,4 +1,6 @@
 ﻿using BlApi;
+using DalApi;
+using DalTest;
 using Helpers;
 
 namespace BlImplementation;
@@ -11,18 +13,6 @@ internal class AdminImplementation : IAdmin
     {
         return ClockManager.Now;
     }
-
-    public TimeSpan GetRiskTimeRange()
-    {
-        return _dal.Config.RiskRange;
-    }
-
-    public void InitializeDatabase()
-    {
-        _dal.ResetDB();
-        DalTest.Initialization.Do();
-    }
-
     public void PromoteClock(BO.Enums.TimeUnit timeUnit)
     {
         DateTime newClock = timeUnit switch
@@ -38,14 +28,27 @@ internal class AdminImplementation : IAdmin
         ClockManager.UpdateClock(newClock);
     }
 
-    public void ResetDatabase()
+    public TimeSpan GetRiskTimeRange()
     {
-        _dal.Config.Reset();
-        _dal.ResetDB();
+        return _dal.Config.RiskRange;
     }
 
     public void SetRiskTimeRange(TimeSpan riskTimeRange)
     {
         _dal.Config.RiskRange = riskTimeRange;
+    }
+
+    public void ResetDatabase()
+    {
+        _dal.Config.Reset();
+        _dal.ResetDB();
+        Console.WriteLine("Resetting configuration and clearing data...");
+        Console.WriteLine("Resetting completed successfully!");
+    }
+
+    public void InitializeDatabase()
+    {
+        _dal.ResetDB();
+        DalTest.Initialization.Do();
     }
 }

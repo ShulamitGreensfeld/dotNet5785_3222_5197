@@ -12,15 +12,15 @@ internal static class CallManager
         List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.ID).ToList()!;
         var lastAssignment = assignments.LastOrDefault(a => a!.CallId == call.ID);
         // אם עבר זמן מקסימלי לסיום הקריאה
-        if (call.MaxTimeForClosing < DateTime.Now)
+        if (call.MaxTimeForClosing < ClockManager.Now)
             return BO.Enums.CallStatus.expired;
         // אם הקריאה פתוחה ומסיימת בזמן הסיכון
-        if ((DateTime.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
+        if ((ClockManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
             return BO.Enums.CallStatus.opened_at_risk;
         // אם הקריאה בטיפול
         if (lastAssignment != null)
             //בטיפול בסיכון
-            if ((DateTime.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+            if ((ClockManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
                 return BO.Enums.CallStatus.treated_at_risk;
             //רק בטיפול      
             else
@@ -64,7 +64,7 @@ internal static class CallManager
         if (string.IsNullOrWhiteSpace(call.FullAddress))
             throw new BO.BlInvalidFormatException("Invalid address!");
 
-        if (!string.IsNullOrWhiteSpace(call.Verbal_description))
+        if (string.IsNullOrWhiteSpace(call.Verbal_description))
             throw new BO.BlInvalidFormatException("Invalid description!");
 
         // בדיקת זמני קריאה
@@ -73,21 +73,6 @@ internal static class CallManager
 
         if (call.Max_finish_time != default && call.Max_finish_time <= call.Opening_time)
             throw new BO.BlInvalidFormatException("Invalid max finish time! Finish time has to be bigger than opening time.");
-
-        // בדיקת מזהה מספרי
-        if (call.Id <= 0)
-            throw new BO.BlInvalidFormatException("Invalid id number! Id number has to be positive.");
-
-        // בדיקת ENUM לשדות שאינם מספרים
-        if (!Enum.IsDefined(typeof(BO.Enums.CallStatus), call.CallStatus))
-            throw new BO.BlInvalidFormatException("סInvalid status!");
-
-        if (!Enum.IsDefined(typeof(DO.TypeOfCall), call.CallType))
-            throw new BO.BlInvalidFormatException("Invalid call type!");
-
-        // בדיקת רשימה
-        if (call.AssignmentsList != null && call.AssignmentsList.Exists(a => a == null))
-            throw new BO.BlInvalidFormatException("Invalid assignments list!");
     }
 
     public static DO.Call ConvertBoCallToDoCall(BO.Call call)
@@ -96,7 +81,7 @@ internal static class CallManager
         {
             ID = call.Id,
             TypeOfCall = (DO.TypeOfCall)call.CallType,
-            //Verbal_description = call.Verbal_description, //כנ"ל לבדוק למה צריך את תהמשתנה הזה........
+            CallDescription = call.Verbal_description,
             Address = call.FullAddress!,
             Latitude = call.Latitude ?? 0.0,
             Longitude = call.Longitude ?? 0.0,

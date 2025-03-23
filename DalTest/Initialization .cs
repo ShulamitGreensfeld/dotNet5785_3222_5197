@@ -1,5 +1,8 @@
 ﻿using DalApi;
 using DO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace DalTest
 {
@@ -41,7 +44,7 @@ namespace DalTest
             createVolunteer();
             createCall();
             createAssignments();
-            //Console.WriteLine("Initialization completed successfully!");
+            Console.WriteLine("Initialization completed successfully!");
         }
 
         /// <summary>
@@ -288,6 +291,65 @@ namespace DalTest
               34.7631, 34.8036, 34.7862, 34.7927, 34.6292, 34.7657, 34.7894, 34.8360, 34.8040, 34.6489
            };
 
+            static string GeneratePassword(int length)
+            {
+                if (length < 4)
+                    throw new ArgumentException("Password length must be at least 4 to meet complexity requirements.");
+
+                const string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const string lowercase = "abcdefghijklmnopqrstuvwxyz";
+                const string digits = "0123456789";
+                const string specialChars = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/";
+
+                using var rng = RandomNumberGenerator.Create();
+                char[] password = new char[length];
+
+                // Ensure at least one character from each required category
+                password[0] = GetRandomChar(uppercase, rng);
+                password[1] = GetRandomChar(lowercase, rng);
+                password[2] = GetRandomChar(digits, rng);
+                password[3] = GetRandomChar(specialChars, rng);
+
+                // Fill the rest of the password with random characters from all categories
+                string allChars = uppercase + lowercase + digits + specialChars;
+                for (int i = 4; i < length; i++)
+                {
+                    password[i] = GetRandomChar(allChars, rng);
+                }
+
+                // Shuffle the password
+                password = password.OrderBy(_ => GetRandomInt(rng)).ToArray();
+
+                return new string(password);
+            }
+
+            static char GetRandomChar(string chars, RandomNumberGenerator rng)
+            {
+                byte[] randomByte = new byte[1];
+                do
+                {
+                    rng.GetBytes(randomByte);
+                } while (randomByte[0] >= 256 - (256 % chars.Length)); // למניעת הטיות
+
+                return chars[randomByte[0] % chars.Length];
+            }
+
+            static int GetRandomInt(RandomNumberGenerator rng)
+            {
+                byte[] randomBytes = new byte[4];
+                rng.GetBytes(randomBytes);
+                return BitConverter.ToInt32(randomBytes, 0) & int.MaxValue; // ערך חיובי בלבד
+            }
+
+            static string HashPasswordSHA256(string password)
+            {
+                using SHA256 sha256 = SHA256.Create();
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
+
+
+
             for (int i = 0; i < VolunteerNames.Length; i++)
             {
                 Volunteer newVolunteer = new Volunteer
@@ -299,6 +361,7 @@ namespace DalTest
                     Address = VolunteerAddresses[i],
                     Latitude = Latitudes[i],
                     Longitude = Longitudes[i],
+                    Password = HashPasswordSHA256(GeneratePassword(12)),
                     Role = Role.Volunteer,
                     IsActive = true,
                     DistanceType = (DistanceType)s_rand.Next(Enum.GetValues(typeof(DistanceType)).Length),
@@ -309,6 +372,14 @@ namespace DalTest
                 if (s_dal!.Volunteer.Read(newVolunteer.ID) == null) { s_dal!.Volunteer.Create(newVolunteer); }//stage 2
 
             }
+        }
+
+        // פונקציה ליצירת מספר טלפון אקראי
+        public static string GenerateRandomPhoneNumber()
+        {
+            string prefix = s_rand.Next(50, 59).ToString(); // קידומת ניידים בישראל (לדוגמה 050-059)
+            string rest = s_rand.Next(1000000, 9999999).ToString(); // 7 ספרות אחרונות
+            return $"{prefix}-{rest}"; // מחזיר עם מקף
         }
 
         /// <summary>

@@ -7,17 +7,20 @@ internal class VolunteerImplementation : IVolunteer
 {
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    public BO.Enums.Role EnterSystem(string name, string pass)
+
+
+    public BO.Volunteer GetVolunteerDetails(int id)
     {
         try
         {
-            var volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.Name == name && VolunteerManager.VerifyPassword(pass, v.Password!));
-            return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid username or password") : (BO.Enums.Role)volunteer.Role;
+            var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
+            return VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException("Error accessing volunteers.", ex);
+            throw new BO.BlDoesNotExistException("Error accessing Volunteers.", ex);
         }
+
         catch (Exception ex)
         {
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
@@ -53,17 +56,39 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
-
-    public BO.Volunteer GetVolunteerDetails(int id)
+    public void AddVolunteer(BO.Volunteer boVolunteer)
     {
         try
         {
-            var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
-            return VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
+            // בודק אם כבר קיים מתנדב עם אותו ID
+            if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
+                throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exists");
+
+            // מאמת את המתנדב לפני יצירתו
+            VolunteerManager.ValidateVolunteer(boVolunteer);
+
+            // אם יש סיסמה חדשה, מצפין אותה
+            if (!string.IsNullOrEmpty(boVolunteer.Password))
+            {
+                boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password); // הצפנה של הסיסמה
+            }
+
+            // אם יש כתובת, ניתן להוסיף כאן קוד לקבלת קואורדינטות (אם תרצה להפעיל את זה שוב)
+            //var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+            //if (latitude == null || longitude == null)
+            //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+            //boVolunteer.Latitude = latitude;
+            //boVolunteer.Longitude = longitude;
+
+            // ממיר את המתנדב מ-BO ל-DO
+            DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
+
+            // שומר את המתנדב בבסיס הנתונים
+            _dal.Volunteer.Create(doVolunteer);
         }
-        catch (DO.DalDoesNotExistException ex)
+        catch (DO.DalAlreadyExistsException ex)
         {
-            throw new BO.BlDoesNotExistException("Error accessing Volunteers.", ex);
+            throw new BO.BlAlreadyExistException($"Volunteer with ID={boVolunteer.Id} already exists", ex);
         }
         catch (Exception ex)
         {
@@ -71,24 +96,26 @@ internal class VolunteerImplementation : IVolunteer
         }
     }
 
+
     public void UpdateVolunteerDetails(int requesterId, BO.Volunteer boVolunteer)
     {
         try
         {
             DO.Volunteer? requester = _dal.Volunteer.Read(requesterId) ?? throw new BO.BlDoesNotExistException("Requester does not exist!");
-            if (requester.ID != boVolunteer.Id || requester.Role != DO.Role.Manager)
+            if (requester.ID != boVolunteer.Id && requester.Role != DO.Role.Manager)
                 throw new BO.BlUnauthorizedException("Requester is not authorized!");
             var existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
             VolunteerManager.ValidateVolunteer(boVolunteer);
-            if (!VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
+
+            if (string.IsNullOrEmpty(boVolunteer.Password!) && !VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
                 throw new BO.BlInvalidFormatException("Password is not strong!");
             if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
             var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            if (latitude is null || longitude is null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            boVolunteer.Latitude = latitude;
-            boVolunteer.Longitude = longitude;
+            //if (latitude == null || longitude == null)
+            //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+            //boVolunteer.Latitude = latitude;
+            //boVolunteer.Longitude = longitude;
 
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);
@@ -102,7 +129,6 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
-
     public void DeleteVolunteer(int id)
     {
         try
@@ -121,30 +147,16 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
-
-    public void AddVolunteer(BO.Volunteer boVolunteer)
+    public BO.Enums.Role EnterSystem(string name, string pass)
     {
         try
         {
-            if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
-                throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exist");
-            VolunteerManager.ValidateVolunteer(boVolunteer);
-            if (!string.IsNullOrEmpty(boVolunteer.Password))
-                boVolunteer.Password = VolunteerManager.GenerateStrongPassword();
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            if (latitude is null || longitude is null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            boVolunteer.Latitude = latitude;
-            boVolunteer.Longitude = longitude;
-
-
-            DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
-
-            _dal.Volunteer.Create(doVolunteer);
+            var volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.Name == name && VolunteerManager.VerifyPassword(pass, v.Password!));
+            return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid username or password") : (BO.Enums.Role)volunteer.Role;
         }
-        catch (DO.DalAlreadyExistsException ex)
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlAlreadyExistException($"Volunteer with ID={boVolunteer.Id} already exists", ex);
+            throw new BO.BlDoesNotExistException("Error accessing volunteers.", ex);
         }
         catch (Exception ex)
         {

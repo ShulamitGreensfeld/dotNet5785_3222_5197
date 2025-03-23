@@ -26,10 +26,11 @@ public class Enums
     /// </summary>
     public enum CallType
     {
-        transportation,
-        car_accident,
-        vehicle_breakdown,
-        search_and_rescue,
+        ToPrepareFood,
+        ToCarryFood,
+        ToPackageFood,
+        ToDonateRawMaterials,
+        ToCommunityCookingNights,
         none
     }
 
@@ -112,4 +113,3 @@ public class Enums
         none
     }
 }
-
