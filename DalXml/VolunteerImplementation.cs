@@ -95,8 +95,7 @@ internal class VolunteerImplementation : IVolunteer
         return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v)).FirstOrDefault(filter);
     }
 
-    // Reads all volunteers from the XML file, optionally filtering them.
-    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)//stage 3
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) // stage 3
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
         var volunteers = volunteersRootElem.Elements("Volunteer")
@@ -110,12 +109,13 @@ internal class VolunteerImplementation : IVolunteer
                 Role = (Role)Enum.Parse(typeof(Role), (string)v.Element("Role")!),
                 Password = (string)v.Element("Password")!,
                 Address = (string)v.Element("Address")!,
-                Latitude = (double)v.Element("Latitude")!,
-                Longitude = (double)v.Element("Longitude")!,
+                Latitude = double.TryParse((string?)v.Element("Latitude"), out double lat) ? lat : 0.0,
+                Longitude = double.TryParse((string?)v.Element("Longitude"), out double lon) ? lon : 0.0,
                 MaxDistanceForCall = (double)v.Element("LargestDistance")!,
                 DistanceType = (DistanceType)Enum.Parse(typeof(DistanceType), (string)v.Element("DistanceType")!)
             })
             .ToList();
+
         return filter == null ? volunteers : volunteers.Where(filter);
     }
 

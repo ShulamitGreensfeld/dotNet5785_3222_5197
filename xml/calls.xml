@@ -1,553 +1,553 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>50 Shlomo HaMelech Street, Kiryat Shmona</Address>
-    <Latitude>32.1736</Latitude>
-    <Longitude>34.8792</Longitude>
-    <OpeningTime>2025-03-22T20:51:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:42:45</MaxTimeForClosing>
-    <CallDescription>Chop vegetables and prep ingredients to kick-start our kitchen efforts.</CallDescription>
-    <ID>1000</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>46 HaTavor Street, Tiberias</Address>
-    <Latitude>32.2907</Latitude>
-    <Longitude>34.8065</Longitude>
-    <OpeningTime>2025-03-23T01:58:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T10:08:45</MaxTimeForClosing>
-    <CallDescription>Donate fresh herbs or seasonings to give meals a special homemade touch.</CallDescription>
-    <ID>1001</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>4 HaTavor Street, Tiberias</Address>
-    <Latitude>31.7267</Latitude>
-    <Longitude>34.7819</Longitude>
-    <OpeningTime>2025-03-23T01:29:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:16:45</MaxTimeForClosing>
-    <CallDescription>Join a social cooking night and put your culinary skills to good use.</CallDescription>
-    <ID>1002</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>19 HaShomer Street, Petah Tikva</Address>
-    <Latitude>32.0951</Latitude>
-    <Longitude>34.8874</Longitude>
-    <OpeningTime>2025-03-22T22:38:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T12:47:45</MaxTimeForClosing>
-    <CallDescription>Use your vehicle to transport food to soldiers in training areas.</CallDescription>
-    <ID>1003</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>7 HaEmek Street, Nazareth</Address>
-    <Latitude>31.6534</Latitude>
-    <Longitude>34.8299</Longitude>
-    <OpeningTime>2025-03-22T20:46:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:02:45</MaxTimeForClosing>
-    <CallDescription>Transport bulk food supplies for distribution to multiple locations.</CallDescription>
-    <ID>1004</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>4 HaTavor Street, Tiberias</Address>
-    <Latitude>31.7267</Latitude>
-    <Longitude>34.7819</Longitude>
-    <OpeningTime>2025-03-22T21:47:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T07:44:45</MaxTimeForClosing>
-    <CallDescription>Join a social cooking night and put your culinary skills to good use.</CallDescription>
-    <ID>1005</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>7 Shderot HaZayit, Be'er Sheva</Address>
-    <Latitude>32.063</Latitude>
-    <Longitude>34.8302</Longitude>
-    <OpeningTime>2025-03-23T02:54:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T09:16:45</MaxTimeForClosing>
-    <CallDescription>Bring your passion for cooking and help us make hearty, filling dishes.</CallDescription>
-    <ID>1006</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>7 Shderot HaZayit, Be'er Sheva</Address>
-    <Latitude>32.063</Latitude>
-    <Longitude>34.8302</Longitude>
-    <OpeningTime>2025-03-22T23:25:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T03:48:45</MaxTimeForClosing>
-    <CallDescription>Bring your passion for cooking and help us make hearty, filling dishes.</CallDescription>
-    <ID>1007</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>12 Shderot Haatzmaut, Hadera</Address>
-    <Latitude>32.9885</Latitude>
-    <Longitude>34.8837</Longitude>
-    <OpeningTime>2025-03-23T00:03:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T03:20:45</MaxTimeForClosing>
-    <CallDescription>Enjoy a team-building evening filled with cooking and laughter.</CallDescription>
-    <ID>1008</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>10 Nordau Boulevard, Tel Aviv</Address>
-    <Latitude>32.0736</Latitude>
-    <Longitude>34.7704</Longitude>
-    <OpeningTime>2025-03-22T22:56:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T13:13:45</MaxTimeForClosing>
-    <CallDescription>Help us package meals for soldiers in the field—your support makes it happen!</CallDescription>
-    <ID>1009</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>40 Bialik Street, Raanana</Address>
-    <Latitude>32.0779</Latitude>
-    <Longitude>34.8195</Longitude>
-    <OpeningTime>2025-03-23T01:13:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:20:45</MaxTimeForClosing>
-    <CallDescription>Share baking ingredients like sugar or flour to create homemade treats.</CallDescription>
-    <ID>1010</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>9 Shderot HaGalim, Herzliya</Address>
-    <Latitude>32.1575</Latitude>
-    <Longitude>34.7909</Longitude>
-    <OpeningTime>2025-03-22T20:34:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T04:01:45</MaxTimeForClosing>
-    <CallDescription>Spend an evening cooking together while making a difference.</CallDescription>
-    <ID>1011</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>27 HaTzafon Street, Holon</Address>
-    <Latitude>32.0926</Latitude>
-    <Longitude>34.8036</Longitude>
-    <OpeningTime>2025-03-23T01:04:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:34:45</MaxTimeForClosing>
-    <CallDescription>Join us in preparing soups, stews, or casseroles—comfort food for heroes.</CallDescription>
-    <ID>1012</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>7 HaArava Street, Eilat</Address>
-    <Latitude>29.5596</Latitude>
-    <Longitude>34.9494</Longitude>
-    <OpeningTime>2025-03-22T21:03:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T07:55:45</MaxTimeForClosing>
-    <CallDescription>Contribute pasta, rice, or staples that are essential for cooking.</CallDescription>
-    <ID>1013</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>50 Shlomo HaMelech Street, Kiryat Shmona</Address>
-    <Latitude>32.1736</Latitude>
-    <Longitude>34.8792</Longitude>
-    <OpeningTime>2025-03-23T00:46:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T10:25:45</MaxTimeForClosing>
-    <CallDescription>Chop vegetables and prep ingredients to kick-start our kitchen efforts.</CallDescription>
-    <ID>1014</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>18 Eilat Street, Tel Aviv</Address>
-    <Latitude>32.0702</Latitude>
-    <Longitude>34.7915</Longitude>
-    <OpeningTime>2025-03-22T22:37:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T03:24:45</MaxTimeForClosing>
-    <CallDescription>Join us for a fun community cooking night to prepare meals for soldiers.</CallDescription>
-    <ID>1015</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>14 HaNasi Harishon Boulevard, Rehovot</Address>
-    <Latitude>31.9737</Latitude>
-    <Longitude>34.836</Longitude>
-    <OpeningTime>2025-03-22T21:20:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T12:40:45</MaxTimeForClosing>
-    <CallDescription>Make a difference by delivering food to remote outposts.</CallDescription>
-    <ID>1016</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>14 Beit HaArava Street, Jerusalem</Address>
-    <Latitude>31.8054</Latitude>
-    <Longitude>34.8454</Longitude>
-    <OpeningTime>2025-03-22T22:03:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:38:45</MaxTimeForClosing>
-    <CallDescription>Bake bread or pastries that will warm someone’s heart.</CallDescription>
-    <ID>1017</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>13 HaSharon Boulevard, Hadera</Address>
-    <Latitude>32.0162</Latitude>
-    <Longitude>34.7724</Longitude>
-    <OpeningTime>2025-03-22T20:39:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:53:45</MaxTimeForClosing>
-    <CallDescription>Assist in packing large trays of delicious food for group delivery.</CallDescription>
-    <ID>1018</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>10 Nordau Boulevard, Tel Aviv</Address>
-    <Latitude>32.0736</Latitude>
-    <Longitude>34.7704</Longitude>
-    <OpeningTime>2025-03-23T02:10:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T12:08:45</MaxTimeForClosing>
-    <CallDescription>Help us package meals for soldiers in the field—your support makes it happen!</CallDescription>
-    <ID>1019</ID>
-  </Call>
-  <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
     <Address>10 HaChavatzelet Street, Netanya</Address>
     <Latitude>32.0873</Latitude>
     <Longitude>34.795</Longitude>
-    <OpeningTime>2025-03-22T23:47:45</OpeningTime>
+    <OpeningTime>2025-03-23T03:45:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T11:00:45</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-03-23T13:35:49</MaxTimeForClosing>
     <CallDescription>Deliver care packages filled with love and nourishment.</CallDescription>
-    <ID>1020</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>4 HaHistadrut Boulevard, Kfar Saba</Address>
-    <Latitude>32.1749</Latitude>
-    <Longitude>34.7631</Longitude>
-    <OpeningTime>2025-03-22T22:58:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T09:55:45</MaxTimeForClosing>
-    <CallDescription>Be part of wrapping sandwiches and snacks for those protecting us.</CallDescription>
-    <ID>1021</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>9 Shderot HaGalim, Herzliya</Address>
-    <Latitude>32.1575</Latitude>
-    <Longitude>34.7909</Longitude>
-    <OpeningTime>2025-03-22T22:09:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T09:24:45</MaxTimeForClosing>
-    <CallDescription>Spend an evening cooking together while making a difference.</CallDescription>
-    <ID>1022</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>29 HaMa'ayan Street, Kiryat Gat</Address>
-    <Latitude>32.6047</Latitude>
-    <Longitude>34.7956</Longitude>
-    <OpeningTime>2025-03-22T22:22:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T04:14:45</MaxTimeForClosing>
-    <CallDescription>Offer fresh fruits that can be turned into desserts or healthy snacks.</CallDescription>
-    <ID>1023</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>21 HaGeula Street, Herzliya</Address>
-    <Latitude>31.7708</Latitude>
-    <Longitude>34.9046</Longitude>
-    <OpeningTime>2025-03-23T02:37:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T07:20:45</MaxTimeForClosing>
-    <CallDescription>Create balanced, nutritious meals that give soldiers the energy they need.</CallDescription>
-    <ID>1024</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>5 HaRav Herzog Street, Haifa</Address>
-    <Latitude>31.8419</Latitude>
-    <Longitude>34.7589</Longitude>
-    <OpeningTime>2025-03-23T00:36:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T04:36:45</MaxTimeForClosing>
-    <CallDescription>Drive and deliver meals, ensuring everything stays fresh and intact.</CallDescription>
-    <ID>1025</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>31 HaBanim Boulevard, Holon</Address>
-    <Latitude>32.0895</Latitude>
-    <Longitude>34.8154</Longitude>
-    <OpeningTime>2025-03-22T22:43:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T13:12:45</MaxTimeForClosing>
-    <CallDescription>Supply grains, legumes, or other bulk items for nutritious meals.</CallDescription>
-    <ID>1026</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>5 HaRav Herzog Street, Haifa</Address>
-    <Latitude>31.8419</Latitude>
-    <Longitude>34.7589</Longitude>
-    <OpeningTime>2025-03-23T00:16:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T13:51:45</MaxTimeForClosing>
-    <CallDescription>Drive and deliver meals, ensuring everything stays fresh and intact.</CallDescription>
-    <ID>1027</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>13 HaSharon Boulevard, Hadera</Address>
-    <Latitude>32.0162</Latitude>
-    <Longitude>34.7724</Longitude>
-    <OpeningTime>2025-03-23T01:59:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T09:28:45</MaxTimeForClosing>
-    <CallDescription>Assist in packing large trays of delicious food for group delivery.</CallDescription>
-    <ID>1028</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>2 HaTsiyonut Street, Rishon LeZion</Address>
-    <Latitude>32.0354</Latitude>
-    <Longitude>34.7894</Longitude>
-    <OpeningTime>2025-03-23T02:18:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T10:06:45</MaxTimeForClosing>
-    <CallDescription>Help us cook using donated ingredients to create something special.</CallDescription>
-    <ID>1029</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>7 Shderot HaZayit, Be'er Sheva</Address>
-    <Latitude>32.063</Latitude>
-    <Longitude>34.8302</Longitude>
-    <OpeningTime>2025-03-22T22:00:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T06:17:45</MaxTimeForClosing>
-    <CallDescription>Bring your passion for cooking and help us make hearty, filling dishes.</CallDescription>
-    <ID>1030</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>5 HaRav Herzog Street, Haifa</Address>
-    <Latitude>31.8419</Latitude>
-    <Longitude>34.7589</Longitude>
-    <OpeningTime>2025-03-22T21:20:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T10:47:45</MaxTimeForClosing>
-    <CallDescription>Drive and deliver meals, ensuring everything stays fresh and intact.</CallDescription>
-    <ID>1031</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>6 HaAliya Street, Acre</Address>
-    <Latitude>31.7665</Latitude>
-    <Longitude>34.6292</Longitude>
-    <OpeningTime>2025-03-22T22:09:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T06:53:45</MaxTimeForClosing>
-    <CallDescription>Donate sauces, spices, or oils to add flavor to meals for soldiers.</CallDescription>
-    <ID>1032</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>22 David HaMelech Street, Jerusalem</Address>
-    <Latitude>31.7702</Latitude>
-    <Longitude>35.2137</Longitude>
-    <OpeningTime>2025-03-22T22:37:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T08:15:45</MaxTimeForClosing>
-    <CallDescription>Support our efforts by donating fresh vegetables for meal prep.</CallDescription>
-    <ID>1033</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>15 HaRav Kook Street, Netanya</Address>
-    <Latitude>32.3212</Latitude>
-    <Longitude>34.8573</Longitude>
-    <OpeningTime>2025-03-23T02:54:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T12:23:45</MaxTimeForClosing>
-    <CallDescription>Bake cookies, cakes, or treats to lift a soldier’s spirits.</CallDescription>
-    <ID>1034</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>10 Nordau Boulevard, Tel Aviv</Address>
-    <Latitude>32.0736</Latitude>
-    <Longitude>34.7704</Longitude>
-    <OpeningTime>2025-03-22T22:49:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T11:49:45</MaxTimeForClosing>
-    <CallDescription>Help us package meals for soldiers in the field—your support makes it happen!</CallDescription>
-    <ID>1035</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>30 Yehuda HaLevi Street, Tel Aviv</Address>
-    <Latitude>32.0782</Latitude>
-    <Longitude>34.7839</Longitude>
-    <OpeningTime>2025-03-22T23:26:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T13:32:45</MaxTimeForClosing>
-    <CallDescription>Join the team to organize and pack food for delivery.</CallDescription>
-    <ID>1036</ID>
+    <ID>1000</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPackageFood</TypeOfCall>
     <Address>35 HaZamir Street, Ashdod</Address>
     <Latitude>31.7717</Latitude>
     <Longitude>34.6415</Longitude>
-    <OpeningTime>2025-03-22T23:35:45</OpeningTime>
+    <OpeningTime>2025-03-23T08:56:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T05:17:45</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-03-23T18:46:49</MaxTimeForClosing>
     <CallDescription>Help prepare food items and pack them for easy transport.</CallDescription>
-    <ID>1037</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>9 HaDekel Street, Tel Aviv</Address>
-    <Latitude>32.1089</Latitude>
-    <Longitude>34.7831</Longitude>
-    <OpeningTime>2025-03-23T02:37:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T09:00:45</MaxTimeForClosing>
-    <CallDescription>Provide dairy products like cheese, butter, or milk to enhance our cooking.</CallDescription>
-    <ID>1038</ID>
+    <ID>1001</ID>
   </Call>
   <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
     <Address>5 HaRav Herzog Street, Haifa</Address>
     <Latitude>31.8419</Latitude>
     <Longitude>34.7589</Longitude>
-    <OpeningTime>2025-03-23T00:37:45</OpeningTime>
+    <OpeningTime>2025-03-23T08:06:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T14:43:45</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-03-23T19:37:49</MaxTimeForClosing>
     <CallDescription>Drive and deliver meals, ensuring everything stays fresh and intact.</CallDescription>
-    <ID>1039</ID>
+    <ID>1002</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>5 HaRav Herzog Street, Haifa</Address>
+    <Latitude>31.8419</Latitude>
+    <Longitude>34.7589</Longitude>
+    <OpeningTime>2025-03-23T09:52:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T18:59:49</MaxTimeForClosing>
+    <CallDescription>Drive and deliver meals, ensuring everything stays fresh and intact.</CallDescription>
+    <ID>1003</ID>
   </Call>
   <Call>
     <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>6 HaTanaim Street, Ramat HaSharon</Address>
-    <Latitude>32.0773</Latitude>
-    <Longitude>34.7797</Longitude>
-    <OpeningTime>2025-03-22T20:30:45</OpeningTime>
+    <Address>31 HaBanim Boulevard, Holon</Address>
+    <Latitude>32.0895</Latitude>
+    <Longitude>34.8154</Longitude>
+    <OpeningTime>2025-03-23T03:55:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T14:59:45</MaxTimeForClosing>
-    <CallDescription>Donate raw meat or fish to ensure our meals are rich in protein.</CallDescription>
-    <ID>1040</ID>
+    <MaxTimeForClosing>2025-03-23T12:35:49</MaxTimeForClosing>
+    <CallDescription>Supply grains, legumes, or other bulk items for nutritious meals.</CallDescription>
+    <ID>1004</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>15 HaRav Kook Street, Netanya</Address>
-    <Latitude>32.3212</Latitude>
-    <Longitude>34.8573</Longitude>
-    <OpeningTime>2025-03-22T23:30:45</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>10 HaChavatzelet Street, Netanya</Address>
+    <Latitude>32.0873</Latitude>
+    <Longitude>34.795</Longitude>
+    <OpeningTime>2025-03-23T08:46:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T07:04:45</MaxTimeForClosing>
-    <CallDescription>Bake cookies, cakes, or treats to lift a soldier’s spirits.</CallDescription>
-    <ID>1041</ID>
+    <MaxTimeForClosing>2025-03-23T14:47:49</MaxTimeForClosing>
+    <CallDescription>Deliver care packages filled with love and nourishment.</CallDescription>
+    <ID>1005</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPackageFood</TypeOfCall>
     <Address>18 HaNegev Boulevard, Sderot</Address>
     <Latitude>32.9023</Latitude>
     <Longitude>34.9216</Longitude>
-    <OpeningTime>2025-03-22T22:21:45</OpeningTime>
+    <OpeningTime>2025-03-23T09:13:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T04:16:45</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-03-23T18:33:49</MaxTimeForClosing>
     <CallDescription>Add a special touch by labeling meal packages with care.</CallDescription>
-    <ID>1042</ID>
+    <ID>1006</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>38 HaHoresh Street, Rosh HaAyin</Address>
-    <Latitude>32.7775</Latitude>
-    <Longitude>34.8741</Longitude>
-    <OpeningTime>2025-03-22T22:39:45</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>31 Herzl Boulevard, Tiberias</Address>
+    <Latitude>32.0546</Latitude>
+    <Longitude>34.8433</Longitude>
+    <OpeningTime>2025-03-23T07:45:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T07:54:45</MaxTimeForClosing>
-    <CallDescription>Seal and secure food containers to ensure everything stays fresh.</CallDescription>
-    <ID>1043</ID>
+    <MaxTimeForClosing>2025-03-23T22:02:49</MaxTimeForClosing>
+    <CallDescription>Work with a cooking team to prepare large quantities of meals.</CallDescription>
+    <ID>1007</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>4 HaHistadrut Boulevard, Kfar Saba</Address>
-    <Latitude>32.1749</Latitude>
-    <Longitude>34.7631</Longitude>
-    <OpeningTime>2025-03-23T03:12:45</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>4 HaTavor Street, Tiberias</Address>
+    <Latitude>31.7267</Latitude>
+    <Longitude>34.7819</Longitude>
+    <OpeningTime>2025-03-23T03:22:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T08:47:45</MaxTimeForClosing>
-    <CallDescription>Be part of wrapping sandwiches and snacks for those protecting us.</CallDescription>
-    <ID>1044</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>30 Yehuda HaLevi Street, Tel Aviv</Address>
-    <Latitude>32.0782</Latitude>
-    <Longitude>34.7839</Longitude>
-    <OpeningTime>2025-03-23T02:30:45</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T08:28:45</MaxTimeForClosing>
-    <CallDescription>Join the team to organize and pack food for delivery.</CallDescription>
-    <ID>1045</ID>
+    <MaxTimeForClosing>2025-03-23T15:14:49</MaxTimeForClosing>
+    <CallDescription>Join a social cooking night and put your culinary skills to good use.</CallDescription>
+    <ID>1008</ID>
   </Call>
   <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
     <Address>12 HaAtzmaut Street, Haifa</Address>
     <Latitude>32.8194</Latitude>
     <Longitude>34.989</Longitude>
-    <OpeningTime>2025-03-22T20:44:45</OpeningTime>
+    <OpeningTime>2025-03-23T05:13:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T09:27:45</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-03-23T19:13:49</MaxTimeForClosing>
     <CallDescription>Volunteer to deliver meal packages to military bases—they’re counting on us!</CallDescription>
-    <ID>1046</ID>
+    <ID>1009</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>11 King Solomon Street, Ashkelon</Address>
+    <Latitude>32.0656</Latitude>
+    <Longitude>34.804</Longitude>
+    <OpeningTime>2025-03-23T04:08:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T21:49:49</MaxTimeForClosing>
+    <CallDescription>Be part of a community effort to support those who protect us.</CallDescription>
+    <ID>1010</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>6 HaAliya Street, Acre</Address>
+    <Latitude>31.7665</Latitude>
+    <Longitude>34.6292</Longitude>
+    <OpeningTime>2025-03-23T10:03:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T17:16:49</MaxTimeForClosing>
+    <CallDescription>Donate sauces, spices, or oils to add flavor to meals for soldiers.</CallDescription>
+    <ID>1011</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>4 HaHistadrut Boulevard, Kfar Saba</Address>
+    <Latitude>32.1749</Latitude>
+    <Longitude>34.7631</Longitude>
+    <OpeningTime>2025-03-23T08:40:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T12:33:49</MaxTimeForClosing>
+    <CallDescription>Be part of wrapping sandwiches and snacks for those protecting us.</CallDescription>
+    <ID>1012</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>7 Shderot HaZayit, Be'er Sheva</Address>
+    <Latitude>32.063</Latitude>
+    <Longitude>34.8302</Longitude>
+    <OpeningTime>2025-03-23T08:31:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T19:39:49</MaxTimeForClosing>
+    <CallDescription>Bring your passion for cooking and help us make hearty, filling dishes.</CallDescription>
+    <ID>1013</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>5 Bialik Street, Ramat Gan</Address>
+    <Latitude>32.0739</Latitude>
+    <Longitude>34.8221</Longitude>
+    <OpeningTime>2025-03-23T09:42:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T13:51:49</MaxTimeForClosing>
+    <CallDescription>Use your cooking skills to make fresh meals for soldiers far from home.</CallDescription>
+    <ID>1014</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>40 Bialik Street, Raanana</Address>
+    <Latitude>32.0779</Latitude>
+    <Longitude>34.8195</Longitude>
+    <OpeningTime>2025-03-23T05:00:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T18:15:49</MaxTimeForClosing>
+    <CallDescription>Share baking ingredients like sugar or flour to create homemade treats.</CallDescription>
+    <ID>1015</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>12 HaAtzmaut Street, Haifa</Address>
+    <Latitude>32.8194</Latitude>
+    <Longitude>34.989</Longitude>
+    <OpeningTime>2025-03-23T08:00:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T12:29:49</MaxTimeForClosing>
+    <CallDescription>Volunteer to deliver meal packages to military bases—they’re counting on us!</CallDescription>
+    <ID>1016</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>10 HaChavatzelet Street, Netanya</Address>
+    <Latitude>32.0873</Latitude>
+    <Longitude>34.795</Longitude>
+    <OpeningTime>2025-03-23T09:13:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T14:31:49</MaxTimeForClosing>
+    <CallDescription>Deliver care packages filled with love and nourishment.</CallDescription>
+    <ID>1017</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>7 HaEmek Street, Nazareth</Address>
+    <Latitude>31.6534</Latitude>
+    <Longitude>34.8299</Longitude>
+    <OpeningTime>2025-03-23T05:09:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T16:28:49</MaxTimeForClosing>
+    <CallDescription>Transport bulk food supplies for distribution to multiple locations.</CallDescription>
+    <ID>1018</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>23 HaPisga Street, Modi'in</Address>
+    <Latitude>31.7083</Latitude>
+    <Longitude>34.7789</Longitude>
+    <OpeningTime>2025-03-23T09:22:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T20:02:49</MaxTimeForClosing>
+    <CallDescription>Help us stock up on essential kitchen supplies like salt, pepper, and spices.</CallDescription>
+    <ID>1019</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>15 HaRav Kook Street, Netanya</Address>
+    <Latitude>32.3212</Latitude>
+    <Longitude>34.8573</Longitude>
+    <OpeningTime>2025-03-23T03:48:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T16:28:49</MaxTimeForClosing>
+    <CallDescription>Bake cookies, cakes, or treats to lift a soldier’s spirits.</CallDescription>
+    <ID>1020</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>4 HaTavor Street, Tiberias</Address>
+    <Latitude>31.7267</Latitude>
+    <Longitude>34.7819</Longitude>
+    <OpeningTime>2025-03-23T06:10:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T10:55:49</MaxTimeForClosing>
+    <CallDescription>Join a social cooking night and put your culinary skills to good use.</CallDescription>
+    <ID>1021</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>20 Jerusalem Boulevard, Bat Yam</Address>
+    <Latitude>32.0509</Latitude>
+    <Longitude>34.7657</Longitude>
+    <OpeningTime>2025-03-23T04:01:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T15:55:49</MaxTimeForClosing>
+    <CallDescription>Package hot meals into containers and bring a smile to someone’s day.</CallDescription>
+    <ID>1022</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>35 HaZamir Street, Ashdod</Address>
+    <Latitude>31.7717</Latitude>
+    <Longitude>34.6415</Longitude>
+    <OpeningTime>2025-03-23T06:20:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T16:09:49</MaxTimeForClosing>
+    <CallDescription>Help prepare food items and pack them for easy transport.</CallDescription>
+    <ID>1023</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>33 Jabotinsky Boulevard, Ramat Gan</Address>
+    <Latitude>32.0814</Latitude>
+    <Longitude>34.7862</Longitude>
+    <OpeningTime>2025-03-23T09:55:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T18:49:49</MaxTimeForClosing>
+    <CallDescription>Help us carry freshly prepared meals to emergency locations.</CallDescription>
+    <ID>1024</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>20 Jerusalem Boulevard, Bat Yam</Address>
+    <Latitude>32.0509</Latitude>
+    <Longitude>34.7657</Longitude>
+    <OpeningTime>2025-03-23T07:03:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T10:39:49</MaxTimeForClosing>
+    <CallDescription>Package hot meals into containers and bring a smile to someone’s day.</CallDescription>
+    <ID>1025</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>50 Shlomo HaMelech Street, Kiryat Shmona</Address>
+    <Latitude>32.1736</Latitude>
+    <Longitude>34.8792</Longitude>
+    <OpeningTime>2025-03-23T10:00:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T14:38:49</MaxTimeForClosing>
+    <CallDescription>Chop vegetables and prep ingredients to kick-start our kitchen efforts.</CallDescription>
+    <ID>1026</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>46 HaTavor Street, Tiberias</Address>
+    <Latitude>32.2907</Latitude>
+    <Longitude>34.8065</Longitude>
+    <OpeningTime>2025-03-23T05:47:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T16:05:49</MaxTimeForClosing>
+    <CallDescription>Donate fresh herbs or seasonings to give meals a special homemade touch.</CallDescription>
+    <ID>1027</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>6 HaAliya Street, Acre</Address>
+    <Latitude>31.7665</Latitude>
+    <Longitude>34.6292</Longitude>
+    <OpeningTime>2025-03-23T08:25:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T17:55:49</MaxTimeForClosing>
+    <CallDescription>Donate sauces, spices, or oils to add flavor to meals for soldiers.</CallDescription>
+    <ID>1028</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>30 Yehuda HaLevi Street, Tel Aviv</Address>
+    <Latitude>32.0782</Latitude>
+    <Longitude>34.7839</Longitude>
+    <OpeningTime>2025-03-23T08:01:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T19:38:49</MaxTimeForClosing>
+    <CallDescription>Join the team to organize and pack food for delivery.</CallDescription>
+    <ID>1029</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>21 HaGeula Street, Herzliya</Address>
+    <Latitude>31.7708</Latitude>
+    <Longitude>34.9046</Longitude>
+    <OpeningTime>2025-03-23T05:10:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T13:28:49</MaxTimeForClosing>
+    <CallDescription>Create balanced, nutritious meals that give soldiers the energy they need.</CallDescription>
+    <ID>1030</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>3 HaGvura Street, Bat Yam</Address>
+    <Latitude>32.1678</Latitude>
+    <Longitude>34.8361</Longitude>
+    <OpeningTime>2025-03-23T09:39:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T17:04:49</MaxTimeForClosing>
+    <CallDescription>Prepare boxes of pre-cooked meals ready for delivery.</CallDescription>
+    <ID>1031</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>18 Eilat Street, Tel Aviv</Address>
+    <Latitude>32.0702</Latitude>
+    <Longitude>34.7915</Longitude>
+    <OpeningTime>2025-03-23T06:41:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T14:51:49</MaxTimeForClosing>
+    <CallDescription>Join us for a fun community cooking night to prepare meals for soldiers.</CallDescription>
+    <ID>1032</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>18 Eilat Street, Tel Aviv</Address>
+    <Latitude>32.0702</Latitude>
+    <Longitude>34.7915</Longitude>
+    <OpeningTime>2025-03-23T06:22:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T20:08:49</MaxTimeForClosing>
+    <CallDescription>Join us for a fun community cooking night to prepare meals for soldiers.</CallDescription>
+    <ID>1033</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>46 HaTavor Street, Tiberias</Address>
+    <Latitude>32.2907</Latitude>
+    <Longitude>34.8065</Longitude>
+    <OpeningTime>2025-03-23T09:57:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T16:07:49</MaxTimeForClosing>
+    <CallDescription>Donate fresh herbs or seasonings to give meals a special homemade touch.</CallDescription>
+    <ID>1034</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>12 Shderot Haatzmaut, Hadera</Address>
+    <Latitude>32.9885</Latitude>
+    <Longitude>34.8837</Longitude>
+    <OpeningTime>2025-03-23T03:20:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T17:44:49</MaxTimeForClosing>
+    <CallDescription>Enjoy a team-building evening filled with cooking and laughter.</CallDescription>
+    <ID>1035</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>50 HaMasger Street, Ramat Gan</Address>
+    <Latitude>31.8761</Latitude>
+    <Longitude>34.7964</Longitude>
+    <OpeningTime>2025-03-23T06:34:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T15:02:49</MaxTimeForClosing>
+    <CallDescription>Join our team of volunteer drivers and bring the food where it’s needed.</CallDescription>
+    <ID>1036</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>50 Shlomo HaMelech Street, Kiryat Shmona</Address>
+    <Latitude>32.1736</Latitude>
+    <Longitude>34.8792</Longitude>
+    <OpeningTime>2025-03-23T04:44:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T20:18:49</MaxTimeForClosing>
+    <CallDescription>Chop vegetables and prep ingredients to kick-start our kitchen efforts.</CallDescription>
+    <ID>1037</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>2 HaTsiyonut Street, Rishon LeZion</Address>
+    <Latitude>32.0354</Latitude>
+    <Longitude>34.7894</Longitude>
+    <OpeningTime>2025-03-23T05:55:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T18:03:49</MaxTimeForClosing>
+    <CallDescription>Help us cook using donated ingredients to create something special.</CallDescription>
+    <ID>1038</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>23 HaPisga Street, Modi'in</Address>
+    <Latitude>31.7083</Latitude>
+    <Longitude>34.7789</Longitude>
+    <OpeningTime>2025-03-23T08:07:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T20:31:49</MaxTimeForClosing>
+    <CallDescription>Help us stock up on essential kitchen supplies like salt, pepper, and spices.</CallDescription>
+    <ID>1039</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>14 Beit HaArava Street, Jerusalem</Address>
+    <Latitude>31.8054</Latitude>
+    <Longitude>34.8454</Longitude>
+    <OpeningTime>2025-03-23T08:51:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T16:21:49</MaxTimeForClosing>
+    <CallDescription>Bake bread or pastries that will warm someone’s heart.</CallDescription>
+    <ID>1040</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
     <Address>27 HaTzafon Street, Holon</Address>
     <Latitude>32.0926</Latitude>
     <Longitude>34.8036</Longitude>
-    <OpeningTime>2025-03-22T22:35:45</OpeningTime>
+    <OpeningTime>2025-03-23T04:34:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T10:49:45</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-03-23T22:18:49</MaxTimeForClosing>
     <CallDescription>Join us in preparing soups, stews, or casseroles—comfort food for heroes.</CallDescription>
-    <ID>1047</ID>
+    <ID>1041</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>15 HaRav Kook Street, Netanya</Address>
+    <Latitude>32.3212</Latitude>
+    <Longitude>34.8573</Longitude>
+    <OpeningTime>2025-03-23T05:14:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T12:33:49</MaxTimeForClosing>
+    <CallDescription>Bake cookies, cakes, or treats to lift a soldier’s spirits.</CallDescription>
+    <ID>1042</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>8 HaNarkisim Street, Ashdod</Address>
+    <Latitude>31.8231</Latitude>
+    <Longitude>34.7721</Longitude>
+    <OpeningTime>2025-03-23T03:24:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T19:28:49</MaxTimeForClosing>
+    <CallDescription>Participate in a special event to cook holiday meals for soldiers.</CallDescription>
+    <ID>1043</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>22 David HaMelech Street, Jerusalem</Address>
+    <Latitude>31.7702</Latitude>
+    <Longitude>35.2137</Longitude>
+    <OpeningTime>2025-03-23T09:54:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T13:58:49</MaxTimeForClosing>
+    <CallDescription>Support our efforts by donating fresh vegetables for meal prep.</CallDescription>
+    <ID>1044</ID>
   </Call>
   <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>14 HaNasi Harishon Boulevard, Rehovot</Address>
-    <Latitude>31.9737</Latitude>
-    <Longitude>34.836</Longitude>
-    <OpeningTime>2025-03-22T23:46:45</OpeningTime>
+    <Address>5 HaRav Herzog Street, Haifa</Address>
+    <Latitude>31.8419</Latitude>
+    <Longitude>34.7589</Longitude>
+    <OpeningTime>2025-03-23T04:35:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T09:34:45</MaxTimeForClosing>
-    <CallDescription>Make a difference by delivering food to remote outposts.</CallDescription>
-    <ID>1048</ID>
+    <MaxTimeForClosing>2025-03-23T17:21:49</MaxTimeForClosing>
+    <CallDescription>Drive and deliver meals, ensuring everything stays fresh and intact.</CallDescription>
+    <ID>1045</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>3 Emek Yizrael Street, Afula</Address>
+    <Latitude>32.0944</Latitude>
+    <Longitude>34.7629</Longitude>
+    <OpeningTime>2025-03-23T08:45:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T20:13:49</MaxTimeForClosing>
+    <CallDescription>Work alongside others to efficiently pack food for our soldiers.</CallDescription>
+    <ID>1046</ID>
   </Call>
   <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
     <Address>19 HaShomer Street, Petah Tikva</Address>
     <Latitude>32.0951</Latitude>
     <Longitude>34.8874</Longitude>
-    <OpeningTime>2025-03-22T21:39:45</OpeningTime>
+    <OpeningTime>2025-03-23T05:10:49</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-03-23T11:22:45</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-03-23T14:52:49</MaxTimeForClosing>
     <CallDescription>Use your vehicle to transport food to soldiers in training areas.</CallDescription>
+    <ID>1047</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>45 HaShalom Boulevard, Givatayim</Address>
+    <Latitude>31.6713</Latitude>
+    <Longitude>34.772</Longitude>
+    <OpeningTime>2025-03-23T04:51:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T11:11:49</MaxTimeForClosing>
+    <CallDescription>Add flavor to the day by helping season and cook delicious meals.</CallDescription>
+    <ID>1048</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>31 Herzl Boulevard, Tiberias</Address>
+    <Latitude>32.0546</Latitude>
+    <Longitude>34.8433</Longitude>
+    <OpeningTime>2025-03-23T04:49:49</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-03-23T14:21:49</MaxTimeForClosing>
+    <CallDescription>Work with a cooking team to prepare large quantities of meals.</CallDescription>
     <ID>1049</ID>
   </Call>
 </ArrayOfCall>

@@ -74,11 +74,11 @@ internal class VolunteerImplementation : IVolunteer
             }
 
             // אם יש כתובת, ניתן להוסיף כאן קוד לקבלת קואורדינטות (אם תרצה להפעיל את זה שוב)
-            //var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            //if (latitude == null || longitude == null)
-            //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            //boVolunteer.Latitude = latitude;
-            //boVolunteer.Longitude = longitude;
+            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+            if (latitude == null || longitude == null)
+                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+            boVolunteer.Latitude = latitude;
+            boVolunteer.Longitude = longitude;
 
             // ממיר את המתנדב מ-BO ל-DO
             DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
@@ -112,10 +112,10 @@ internal class VolunteerImplementation : IVolunteer
             if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
             var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            //if (latitude == null || longitude == null)
-            //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            //boVolunteer.Latitude = latitude;
-            //boVolunteer.Longitude = longitude;
+            if (latitude == null || longitude == null)
+                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+            boVolunteer.Latitude = latitude;
+            boVolunteer.Longitude = longitude;
 
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);

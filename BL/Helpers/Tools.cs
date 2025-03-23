@@ -138,7 +138,7 @@ internal static class Tools
         }
     }
 
-    public static void StorePasswordInXml(string volunteerName, string hashedPassword, string filePath)
+    public static void StorePasswordInXml(string volunteerName, string hashedPassword, string filePath)   //לבדוק אם צריך את הפונקציה הזאת כי אל נעשה בה שימוש ככל הנראה...
     {
         XDocument doc;
         if (File.Exists(filePath))
