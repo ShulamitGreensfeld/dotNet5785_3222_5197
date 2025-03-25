@@ -1,6 +1,4 @@
 ﻿using Helpers;
-using System.Collections.Generic;
-using System.Linq;
 
 
 namespace BlImplementation;
@@ -11,7 +9,11 @@ internal class CallImplementation : BlApi.ICall
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     private readonly bool RequesterVolunteer;
 
-
+    /// <summary>
+    /// Retrieves the details of a call by its ID.
+    /// </summary>
+    /// <param name="callId">The ID of the call.</param>
+    /// <returns>A BO.Call object containing the details of the call.</returns>
     public BO.Call GetCallDetails(int callId)
     {
         try
@@ -49,10 +51,14 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Adds a new call to the system.
+    /// </summary>
+    /// <param name="boCall">The BO.Call object representing the new call.</param>
     public void AddCall(BO.Call boCall)
     {
         try
@@ -75,10 +81,14 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Updates the details of an existing call.
+    /// </summary>
+    /// <param name="boCall">The BO.Call object containing the updated call information.</param>
     public void UpdateCallDetails(BO.Call boCall)
     {
         try
@@ -99,10 +109,14 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Deletes a call from the system by its ID.
+    /// </summary>
+    /// <param name="callId">The ID of the call to delete.</param>
     public void DeleteCall(int callId)
     {
         try
@@ -122,10 +136,17 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Retrieves a list of closed calls handled by a specific volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer.</param>
+    /// <param name="callTypeFilter">Optional filter for the type of calls.</param>
+    /// <param name="sortField">Optional field by which to sort the list of calls.</param>
+    /// <returns>A list of closed calls handled by the volunteer.</returns>
     public IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.ClosedCallInListFields? sortField = null)
     {
         try
@@ -157,10 +178,17 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Retrieves a list of open calls for a specific volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer.</param>
+    /// <param name="callTypeFilter">Optional filter for the type of calls.</param>
+    /// <param name="sortField">Optional field by which to sort the list of calls.</param>
+    /// <returns>A list of open calls for the volunteer.</returns>
     public IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null)
     {
         try
@@ -189,10 +217,15 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Marks an assignment as canceled for a volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer canceling the assignment.</param>
+    /// <param name="assignmentId">The ID of the assignment to cancel.</param>
     public void MarkCallCancellation(int volunteerId, int assignmentId)
     {
         try
@@ -218,10 +251,15 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Marks an assignment as complited for a volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer compliting the assignment.</param>
+    /// <param name="assignmentId">The ID of the assignment to complite.</param>
     public void MarkCallCompletion(int volunteerId, int assignmentId)
     {
         try
@@ -244,10 +282,13 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
-
+    /// <summary>
+    /// Retrieves the quantities of calls by their status.
+    /// </summary>
+    /// <returns>An array of integers representing the quantities of calls for each status in the system.</returns>
     public int[] GetCallQuantitiesByStatus()
     {
         try
@@ -270,10 +311,17 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Retrieves a list of calls, optionally filtered and sorted by specified fields.
+    /// </summary>
+    /// <param name="fieldFilter">Optional filter field for the calls.</param>
+    /// <param name="filterValue">The value to filter the calls by.</param>
+    /// <param name="sortField">Optional field to sort the calls by.</param>
+    /// <returns>An IEnumerable of calls that match the filter and sort criteria.</returns>
     public IEnumerable<BO.CallInList> GetCallsList(BO.Enums.CallInListFields? fieldFilter = null, object? filterValue = null, BO.Enums.CallInListFields? sortField = null)
     {
         try
@@ -295,10 +343,15 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
-        };  
+            throw new BO.BlGeneralException(ex.Message, ex);
+        }
     }
 
+    /// <summary>
+    /// Assigns a volunteer to a call for treatment, provided the call is eligible for treatment.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer who is assigning themselves to the call.</param>
+    /// <param name="callId">The ID of the call to assign to the volunteer.</param>
     public void SelectCallForTreatment(int volunteerId, int callId)
     {
         try
@@ -327,7 +380,8 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+
 }

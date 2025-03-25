@@ -1,8 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Threading.Channels;
-using BlApi;
-using DO;
+﻿using BlApi;
 
 namespace BlTest
 {
@@ -62,32 +58,39 @@ namespace BlTest
                 Console.WriteLine("7. Back to Main Menu");
                 Console.Write("Choose an option: ");
                 string? choice = Console.ReadLine();
-                switch (choice)
+                try
                 {
-                    case "1":
-                        Console.WriteLine(s_bl.Admin.GetClock());
-                        break;
-                    case "2":
-                        PromoteClock();
-                        break;
-                    case "3":
-                        Console.WriteLine(s_bl.Admin.GetRiskTimeRange());
-                        break;
-                    case "4":
-                        SetRiskTimeRange();
-                        break;
-                    case "5":
-                        s_bl.Admin.ResetDatabase();
-                        break;
-                    case "6":
-                        s_bl.Admin.InitializeDatabase();
-                        break;
-                    case "7":
-                        exit = true;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
+                    switch (choice)
+                    {
+                        case "1":
+                            Console.WriteLine(s_bl.Admin.GetClock());
+                            break;
+                        case "2":
+                            PromoteClock();
+                            break;
+                        case "3":
+                            Console.WriteLine(s_bl.Admin.GetRiskTimeRange());
+                            break;
+                        case "4":
+                            SetRiskTimeRange();
+                            break;
+                        case "5":
+                            s_bl.Admin.ResetDatabase();
+                            break;
+                        case "6":
+                            s_bl.Admin.InitializeDatabase();
+                            break;
+                        case "7":
+                            exit = true;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
                 }
             }
         }
@@ -156,48 +159,54 @@ namespace BlTest
                 Console.WriteLine("12. Back to Main Menu");
                 Console.Write("Choose an option: ");
                 string? choice = Console.ReadLine();
-
-                switch (choice)
+                try
                 {
-                    case "1":
-                        GetCallDetails();
-                        break;
-                    case "2":
-                        AddCall();
-                        break;
-                    case "3":
-                        UpdateCall();
-                        break;
-                    case "4":
-                        DeleteCall();
-                        break;
-                    case "5":
-                        GetClosedCallsHandledByVolunteer();
-                        break;
-                    case "6":
-                        GetOpenCallsForVolunteer();
-                        break;
-                    case "7":
-                        MarkCallCancellation();
-                        break;
-                    case "8":
-                        MarkCallCompletion();
-                        break;
-                    case "9":
-                        GetCallQuantitiesByStatus();
-                        break;
-                    case "10":
-                        GetCallsList();
-                        break;
-                    case "11":
-                        SelectCallForTreatment();
-                        break;
-                    case "12":
-                        exit = true;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
+                    switch (choice)
+                    {
+                        case "1":
+                            GetCallDetails();
+                            break;
+                        case "2":
+                            AddCall();
+                            break;
+                        case "3":
+                            UpdateCall();
+                            break;
+                        case "4":
+                            DeleteCall();
+                            break;
+                        case "5":
+                            GetClosedCallsHandledByVolunteer();
+                            break;
+                        case "6":
+                            GetOpenCallsForVolunteer();
+                            break;
+                        case "7":
+                            MarkCallCancellation();
+                            break;
+                        case "8":
+                            MarkCallCompletion();
+                            break;
+                        case "9":
+                            GetCallQuantitiesByStatus();
+                            break;
+                        case "10":
+                            GetCallsList();
+                            break;
+                        case "11":
+                            SelectCallForTreatment();
+                            break;
+                        case "12":
+                            exit = true;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
                 }
             }
         }
@@ -464,33 +473,39 @@ namespace BlTest
                 Console.WriteLine("7. Back to Main Menu");
                 Console.Write("Choose an option: ");
                 string choice = Console.ReadLine();
-
-                switch (choice)
+                try
                 {
-                    case "1":
-                        GetVolunteerDetails();
-                        break;
-                    case "2":
-                        GetVolunteersList();
-                        break;
-                    case "3":
-                        AddVolunteer();
-                        break;
-                    case "4":
-                        UpdateVolunteerDetails();
-                        break;
-                    case "5":
-                        DeleteVolunteer();
-                        break;
-                    case "6":
-                        EnterVolunteerSystem();
-                        break;
-                    case "7":
-                        exit = true;
-                        break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
+                    switch (choice)
+                    {
+                        case "1":
+                            GetVolunteerDetails();
+                            break;
+                        case "2":
+                            GetVolunteersList();
+                            break;
+                        case "3":
+                            AddVolunteer();
+                            break;
+                        case "4":
+                            UpdateVolunteerDetails();
+                            break;
+                        case "5":
+                            DeleteVolunteer();
+                            break;
+                        case "6":
+                            EnterVolunteerSystem();
+                            break;
+                        case "7":
+                            exit = true;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
                 }
             }
         }

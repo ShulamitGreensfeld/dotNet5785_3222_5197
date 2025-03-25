@@ -15,20 +15,46 @@ static class XMLTools
     }
 
     #region SaveLoadWithXMLSerializer
+    //public static void SaveListToXMLSerializer<T>(List<T> list, string xmlFileName) where T : class
+    //{
+    //    string xmlFilePath = s_xmlDir + xmlFileName;
+
+    //    try
+    //    {
+    //        using FileStream file = new(xmlFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+    //        new XmlSerializer(typeof(List<T>)).Serialize(file, list);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
+    //    }
+    //}
     public static void SaveListToXMLSerializer<T>(List<T> list, string xmlFileName) where T : class
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
+        int retryCount = 3;
+        int delay = 1000; // milliseconds
 
-        try
+        for (int i = 0; i < retryCount; i++)
         {
-            using FileStream file = new(xmlFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            new XmlSerializer(typeof(List<T>)).Serialize(file, list);
-        }
-        catch (Exception ex)
-        {
-            throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
+            try
+            {
+                using FileStream file = new(xmlFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                new XmlSerializer(typeof(List<T>)).Serialize(file, list);
+                return;
+            }
+            catch (IOException ex) when (i < retryCount - 1)
+            {
+                // Wait for a while before retrying
+                Thread.Sleep(delay);
+            }
+            catch (Exception ex)
+            {
+                throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
+            }
         }
     }
+
     public static List<T> LoadListFromXMLSerializer<T>(string xmlFileName) where T : class
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
@@ -48,19 +74,44 @@ static class XMLTools
     #endregion
 
     #region SaveLoadWithXElement
+    //public static void SaveListToXMLElement(XElement rootElem, string xmlFileName)
+    //{
+    //    string xmlFilePath = s_xmlDir + xmlFileName;
+
+    //    try
+    //    {
+    //        rootElem.Save(xmlFilePath);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
+    //    }
+    //}
     public static void SaveListToXMLElement(XElement rootElem, string xmlFileName)
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
+    int retryCount = 3;
+    int delay = 1000; // milliseconds
 
-        try
+        for (int i = 0; i<retryCount; i++)
         {
-            rootElem.Save(xmlFilePath);
-        }
-        catch (Exception ex)
-        {
-            throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
+            try
+            {
+                rootElem.Save(xmlFilePath);
+                return;
+            }
+            catch (IOException ex) when(i<retryCount - 1)
+{
+    // Wait for a while before retrying
+    Thread.Sleep(delay);
+}
+            catch (Exception ex)
+            {
+                throw new DalXMLFileLoadCreateException($"fail to create xml file: {xmlFilePath}, {ex.Message}");
+            }
         }
     }
+
     public static XElement LoadListFromXMLElement(string xmlFileName)
     {
         string xmlFilePath = s_xmlDir + xmlFileName;

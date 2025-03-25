@@ -1,17 +1,16 @@
-﻿//Module Volunteer.cs
-namespace DO;
+﻿namespace DO;
 
 /// <summary>
 /// Call Entity represents a call with all its props
 /// </summary>
-/// <param name="ID"></param>
-/// <param name="TypeOfCall"></param>
-/// <param name="Address"></param>
-/// <param name="Latitude"></param>
-/// <param name="Longitude"></param>
-/// <param name="OpeningTime"></param>
-/// <param name="MaxTimeForClosing"></param>
-/// <param name="CallDescription"></param>
+/// <param name="ID">Unique identifier for the call.</param>
+/// <param name="TypeOfCall">Type of the call (e.g., carrying food, emergency, etc.).</param>
+/// <param name="Address">The address where the call takes place.</param>
+/// <param name="Latitude">Latitude of the call location.</param>
+/// <param name="Longitude">Longitude of the call location.</param>
+/// <param name="OpeningTime">The time when the call is opened.</param>
+/// <param name="MaxTimeForClosing">Optional max time for closing the call.</param>
+/// <param name="CallDescription">Optional description of the call.</param>
 public record Call
 (
    TypeOfCall TypeOfCall,

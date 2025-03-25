@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using Helpers;
+using System.Net;
 
 namespace BlImplementation;
 
@@ -9,6 +10,11 @@ internal class VolunteerImplementation : IVolunteer
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
 
+    /// <summary>
+    /// Retrieves the details of a volunteer by their ID.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer.</param>
+    /// <returns>A BO.Volunteer object representing the volunteer's details.</returns>
     public BO.Volunteer GetVolunteerDetails(int id)
     {
         try
@@ -20,13 +26,18 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new BO.BlDoesNotExistException("Error accessing Volunteers.", ex);
         }
-
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
+    /// <summary>
+    /// Retrieves a list of volunteers, optionally filtered by activity status and sorted by a specific field.
+    /// </summary>
+    /// <param name="isActiveFilter">Optional filter for the volunteer's active status.</param>
+    /// <param name="fieldSort">Optional sorting field for the volunteers list.</param>
+    /// <returns>A list of BO.VolunteerInList objects representing the volunteers.</returns>
     public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActiveFilter = null, BO.Enums.VolunteerInListFields? fieldSort = null)
     {
         try
@@ -53,37 +64,50 @@ internal class VolunteerImplementation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+
+    /// <summary>
+    /// Adds a new volunteer to the system after validating their information.
+    /// </summary>
+    /// <param name="boVolunteer">A BO.Volunteer object representing the volunteer to add.</param>
     public void AddVolunteer(BO.Volunteer boVolunteer)
     {
         try
         {
-            // בודק אם כבר קיים מתנדב עם אותו ID
+            // Check if a volunteer with the same ID already exists
             if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
                 throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exists");
 
-            // מאמת את המתנדב לפני יצירתו
+            // Validate the volunteer before creating
             VolunteerManager.ValidateVolunteer(boVolunteer);
 
-            // אם יש סיסמה חדשה, מצפין אותה
-            if (!string.IsNullOrEmpty(boVolunteer.Password))
+            // Generate a strong password if none is provided
+            if (string.IsNullOrEmpty(boVolunteer.Password))
             {
-                boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password); // הצפנה של הסיסמה
+                boVolunteer.Password = VolunteerManager.GenerateStrongPassword(); // Generate a strong password
             }
 
-            // אם יש כתובת, ניתן להוסיף כאן קוד לקבלת קואורדינטות (אם תרצה להפעיל את זה שוב)
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            if (latitude == null || longitude == null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            boVolunteer.Latitude = latitude;
-            boVolunteer.Longitude = longitude;
+            // Encrypt the password
+            boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password); // Encrypt the password
+            // Handle address, if provided, and get coordinates
+            if (boVolunteer.FullAddress != null && boVolunteer.FullAddress != "")
+            {
+                var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+                if (latitude == null || longitude == null)
+                {
+                    boVolunteer.FullAddress = null;
+                    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+                }
+                boVolunteer.Latitude = latitude;
+                boVolunteer.Longitude = longitude;
+            }
+            else
+                boVolunteer.FullAddress = null;
 
-            // ממיר את המתנדב מ-BO ל-DO
+            // Convert BO to DO and save the volunteer
             DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
-
-            // שומר את המתנדב בבסיס הנתונים
             _dal.Volunteer.Create(doVolunteer);
         }
         catch (DO.DalAlreadyExistsException ex)
@@ -92,31 +116,53 @@ internal class VolunteerImplementation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
 
-
+    /// <summary>
+    /// Updates the details of a volunteer, including address and password validation.
+    /// </summary>
+    /// <param name="requesterId">The ID of the requester trying to update the volunteer's details.</param>
+    /// <param name="boVolunteer">A BO.Volunteer object with the updated volunteer details.</param>
     public void UpdateVolunteerDetails(int requesterId, BO.Volunteer boVolunteer)
     {
         try
         {
-            DO.Volunteer? requester = _dal.Volunteer.Read(requesterId) ?? throw new BO.BlDoesNotExistException("Requester does not exist!");
+            // Fetch the requester and check authorization
+            DO.Volunteer requester = _dal.Volunteer.Read(requesterId)
+                ?? throw new BO.BlDoesNotExistException("Requester does not exist!");
+
             if (requester.ID != boVolunteer.Id && requester.Role != DO.Role.Manager)
                 throw new BO.BlUnauthorizedException("Requester is not authorized!");
-            var existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
+
+            // Validate the volunteer exists
+            DO.Volunteer existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id)
+                ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
+
+            // Validate the volunteer data
             VolunteerManager.ValidateVolunteer(boVolunteer);
 
-            if (string.IsNullOrEmpty(boVolunteer.Password!) && !VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
+            // Check password strength if provided
+            if (!string.IsNullOrEmpty(boVolunteer.Password) && !VolunteerManager.IsPasswordStrong(boVolunteer.Password))
                 throw new BO.BlInvalidFormatException("Password is not strong!");
+
+            // Check authorization to modify role
             if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            if (latitude == null || longitude == null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            boVolunteer.Latitude = latitude;
-            boVolunteer.Longitude = longitude;
 
+            // Process address if provided
+            if (!string.IsNullOrWhiteSpace(boVolunteer.FullAddress))
+            {
+                var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress);
+                if (latitude == null || longitude == null)
+                    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+
+                boVolunteer.Latitude = latitude;
+                boVolunteer.Longitude = longitude;
+            }
+
+            // Convert BO to DO and update in the database
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);
         }
@@ -126,16 +172,21 @@ internal class VolunteerImplementation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+
+    /// <summary>
+    /// Deletes a volunteer from the system if they are not handling any active calls.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to delete.</param>
     public void DeleteVolunteer(int id)
     {
         try
         {
             var volunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist");
             if (_dal.Assignment.ReadAll(a => a!.VolunteerId == id).Any())
-                throw new BO.BlDeletionException($"Cannot delete volunteer with ID={id} as he is handling calls.");
+                throw new BO.BlDeletionException($"Cannot delete volunteer with ID={id} as they are handling calls.");
             _dal.Volunteer.Delete(id);
         }
         catch (DO.DalDoesNotExistException ex)
@@ -144,9 +195,16 @@ internal class VolunteerImplementation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+
+    /// <summary>
+    /// Allows a volunteer to log in by verifying their username and password.
+    /// </summary>
+    /// <param name="name">The name of the volunteer.</param>
+    /// <param name="pass">The password of the volunteer.</param>
+    /// <returns>The role of the volunteer if login is successful.</returns>
     public BO.Enums.Role EnterSystem(string name, string pass)
     {
         try
@@ -160,7 +218,8 @@ internal class VolunteerImplementation : IVolunteer
         }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+            throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+
 }

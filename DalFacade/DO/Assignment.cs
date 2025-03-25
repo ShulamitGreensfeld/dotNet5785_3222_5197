@@ -1,15 +1,14 @@
-﻿//Module Volunteer.cs
-namespace DO;
+﻿namespace DO;
 
 /// <summary>
-///  Assignment Entity represents a Assignment with all its props
+/// Assignment Entity represents an Assignment with all its properties.
 /// </summary>
-/// <param name="ID"></param>
-/// <param name="CallId"></param>
-/// <param name="VolunteerId"></param>
-/// <param name="EntryTimeForTreatment"></param>
-/// <param name="EndTimeForTreatment"></param>
-/// <param name="TypeOfFinishTreatment"></param>
+/// <param name="ID">The unique identifier for the assignment.</param>
+/// <param name="CallId">The unique identifier for the associated call.</param>
+/// <param name="VolunteerId">The unique identifier for the volunteer assigned to the treatment.</param>
+/// <param name="EntryTimeForTreatment">The time when the treatment begins.</param>
+/// <param name="EndTimeForTreatment">The time when the treatment ends (optional, null by default).</param>
+/// <param name="TypeOfFinishTreatment">The type of finish for the treatment (optional, null by default).</param>
 public record Assignment
 (
    int CallId,

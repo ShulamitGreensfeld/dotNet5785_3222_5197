@@ -56,9 +56,6 @@ public class BlUnauthorizedException : Exception
 
 }
 
-
-
-
 /// <summary>
 /// General exception in the Bl.
 /// </summary>
@@ -69,7 +66,9 @@ public class BlGeneralException : Exception
     public BlGeneralException(string message, Exception innerException) : base(message, innerException) { }
 }
 
-
+/// <summary>
+/// Null exception in the Bl.
+/// </summary>
 [Serializable]
 public class BlNullPropertyException : Exception
 {

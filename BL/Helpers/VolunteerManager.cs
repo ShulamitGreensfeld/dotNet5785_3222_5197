@@ -62,7 +62,7 @@ internal static class VolunteerManager
 
             };
         }
-        catch (DO.DalDoesNotExistException ex)  //never used we have to check this error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        catch (DO.DalDoesNotExistException ex)
         {
             return null!;
         }
@@ -134,20 +134,6 @@ internal static class VolunteerManager
                                .ToArray());
     }
 
-    //public static bool IsValidId(int id)
-    //{
-    //    string idStr = id.ToString().PadLeft(9, '0');
-    //    int sum = 0;
-    //    for (int i = 0; i < 9; i++)
-    //    {
-    //        int digit = idStr[i] - '0';
-    //        int weight = (i % 2 == 0) ? 1 : 2;
-    //        int product = digit * weight;
-
-    //        sum += (product > 9) ? product - 9 : product;
-    //    }
-    //    return sum % 10 == 0;
-    //}
     public static bool IsValidId(int id)
     {
         string idStr = id.ToString().PadLeft(9, '0');
@@ -172,7 +158,7 @@ internal static class VolunteerManager
         if (volunteer.Id <= 0 || !IsValidId(volunteer.Id))
             throw new BO.BlInvalidFormatException("Invalid Id number!");
 
-        if (string.IsNullOrWhiteSpace(volunteer.FullName) || volunteer.FullName.Contains(" "))
+        if (string.IsNullOrEmpty(volunteer.FullName))
             throw new BO.BlInvalidFormatException("Invalid name!");
 
         if (!Regex.IsMatch(volunteer.CellphoneNumber, @"^\d{3}-?\d{7}$"))
@@ -181,17 +167,14 @@ internal static class VolunteerManager
         if (!Regex.IsMatch(volunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             throw new BO.BlInvalidFormatException("Invalid email!");
 
-        if (volunteer.Password! != null && (volunteer.Password!.Length > 12 ||
+        if (volunteer.Password == null && (volunteer.Password!.Length > 12 ||
              !Regex.IsMatch(volunteer.Password, "[A-Z]") ||
              !Regex.IsMatch(volunteer.Password, "[a-z]") ||
              !Regex.IsMatch(volunteer.Password, "[0-9]") ||
              !Regex.IsMatch(volunteer.Password, "[!@#$%^&=*]")))
                throw new BO.BlInvalidFormatException("Invalid password!");
 
-        //if (volunteer.FullAddress)                                               //לקרוא פה לקורדינאטות כדי לבדוק אם הכתובת אכן תקינה
-        //    throw new BO.BlInvalidFormatException("Invalid address!");
-
-        if (volunteer.Role != (BO.Enums.Role.volunteer) && volunteer.Role != (BO.Enums.Role.manager))     //הוא לא מזהה אותו כאן כולנטיר או מנג'ר למה????
+        if (volunteer.Role != (BO.Enums.Role.volunteer) && volunteer.Role != (BO.Enums.Role.manager))  
             throw new BO.BlInvalidFormatException("Invalid role!");
 
         if (volunteer.MaxDistance < 0)
