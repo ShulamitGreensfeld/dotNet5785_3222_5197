@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using Helpers;
+using static BO.Enums;
 
 namespace BlImplementation;
 
@@ -20,19 +21,32 @@ internal class AdminImplementation : IAdmin
     /// Advances the system clock by a specified time unit (minute, hour, day, month, or year).
     /// </summary>
     /// <param name="timeUnit">The unit of time to advance (minute, hour, day, month, or year).</param>
-    public void PromoteClock(BO.Enums.TimeUnit timeUnit)
+    public void PromoteClock(TimeUnit timeUnit)
     {
-        DateTime newClock = timeUnit switch
-        {
-            BO.Enums.TimeUnit.Minute => ClockManager.Now.AddMinutes(1),
-            BO.Enums.TimeUnit.Hour => ClockManager.Now.AddHours(1),
-            BO.Enums.TimeUnit.Day => ClockManager.Now.AddDays(1),
-            BO.Enums.TimeUnit.Month => ClockManager.Now.AddMonths(1),
-            BO.Enums.TimeUnit.Year => ClockManager.Now.AddYears(1),
-            _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), "Invalid time unit")
-        };
+        DateTime oldClock = GetClock();
+        DateTime newClock = oldClock;
 
-        ClockManager.UpdateClock(newClock);
+        switch (timeUnit)
+        {
+            case TimeUnit.Minute:
+                newClock = oldClock.AddMinutes(1);
+                break;
+            case TimeUnit.Hour:
+                newClock = oldClock.AddHours(1);
+                break;
+            case TimeUnit.Day:
+                newClock = oldClock.AddDays(1);
+                break;
+            case TimeUnit.Month:
+                newClock = oldClock.AddMonths(1);
+                break;
+            case TimeUnit.Year:
+                newClock = oldClock.AddYears(1);
+                break;
+        }
+
+        //ClockManager.UpdateClock(newClock); 
+        CallManager.PeriodicVolunteersUpdates(oldClock, newClock);
     }
 
     /// <summary>

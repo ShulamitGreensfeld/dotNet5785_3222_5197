@@ -67,13 +67,14 @@ internal class CallImplementation : BlApi.ICall
             if (existingCall != null)
                 throw new BO.BlAlreadyExistException($"Call with ID={boCall.Id} already exist");
             CallManager.ValidateCall(boCall);
-            //var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
-            //if (latitude is null || longitude is null)
-            //    throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
-            //boCall.Latitude = latitude;
-            //boCall.Longitude = longitude;
+            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
+            if (latitude == null || longitude == null)
+                throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
+            boCall.Latitude = latitude;
+            boCall.Longitude = longitude;
             DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Create(doCall);
+            CallManager.SendEmailWhenCallOpened(boCall);
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -196,7 +197,7 @@ internal class CallImplementation : BlApi.ICall
             var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
             var openCalls = _dal.Call.ReadAll()
                 .Where(c =>
-                (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk))
+                    (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk))
                 .Select(c => new BO.OpenCallInList
                 {
                     Id = volunteerId,
@@ -208,8 +209,8 @@ internal class CallImplementation : BlApi.ICall
                     CallDistance = Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, c.Latitude, c.Longitude)
                 });
             return sortField.HasValue
-            ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString()!)?.GetValue(c))
-            : openCalls.OrderBy(c => c.Id);
+                ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString()!)?.GetValue(c))
+                : openCalls.OrderBy(c => c.Id);
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -226,28 +227,65 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer canceling the assignment.</param>
     /// <param name="assignmentId">The ID of the assignment to cancel.</param>
+    //public void MarkCallCancellation(int volunteerId, int assignmentId)
+    //{
+    //    try
+    //    {
+    //        var assignment = _dal.Assignment.Read(assignmentId);
+    //        if (assignment == null)
+    //            throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist");
+    //        var isRequesterManager = _dal.Volunteer?.Read(volunteerId)!.Role;
+    //        if (isRequesterManager != DO.Role.Manager && assignment.VolunteerId != volunteerId)
+    //            throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
+    //        if (assignment.EndTimeForTreatment != null)
+    //            throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
+    //        DO.Assignment copy = assignment with
+    //        {
+    //            EndTimeForTreatment = _dal.Config.Clock,
+    //            TypeOfFinishTreatment = (DO.TypeOfFinishTreatment)((isRequesterManager == DO.Role.Manager) ? BO.Enums.EndType.manager_cancellation : BO.Enums.EndType.self_cancellation)
+    //        };
+    //        _dal.Assignment.Update(copy);
+    //    }
+    //    catch (DO.DalDoesNotExistException ex)
+    //    {
+    //        throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.", ex);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new BO.BlGeneralException(ex.Message, ex);
+    //    }
+    //}
     public void MarkCallCancellation(int volunteerId, int assignmentId)
     {
         try
         {
-            var assignment = _dal.Assignment.Read(assignmentId);
-            if (assignment == null)
-                throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist");
-            var isRequesterManager = _dal.Volunteer?.Read(volunteerId)!.Role;
-            if (isRequesterManager != DO.Role.Manager && assignment.VolunteerId != volunteerId)
-                throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
-            if (assignment.EndTimeForTreatment != null)
-                throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
-            DO.Assignment copy = assignment with
+            var assignment = _dal.Assignment.Read(assignmentId)
+                ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist.");
+
+            var volunteer = _dal.Volunteer.Read(volunteerId)
+                ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+
+            if (assignment.VolunteerId != volunteerId)
             {
-                EndTimeForTreatment = _dal.Config.Clock,
-                TypeOfFinishTreatment = (DO.TypeOfFinishTreatment)((isRequesterManager == DO.Role.Manager) ? BO.Enums.EndType.manager_cancellation : BO.Enums.EndType.self_cancellation)
+                throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this treatment.");
+            }
+
+            var updatedAssignment = assignment with
+            {
+                EndTimeForTreatment = DateTime.Now,
+                TypeOfFinishTreatment = DO.TypeOfFinishTreatment.SelfCancellation
             };
-            _dal.Assignment.Update(copy);
+
+            _dal.Assignment.Update(updatedAssignment);
+            CallManager.SendEmailToVolunteer(volunteer, assignment);
+        }
+        catch (BO.BlUnauthorizedException ex)
+        {
+            throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} does not exist", ex);
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.", ex);
+            throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} or volunteer with ID={volunteerId} does not exist.", ex);
         }
         catch (Exception ex)
         {
@@ -271,6 +309,10 @@ internal class CallImplementation : BlApi.ICall
                 throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or canceled.");
             DO.Assignment newAssignment = assignment with { EndTimeForTreatment = _dal.Config.Clock, TypeOfFinishTreatment = DO.TypeOfFinishTreatment.Treated };
             _dal.Assignment.Update(newAssignment);
+        }
+        catch (BO.BlUnauthorizedException ex)
+        {
+            throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} does not exist", ex);
         }
         catch (DO.DalDoesNotExistException ex)
         {

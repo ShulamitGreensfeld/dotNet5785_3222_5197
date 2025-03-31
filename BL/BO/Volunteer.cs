@@ -56,6 +56,12 @@ namespace BO
         /// Provides a string representation of the Volunteer object based on its properties.
         /// </summary>
         /// <returns>A string representing the Volunteer object.</returns>
-        public override string ToString() => this.ToStringProperty();
+        public override string ToString()
+        {
+            return $"Id: {Id}, FullName: {FullName}, CellphoneNumber: {CellphoneNumber}, Email: {Email}," +
+                $" FullAddress: {FullAddress}, Latitude: {Latitude}, Longitude: {Longitude}, Role: {Role}," +
+                $" IsActive: {IsActive}, DistanceType: {DistanceType}, MaxDistance: {MaxDistance}," +
+                $" TotalHandledCalls: {TotalHandledCalls}, TotalCanceledCalls: {TotalCanceledCalls}, TotalExpiredCalls: {TotalExpiredCalls}, CallInProgress: {CallInProgress}";
+        }
     }
 }

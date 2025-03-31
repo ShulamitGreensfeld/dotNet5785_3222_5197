@@ -74,3 +74,23 @@ public class BlNullPropertyException : Exception
 {
     public BlNullPropertyException(string? message) : base(message) { }
 }
+
+/// <summary>
+/// logging exception in the Bl.
+/// </summary>
+[Serializable]
+public class BlInvalidInputException : Exception
+{
+    public BlInvalidInputException(string? message) : base(message) { }
+}
+
+/// <summary>
+/// logging exception in the Bl.
+/// </summary>
+[Serializable]
+    public class BlNotFoundException : Exception
+    {
+        public BlNotFoundException() { }
+        public BlNotFoundException(string message) : base(message) { }
+        public BlNotFoundException(string message, Exception inner) : base(message, inner) { }
+    }

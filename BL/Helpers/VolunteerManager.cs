@@ -3,13 +3,20 @@ using DO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 using static BO.Enums;
+using BO;
+using Microsoft.VisualBasic;
 
 namespace Helpers;
 
 internal static class VolunteerManager
 {
     private readonly static IDal s_dal = Factory.Get;
+    public static event Action? CallsListUpdated;
+    private static readonly ConcurrentDictionary<int, Action<DO.Call>> callObservers = new();
+
     public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
         try
@@ -122,7 +129,7 @@ internal static class VolunteerManager
     {
         using var sha256 = SHA256.Create();
         var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower(); // הצפנה ב-SHA256 כ-string
+        return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
     }
 
     internal static string GenerateStrongPassword()
@@ -139,7 +146,7 @@ internal static class VolunteerManager
         string idStr = id.ToString().PadLeft(9, '0');
 
         // בדיקה שהאורך הוא 9 ושיש לפחות ספרה אחת שאינה 0
-        if (idStr.Length != 9 || idStr.All(c => c == '0')) 
+        if (idStr.Length != 9 || idStr.All(c => c == '0'))
             return false;
 
         int sum = 0;
@@ -172,9 +179,9 @@ internal static class VolunteerManager
              !Regex.IsMatch(volunteer.Password, "[a-z]") ||
              !Regex.IsMatch(volunteer.Password, "[0-9]") ||
              !Regex.IsMatch(volunteer.Password, "[!@#$%^&=*]")))
-               throw new BO.BlInvalidFormatException("Invalid password!");
+            throw new BO.BlInvalidFormatException("Invalid password!");
 
-        if (volunteer.Role != (BO.Enums.Role.volunteer) && volunteer.Role != (BO.Enums.Role.manager))  
+        if (volunteer.Role != (BO.Enums.Role.volunteer) && volunteer.Role != (BO.Enums.Role.manager))
             throw new BO.BlInvalidFormatException("Invalid role!");
 
         if (volunteer.MaxDistance < 0)
@@ -205,159 +212,6 @@ internal static class VolunteerManager
         if (!password.Any(c => "@#$%^&*".Contains(c)))
             return false;
         return true;
-    }
-
-    //internal static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
-    //{
-    //    throw new NotImplementedException();
-    //}
-    //internal static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
-    //{
-    //    var assignments = s_dal.Assignment.ReadAll().ToList(); // שליפת כל המטלות הפעילות
-
-    //    foreach (var assignment in assignments)
-    //    {
-    //        var call = s_dal.Call.Read(assignment.CallId); // שליפת הקריאה מתוך מסד הנתונים
-
-    //        if (call != null && assignment.EndTimeForTreatment == null) // אם הקריאה עדיין פתוחה
-    //        {
-    //            // חישוב הזמן שנותר לטיפול
-    //            TimeSpan remainingTime = (call.MaxTimeForClosing ?? newClock) - newClock;
-
-    //            // קביעת סטטוס הקריאה
-    //            bool isAtRisk = remainingTime <= TimeSpan.FromHours(2); // האם נותרו פחות משעתיים?
-    //            bool isExpired = remainingTime <= TimeSpan.Zero; // האם נגמר הזמן?
-
-    //            // עדכון המידע של המשימה במסד הנתונים
-    //            //assignment.call.RiskRange = isAtRisk;
-    //            //assignment.EntryTimeForTreatment = isExpired ? TimeSpan.Zero : remainingTime; // אם נגמר הזמן - 0
-
-    //            s_dal.Assignment.Update(assignment);
-    //        }
-    //    }
-    //}
-
-    //public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
-    //{
-    //    // Get all active assignments (those without EndTimeForTreatment)
-    //    var activeAssignments = s_dal.Assignment.ReadAll(a => a.EndTimeForTreatment == null);
-
-    //    foreach (var assignment in activeAssignments)
-    //    {
-    //        // Get the related call for this assignment
-    //        var call = s_dal.Call.Read(assignment.CallId);
-
-    //        if (call == null)
-    //            continue;
-
-    //        // If MaxTimeForClosing is defined for the call
-    //        if (call.MaxTimeForClosing.HasValue)
-    //        {
-    //            // Check if the assignment has entered risk range with the new clock
-    //            if (call.RiskRange.HasValue &&
-    //                newClock >= call.MaxTimeForClosing.Value.Subtract(call.RiskRange.Value) &&
-    //                (oldClock < call.MaxTimeForClosing.Value.Subtract(call.RiskRange.Value) || oldClock > newClock))
-    //            {
-    //                // Assignment has entered risk range - update status or trigger notification
-    //                // (Implementation depends on your existing notification system)
-    //                // This might involve updating a field in the assignment or triggering an event
-    //            }
-
-    //            // Check if the assignment has expired with the new clock
-    //            if (newClock >= call.MaxTimeForClosing.Value &&
-    //                (oldClock < call.MaxTimeForClosing.Value || oldClock > newClock))
-    //            {
-    //                // Assignment has expired - mark as expired
-    //                //assignment.EndTimeForTreatment = newClock;
-    //                //assignment.TypeOfFinishTreatment = TypeOfFinishTreatment.Treated;
-    //                s_dal.Assignment.Update(assignment);
-    //            }
-    //        }
-    //    }
-    //}
-
-    public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
-    {
-        Console.WriteLine("Starting PeriodicVolunteersUpdates...");
-
-        // Get all active assignments (those without EndTimeForTreatment)
-        var activeAssignments = s_dal.Assignment.ReadAll(a => a.EndTimeForTreatment == null);
-        Console.WriteLine($"Found {activeAssignments.Count()} active assignments.");
-
-        foreach (var assignment in activeAssignments)
-        {
-            // Get the related call for this assignment
-            var call = s_dal.Call.Read(assignment.CallId);
-
-            if (call == null)
-            {
-                Console.WriteLine($"Call with ID {assignment.CallId} not found.");
-                continue;
-            }
-
-            // If MaxTimeForClosing is defined for the call
-            if (call.MaxTimeForClosing.HasValue)
-            {
-                // Check if the assignment has entered risk range with the new clock
-                if (call.RiskRange.HasValue &&
-                    newClock >= call.MaxTimeForClosing.Value.Subtract(call.RiskRange.Value) &&
-                    (oldClock < call.MaxTimeForClosing.Value.Subtract(call.RiskRange.Value) || oldClock > newClock))
-                {
-                    // Assignment has entered risk range - update status or trigger notification
-                    Console.WriteLine($"Assignment {assignment.ID} has entered risk range.");
-                    // (Implementation depends on your existing notification system)
-                    // This might involve updating a field in the assignment or triggering an event
-                }
-
-                // Check if the assignment has expired with the new clock
-                if (newClock >= call.MaxTimeForClosing.Value &&
-                    (oldClock < call.MaxTimeForClosing.Value || oldClock > newClock))
-                {
-                    // Assignment has expired - mark as expired
-                    Console.WriteLine($"Assignment {assignment.ID} has expired.");
-                    //assignment.EndTimeForTreatment = newClock;
-                    //assignment.TypeOfFinishTreatment = TypeOfFinishTreatment.Treated;
-                    s_dal.Assignment.Update(assignment);
-                }
-            }
-        }
-
-        Console.WriteLine("Finished PeriodicVolunteersUpdates.");
-    }
-    public static class DistanceCalculator
-    {
-        public static double CalculateDistance(double lat1, double lon1, double lat2, double lon2, DistanceTypes distanceType)
-        {
-            switch (distanceType)
-            {
-                case DistanceTypes.aerial_distance:
-                    return CalculateAerialDistance(lat1, lon1, lat2, lon2);
-                case DistanceTypes.walking_distance:
-                    return CalculateWalkingDistance(lat1, lon1, lat2, lon2);
-                case DistanceTypes.driving_distance:
-                    return CalculateDrivingDistance(lat1, lon1, lat2, lon2);
-                default:
-                    throw new ArgumentException("Invalid distance type");
-            }
-        }
-
-        private static double CalculateAerialDistance(double lat1, double lon1, double lat2, double lon2)
-        {
-            // Implement aerial distance calculation
-            return 0.0;
-        }
-
-        private static double CalculateWalkingDistance(double lat1, double lon1, double lat2, double lon2)
-        {
-            // Implement walking distance calculation
-            return 0.0;
-        }
-
-        private static double CalculateDrivingDistance(double lat1, double lon1, double lat2, double lon2)
-        {
-            // Implement driving distance calculation
-            return 0.0;
-        }
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using Dal;
 using DalApi;
 using DO;
+using System;
 
 namespace DalTest
 {
@@ -537,8 +538,9 @@ namespace DalTest
                 {
                     Console.WriteLine($"Error: {ex.Message}");
                 }
-            } while (isRunning);
+            } while (isRunning); 
         }
+
 
         private static void CreateVolunteer()
         {
@@ -626,8 +628,7 @@ namespace DalTest
                 Console.WriteLine("Invalid Volunteer ID. Please enter a valid number.");
                 return;
             }
-            //var volunteer = s_dalVolunteer?.Read(id); //stage1
-            var volunteer = s_dal?.Volunteer.Read(id); //stage2
+            var volunteer = s_dal?.Volunteer.Read(id);
             if (volunteer != null)
             {
                 Console.WriteLine($"Volunteer ID: {volunteer.ID}, Full Name: {volunteer.Name}, Cellphone: {volunteer.Phone}, Email: {volunteer.Email}, " +

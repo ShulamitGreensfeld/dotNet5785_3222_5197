@@ -19,10 +19,11 @@
         IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive = null, BO.Enums.VolunteerInListFields? fieldFilter = null);
 
         /// <summary>
-        /// Retrieves detailed information about a specific volunteer by their ID.
+        /// Gets the details of a volunteer by ID and password.
         /// </summary>
-        /// <param name="id">The ID of the volunteer to retrieve.</param>
-        /// <returns>The volunteer's details.</returns>
+        /// <param name="id">The ID of the volunteer.</param>
+        /// <param name="password">The password of the volunteer.</param>
+        /// <returns>The volunteer details if the ID and password are correct; otherwise, null.</returns>
         BO.Volunteer GetVolunteerDetails(int id);
 
         /// <summary>

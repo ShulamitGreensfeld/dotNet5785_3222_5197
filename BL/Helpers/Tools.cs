@@ -1,20 +1,25 @@
 ﻿using BO;
-using System.Text.Json;
-namespace Helpers;
-using System.Collections;
-//using System.Net;
-//using System.Net.Mail;
-//using System.Collections;
+using System.Net.Mail;
+using System.Net;
 using System.Reflection;
-using System.Security.Cryptography;
+using System.Text.Json;
 using System.Text;
-using System.Xml.Linq;
-using Newtonsoft.Json.Linq;
-
 
 internal static class Tools
 {
     private static readonly DalApi.IDal _dal = DalApi.Factory.Get; //stage 4
+
+    // Property to store the selected distance type
+    private static Enums.DistanceTypes _selectedDistanceType = Enums.DistanceTypes.aerial_distance;
+
+    /// <summary>
+    /// Sets the selected distance type.
+    /// </summary>
+    /// <param name="distanceType">The distance type to set.</param>
+    public static void SetDistanceType(Enums.DistanceTypes distanceType)
+    {
+        _selectedDistanceType = distanceType;
+    }
 
     /// <summary>
     /// Converts an object to a string representation of its properties.
@@ -33,7 +38,7 @@ internal static class Tools
         foreach (var property in properties)
         {
             var value = property.GetValue(t);
-            if (value is IEnumerable enumerable && value is not string)
+            if (value is IEnumerable<object> enumerable && value is not string)
             {
                 result.Append($"{property.Name}: [");
                 foreach (var item in enumerable)
@@ -131,48 +136,103 @@ internal static class Tools
     }
 
     /// <summary>
-    /// Hashes a password using SHA256.
+    /// Sends an email using an SMTP client.
     /// </summary>
-    /// <param name="password">The password to hash.</param>
-    /// <returns>The hashed password as a string.</returns>
-    public static string HashPassword(string password)
+    /// <param name="toEmail">The recipient's email address.</param>
+    /// <param name="subject">The subject of the email.</param>
+    /// <param name="body">The body content of the email.</param>
+    public static void SendEmail(string toEmail, string subject, string body)
     {
-        using (SHA256 sha256Hash = SHA256.Create())
+        var fromAddress = new MailAddress("mailforcsharp1234@gmail.com", "NoReplyVolunteerOrganization");
+        var toAddress = new MailAddress(toEmail);
+
+        var smtpClient = new SmtpClient("smtp.gmail.com")
         {
-            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-            StringBuilder builder = new StringBuilder();
-            foreach (byte b in bytes)
-            {
-                builder.Append(b.ToString("x2"));
-            }
-            return builder.ToString();
+            Port = 587,
+            Credentials = new NetworkCredential("mailforcsharp1234@gmail.com", "mjhm ignt phfr whuc"),
+            EnableSsl = true,
+        };
+
+        using (var message = new MailMessage(fromAddress, toAddress)
+        {
+            Subject = subject,
+            Body = body
+        })
+        {
+            smtpClient.Send(message);
         }
     }
 
     /// <summary>
-    /// Stores a volunteer's name and hashed password in an XML file.
+    /// Asynchronously calculates the distance between two geographical points based on the selected distance type.
     /// </summary>
-    /// <param name="volunteerName">The name of the volunteer.</param>
-    /// <param name="hashedPassword">The hashed password to store.</param>
-    /// <param name="filePath">The file path where the data should be saved.</param>
-    public static void StorePasswordInXml(string volunteerName, string hashedPassword, string filePath)
+    /// <param name="latitudeV">The latitude of the first point.</param>
+    /// <param name="longitudeV">The longitude of the first point.</param>
+    /// <param name="latitudeC">The latitude of the second point.</param>
+    /// <param name="longitudeC">The longitude of the second point.</param>
+    /// <returns>The calculated distance in kilometers.</returns>
+    public static async Task<double> CalculateDistanceAsync(double latitudeV, double longitudeV, double latitudeC, double longitudeC)
     {
-        XDocument doc;
-        if (File.Exists(filePath))
-        {
-            doc = XDocument.Load(filePath);
-        }
-        else
-        {
-            doc = new XDocument(new XElement("Volunteers"));
-        }
+        return await CalculateDistanceAsync(_selectedDistanceType, latitudeV, longitudeV, latitudeC, longitudeC);
+    }
 
-        XElement volunteerElement = new XElement("Volunteer",
-            new XElement("Name", volunteerName),
-            new XElement("Password", hashedPassword)
-        );
+    /// <summary>
+    /// Asynchronously calculates the distance between two geographical points based on the specified distance type.
+    /// </summary>
+    /// <param name="type">The type of distance calculation (aerial, walking, or driving).</param>
+    /// <param name="latitudeV">The latitude of the first point.</param>
+    /// <param name="longitudeV">The longitude of the first point.</param>
+    /// <param name="latitudeC">The latitude of the second point.</param>
+    /// <param name="longitudeC">The longitude of the second point.</param>
+    /// <returns>The calculated distance in kilometers.</returns>
+    public static async Task<double> CalculateDistanceAsync(Enums.DistanceTypes type, double latitudeV, double longitudeV, double latitudeC, double longitudeC)
+    {
+        return type switch
+        {
+            Enums.DistanceTypes.aerial_distance => CalculateDistance(latitudeV, longitudeV, latitudeC, longitudeC),
+            Enums.DistanceTypes.walking_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "pedestrian"),
+            Enums.DistanceTypes.driving_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "car"),
+            _ => throw new ArgumentException("Invalid distance type", nameof(type))
+        };
+    }
 
-        doc.Root.Add(volunteerElement);
-        doc.Save(filePath);
+    /// <summary>
+    /// Asynchronously retrieves the distance between two geographical points using the TomTom API for a specified travel mode.
+    /// </summary>
+    /// <param name="latitudeV">The latitude of the starting point.</param>
+    /// <param name="longitudeV">The longitude of the starting point.</param>
+    /// <param name="latitudeC">The latitude of the destination.</param>
+    /// <param name="longitudeC">The longitude of the destination.</param>
+    /// <param name="travelMode">The mode of travel (e.g., pedestrian, car).</param>
+    /// <returns>The calculated route distance in kilometers, or double.MaxValue if an error occurs.</returns>
+    private static async Task<double> GetRouteDistanceAsync(double latitudeV, double longitudeV, double latitudeC, double longitudeC, string travelMode)
+    {
+        using HttpClient client = new HttpClient();
+        string apiKey = Environment.GetEnvironmentVariable("TOMTOM_API_KEY") ?? throw new InvalidOperationException("API key is missing");
+        string url = $"https://api.tomtom.com/routing/1/calculateRoute/{latitudeV},{longitudeV}:{latitudeC},{longitudeC}/json?key={apiKey}&travelMode={travelMode}";
+
+        try
+        {
+            HttpResponseMessage response = await client.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+                return double.MaxValue;
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            using JsonDocument doc = JsonDocument.Parse(responseContent);
+
+            if (doc.RootElement.TryGetProperty("routes", out var routes) && routes.GetArrayLength() > 0 &&
+                routes[0].TryGetProperty("summary", out var summary) &&
+                summary.TryGetProperty("lengthInMeters", out var length))
+            {
+                return length.GetDouble() / 1000.0; // Convert meters to km
+            }
+
+            return double.MaxValue;
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error fetching route distance: {ex.Message}");
+            return double.MaxValue;
+        }
     }
 }

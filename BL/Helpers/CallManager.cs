@@ -1,11 +1,27 @@
 ﻿
 using DalApi;
+using DO;
 
 namespace Helpers
 {
     internal static class CallManager
     {
-        private static IDal s_dal = Factory.Get;
+        private static IDal s_dal = Factory.Get; //stage 4
+        private static int nextCallId = 1050;
+
+        /// <summary>
+        /// Gets the next available call ID.
+        /// </summary>
+        /// <returns>The next available call ID.</returns>
+        public static int GetNextCallId()
+        {
+            List<Call> calls = s_dal.Call.ReadAll().ToList();
+            if (calls.Any())
+            {
+                nextCallId = calls.Max(c => c.ID) + 1;
+            }
+            return nextCallId++;
+        }
 
         /// <summary>
         /// Calculates the current status of a call based on its properties and assignments.
@@ -120,6 +136,111 @@ namespace Helpers
                 OpeningTime = call.Opening_time,
                 MaxTimeForClosing = call.Max_finish_time,
             };
+        }
+
+        /// <summary>
+        /// Periodically updates the calls based on the current clock and checks for expired assignments.
+        /// </summary>
+        /// <param name="oldClock">The previous clock time.</param>
+        /// <param name="newClock">The new clock time.</param>
+        public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
+        {
+            Console.WriteLine("Starting PeriodicVolunteersUpdates...");
+
+            // Get all assignments
+            var assignments = s_dal.Assignment.ReadAll().ToList();
+            Console.WriteLine($"Found {assignments.Count} assignments.");
+
+            // Set to track processed assignment IDs
+            var processedAssignments = new HashSet<int>();
+
+            foreach (var assignment in assignments)
+            {
+                // Check if the assignment has expired with the new clock
+                if (assignment.EndTimeForTreatment <= newClock && !processedAssignments.Contains(assignment.ID))
+                {
+                    // Assignment has expired - create a new updated assignment
+                    Console.WriteLine($"Assignment {assignment.ID} has expired.");
+                    var updatedAssignment = assignment with { TypeOfFinishTreatment = TypeOfFinishTreatment.Treated };
+                    s_dal.Assignment.Update(updatedAssignment);
+                    processedAssignments.Add(assignment.ID);
+                }
+                else if (assignment.EndTimeForTreatment <= newClock.AddHours(2) && !processedAssignments.Contains(assignment.ID))
+                {
+                    // Assignment is at risk - mark as risk
+                    Console.WriteLine($"Assignment {assignment.ID} is at risk.");
+                    // Update the assignment status or trigger notification
+                    // (Implementation depends on your existing notification system)
+                    processedAssignments.Add(assignment.ID);
+                }
+            }
+
+            Console.WriteLine("Finished Periodic the Updates successfully.");
+        }
+
+        /// <summary>
+        /// Sends an email notification to all volunteers within the specified distance from a new call.
+        /// </summary>
+        /// <param name="call">The call object that was opened.</param>
+        internal static void SendEmailWhenCallOpened(BO.Call call)
+        {
+            var volunteer = s_dal.Volunteer.ReadAll();
+            foreach (var item in volunteer)
+            {
+
+                if (item.MaxDistanceForCall >= Tools.CalculateDistance(item.Latitude ?? 0.0, item.Longitude ?? 0.0, call.Latitude ?? 0.0, call.Longitude ?? 0.0))
+                {
+                    string subject = "Openning call";
+                    string body = $@"
+      Hello {item.Name},
+
+     A new call has been opened in your area.
+      Call Details:
+      - Call ID: {call.Id}
+      - Call Type: {call.CallType}
+      - Call Address: {call.FullAddress}
+      - Opening Time: {call.Opening_time}
+      - Description: {call.Verbal_description}
+      - Entry Time for Treatment: {call.Max_finish_time}
+      -call Status:{call.CallStatus}
+
+      If you wish to handle this call, please log into the system.
+
+      Best regards,  
+     Call Management System";
+
+                    Tools.SendEmail(item.Email, subject, body);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sends an email notification to the volunteer when their assignment is canceled.
+        /// </summary>
+        /// <param name="volunteer">The volunteer to notify.</param>
+        /// <param name="assignment">The assignment that was canceled.</param>
+        internal static void SendEmailToVolunteer(DO.Volunteer volunteer, DO.Assignment assignment)
+        {
+            var call = s_dal.Call.Read(assignment.CallId)!;
+
+            string subject = "Assignment Canceled";
+            string body = $@"
+      Hello {volunteer.Name},
+
+      Your assignment for handling call {assignment.ID} has been canceled by the administrator.
+
+      Call Details:
+      - Call ID: {assignment.CallId}
+      - Call Type: {call.TypeOfCall}
+      - Call Address: {call.Address}
+      - Opening Time: {call.OpeningTime}
+      - Description: {call.CallDescription}
+      - Entry Time for Treatment: {assignment.EntryTimeForTreatment}
+
+      Best regards,  
+      Call Management System";
+
+            Tools.SendEmail(volunteer.Email, subject, body);
         }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using BlApi;
+using BO;
+using DO;
 
 namespace BlTest
 {
     internal class Program
     {
         static readonly IBl s_bl = BlApi.Factory.Get();
+        static int nextCallId = 1100;
         static void Main(string[] args)
         {
             bool exit = false;
@@ -211,7 +214,6 @@ namespace BlTest
             }
         }
 
-        //v
         private static void GetCallDetails()
         {
             Console.Write("Enter Call ID: ");
@@ -232,7 +234,6 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-        //v
         private static void GetCallsList()
         {
             Console.WriteLine("Enter filter field (optional): ");
@@ -264,7 +265,6 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
-        //v
         private static void SelectCallForTreatment()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -295,16 +295,16 @@ namespace BlTest
         }
         private static void AddCall()
         {
-
             Console.Write("Enter Call Description: ");
-            string? description = Console.ReadLine();////
+            string? description = Console.ReadLine();
             Console.Write("Enter Call type(ToPrepareFood, ToCarryFood, ToPackageFood, ToDonateRawMaterials, ToCommunityCookingNights,): ");
             BO.Enums.CallType callType = Enum.TryParse(Console.ReadLine(), out BO.Enums.CallType parsedType) ? parsedType : throw new ArgumentException("Invalid call type.");
             Console.Write("Enter Full Address: ");
-            string address = Console.ReadLine()!;///////////////
+            string address = Console.ReadLine()!;
 
             var newCall = new BO.Call
             {
+                Id = NextCallId(),
                 Verbal_description = description,
                 FullAddress = address,
                 Opening_time = DateTime.Now,
@@ -320,7 +320,14 @@ namespace BlTest
             {
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
+        }
 
+        private static int NextCallId()
+        {
+            // Implement the logic to generate the next call ID
+            // This is a placeholder implementation
+            //return new Random().Next(1, 1000);
+            return nextCallId++;
         }
 
         private static void UpdateCall()
@@ -366,6 +373,10 @@ namespace BlTest
                 {
                     s_bl.Call.DeleteCall(callId);
                     Console.WriteLine("Call deleted successfully.");
+                }
+                catch (DO.DalDoesNotExistException ex)
+                {
+                    throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist", ex);
                 }
                 catch (Exception ex)
                 {
@@ -423,20 +434,37 @@ namespace BlTest
         private static void MarkCallCancellation()
         {
             Console.Write("Enter Volunteer ID: ");
-            
-            int.TryParse(Console.ReadLine(), out int volunteerId);
-            Console.Write("Enter assignment ID: ");
-            int.TryParse(Console.ReadLine(), out int assignmentId);
-
-            try
+            if (int.TryParse(Console.ReadLine(), out int volunteerId))
             {
+                try
+                {
+                    // Check if the volunteer ID is valid
+                    var volunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId);
+                    if (volunteer == null)
+                    {
+                        Console.WriteLine("Invalid Volunteer ID.");
+                        return;
+                    }
 
-                s_bl.Call.MarkCallCancellation(volunteerId, assignmentId);
-                Console.WriteLine("Call marked as canceled.");
+                    Console.Write("Enter assignment ID: ");
+                    if (int.TryParse(Console.ReadLine(), out int assignmentId))
+                    {
+                        s_bl.Call.MarkCallCancellation(volunteerId, assignmentId);
+                        Console.WriteLine("Call marked as canceled.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Assignment ID.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
+                Console.WriteLine("Invalid Volunteer ID.");
             }
         }
         private static void MarkCallCompletion()
@@ -548,7 +576,8 @@ namespace BlTest
                 var volunteers = s_bl.Volunteer.GetVolunteersList(isActiveFilter, sortField);
                 foreach (var volunteer in volunteers)
                 {
-                    Console.WriteLine(volunteer);
+                    // Exclude Call ID and Call Type from the output
+                    Console.WriteLine($"ID: {volunteer.Id}, Name: {volunteer.FullName}, IsActive: {volunteer.IsActive}");
                 }
             }
             catch (Exception ex)
@@ -577,7 +606,7 @@ namespace BlTest
             BO.Enums.Role.TryParse(Console.ReadLine(), out BO.Enums.Role role);
             Console.WriteLine("IsActive (true/false):");
             bool.TryParse(Console.ReadLine(), out bool isActive);
-            Console.WriteLine("Distance Type (  aerial_distance, walking_distance, driving_distance):");
+            Console.WriteLine("Distance Type (aerial_distance, walking_distance, driving_distance):");
             BO.Enums.DistanceTypes.TryParse(Console.ReadLine(), out BO.Enums.DistanceTypes distanceType);
             Console.WriteLine("Max Distance (optional):");
             double.TryParse(Console.ReadLine(), out double maxDistance);
@@ -614,9 +643,13 @@ namespace BlTest
             Console.Write("Enter Volunteer ID to Update: ");
             int volunteerId = int.Parse(Console.ReadLine());
 
+            Console.Write("Enter Volunteer Password: ");
+            string volunteerPassword = Console.ReadLine();
+
             var doVolunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId);
             if (doVolunteer is null)
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist!");
+
             Console.Write("Full Name(optional): ");
             string name = Console.ReadLine();
 
@@ -627,11 +660,9 @@ namespace BlTest
             string email = Console.ReadLine();
 
             Console.WriteLine("Password (optional):");
-            
             string pass = Console.ReadLine();
 
             Console.Write("Address (optional): ");
-            
             string address = Console.ReadLine();
 
             Console.WriteLine("Role (volunteer/manager)(optional):");
@@ -642,9 +673,9 @@ namespace BlTest
             string isActiveInput = Console.ReadLine()!;
             bool isActive = string.IsNullOrEmpty(isActiveInput) || !bool.TryParse(isActiveInput, out bool isA) ? doVolunteer.IsActive : isA;
 
-            Console.WriteLine("Distance Type (  aerial_distance, walking_distance, driving_distance)(optional):");
+            Console.WriteLine("Distance Type (aerial_distance, walking_distance, driving_distance)(optional):");
             string distanceTypeInput = Console.ReadLine()!;
-            BO.Enums.DistanceTypes distanceType = string.IsNullOrEmpty(distanceTypeInput) || !Enum.TryParse(distanceTypeInput, out BO.Enums.DistanceTypes dType) ? (BO.Enums.DistanceTypes)doVolunteer.DistanceType : dType;
+            BO.Enums.DistanceTypes distanceType = string.IsNullOrEmpty(distanceTypeInput) || !Enum.TryParse(distanceTypeInput, out BO.Enums.DistanceTypes dType) ? doVolunteer.DistanceType : dType;
 
             Console.WriteLine("Max Distance (optional):");
             string maxDistanceInput = Console.ReadLine()!;
@@ -656,14 +687,13 @@ namespace BlTest
                 FullName = string.IsNullOrEmpty(name) ? doVolunteer.FullName : name,
                 CellphoneNumber = string.IsNullOrEmpty(cellphone) ? doVolunteer.CellphoneNumber : cellphone,
                 Email = string.IsNullOrEmpty(email) ? doVolunteer.Email : email,
-                Password = /*string.IsNullOrEmpty(pass) ? doVolunteer.Password : */pass,
+                Password = pass,
                 FullAddress = string.IsNullOrEmpty(address) ? doVolunteer.FullAddress : address,
-                Role = (role != BO.Enums.Role.manager) && (role != BO.Enums.Role.volunteer) ? doVolunteer.Role : role,
-                IsActive = isActive ? doVolunteer.IsActive : isActive,
-                DistanceType = (distanceType != BO.Enums.DistanceTypes.driving_distance) && (distanceType != BO.Enums.DistanceTypes.driving_distance) && (distanceType != BO.Enums.DistanceTypes.aerial_distance) ? doVolunteer.DistanceType : distanceType,
+                Role = role,
+                IsActive = isActive,
+                DistanceType = distanceType,
                 MaxDistance = maxDistance
             };
-
 
             try
             {
@@ -675,6 +705,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
 
         private static void DeleteVolunteer()
         {

@@ -15,23 +15,66 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">The ID of the volunteer.</param>
     /// <returns>A BO.Volunteer object representing the volunteer's details.</returns>
-    public BO.Volunteer GetVolunteerDetails(int id)
+    public BO.Volunteer GetVolunteerDetails(int volunteerId)
     {
         try
         {
-            var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
-            return VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
+            var volunteerDO = _dal.Volunteer.Read(volunteerId) ??
+                throw new BO.BlNotFoundException($"Volunteer with ID={volunteerId} does not exist.");
+
+            var currentAssignment = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment == null).FirstOrDefault();
+
+            BO.CallInProgress? callInProgress = null;
+            if (currentAssignment != null)
+            {
+                var callDetails = _dal.Call.Read(currentAssignment.CallId);
+                if (callDetails != null)
+                {
+                    callInProgress = new BO.CallInProgress
+                    {
+                        Id = currentAssignment.ID,
+                        CallId = currentAssignment.CallId,
+                        CallType = (BO.Enums.CallType)callDetails.TypeOfCall,
+                        Verbal_description = callDetails.CallDescription,
+                        FullAddress = callDetails.Address,
+                        Opening_time = callDetails.OpeningTime,
+                        Max_finish_time = callDetails.MaxTimeForClosing ?? throw new InvalidOperationException("MaxTimeForClosing cannot be null"),
+                        Start_time = currentAssignment.EntryTimeForTreatment,
+                        CallDistance = Tools.CalculateDistance(volunteerDO.Latitude!, volunteerDO.Longitude!, callDetails.Latitude, callDetails.Longitude),
+                        CallStatus = CalculateStatus(callDetails, 30)
+                    };
+                }
+            }
+            return new BO.Volunteer
+            {
+                Id = volunteerDO.ID,
+                FullName = volunteerDO.Name,
+                CellphoneNumber = volunteerDO.Phone,
+                Email = volunteerDO.Email,
+                Password = volunteerDO.Password,
+                FullAddress = volunteerDO.Address,
+                Latitude = volunteerDO.Latitude,
+                Longitude = volunteerDO.Longitude,
+                Role = (BO.Enums.Role)volunteerDO.Role,
+                IsActive = volunteerDO.IsActive,
+                MaxDistance = volunteerDO.MaxDistanceForCall,
+                DistanceType = (BO.Enums.DistanceTypes)volunteerDO.DistanceType,
+                CallInProgress = callInProgress
+            };
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException("Error accessing Volunteers.", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlGeneralException(ex.Message, ex);
+            throw new BO.BlNotFoundException("Volunteer not found in data layer.", ex);
         }
     }
 
+
+    private BO.Enums.CallStatus CalculateStatus(DO.Call callDetails, int threshold)
+    {
+        // Implement the logic to calculate the call status based on callDetails and threshold
+        // This is a placeholder implementation
+        return BO.Enums.CallStatus.opened;
+    }
     /// <summary>
     /// Retrieves a list of volunteers, optionally filtered by activity status and sorted by a specific field.
     /// </summary>
@@ -52,7 +95,7 @@ internal class VolunteerImplementation : IVolunteer
                 BO.Enums.VolunteerInListFields.TotalHandledCalls => allVolunteersInList.OrderBy(v => v?.TotalHandledCalls).ToList(),
                 BO.Enums.VolunteerInListFields.TotalCanceledCalls => allVolunteersInList.OrderBy(v => v?.TotalCanceledCalls).ToList(),
                 BO.Enums.VolunteerInListFields.TotalExpiredCalls => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
-                BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
+                //BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
                 BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),
                 _ => allVolunteersInList.OrderBy(v => v?.Id).ToList(),
             } : allVolunteersInList.OrderBy(v => v?.Id).ToList();
@@ -221,5 +264,4 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
-
 }
