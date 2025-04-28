@@ -14,6 +14,7 @@ namespace Helpers;
 internal static class VolunteerManager
 {
     private readonly static IDal s_dal = Factory.Get;
+    internal static ObserverManager Observers = new(); //stage 5 
     public static event Action? CallsListUpdated;
     private static readonly ConcurrentDictionary<int, Action<DO.Call>> callObservers = new();
 

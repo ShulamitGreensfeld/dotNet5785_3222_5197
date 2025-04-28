@@ -6,7 +6,8 @@ namespace BlImplementation;
 
 internal class AdminImplementation : IAdmin
 {
-    private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
+   private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
     /// <summary>
     /// Retrieves the current system clock time.
@@ -14,7 +15,7 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current system time.</returns>
     public DateTime GetClock()
     {
-        return ClockManager.Now;
+        return AdminManager.Now;
     }
 
     /// <summary>
@@ -45,7 +46,7 @@ internal class AdminImplementation : IAdmin
                 break;
         }
 
-        //ClockManager.UpdateClock(newClock); 
+        AdminManager.UpdateClock(newClock); 
         CallManager.PeriodicVolunteersUpdates(oldClock, newClock);
     }
 
@@ -55,16 +56,16 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current risk time range.</returns>
     public TimeSpan GetRiskTimeRange()
     {
-        return _dal.Config.RiskRange;
+        return AdminManager.RiskRange;
     }
 
     /// <summary>
     /// Sets a new risk time range in the database configuration.
     /// </summary>
-    /// <param name="riskTimeRange">The new risk time range to set.</param>
-    public void SetRiskTimeRange(TimeSpan riskTimeRange)
+    /// <param name="maxRange">The new risk time range to set.</param>
+    public void SetRiskTimeRange(TimeSpan RiskRange)
     {
-        _dal.Config.RiskRange = riskTimeRange;
+        AdminManager.RiskRange = RiskRange;
     }
 
     /// <summary>
@@ -72,7 +73,7 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void ResetDatabase()
     {
-        _dal.Config.Reset();
+        AdminManager.ResetDB();
         _dal.ResetDB();
         Console.WriteLine("Resetting configuration and clearing data...");
         Console.WriteLine("Resetting completed successfully!");
@@ -83,7 +84,20 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void InitializeDatabase()
     {
+        AdminManager.InitializeDB();
         _dal.ResetDB();
         DalTest.Initialization.Do();
     }
+
+    #region Stage 5
+    public void AddClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers += clockObserver;
+    public void RemoveClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers -= clockObserver;
+    public void AddConfigObserver(Action configObserver) =>
+   AdminManager.ConfigUpdatedObservers += configObserver;
+    public void RemoveConfigObserver(Action configObserver) =>
+    AdminManager.ConfigUpdatedObservers -= configObserver;
+    #endregion Stage 5
+
 }

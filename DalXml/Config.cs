@@ -58,6 +58,7 @@ internal static class Config
         set => XMLTools.SetConfigTimeSpanVal(s_data_config_xml, "RiskRange", value);
     }
 
+
     /// <summary>
     /// Gets or sets the system clock value from the XML file.
     /// This represents the current operational time for the system.

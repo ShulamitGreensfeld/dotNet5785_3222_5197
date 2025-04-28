@@ -7,7 +7,9 @@ namespace Helpers
     internal static class CallManager
     {
         private static IDal s_dal = Factory.Get; //stage 4
+        internal static ObserverManager Observers = new(); //stage 5 
         private static int nextCallId = 1050;
+
 
         /// <summary>
         /// Gets the next available call ID.
@@ -34,18 +36,18 @@ namespace Helpers
             var lastAssignment = assignments.LastOrDefault(a => a!.CallId == call.ID);
 
             // If the maximum time for closing the call has passed
-            if (call.MaxTimeForClosing < ClockManager.Now)
+            if (call.MaxTimeForClosing < AdminManager.Now)
                 return BO.Enums.CallStatus.expired;
 
             // If the call is open and is ending during the risk period
-            if ((ClockManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
+            if ((AdminManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
                 return BO.Enums.CallStatus.opened_at_risk;
 
             // If the call is being treated
             if (lastAssignment != null)
             {
                 // Treated at risk
-                if ((ClockManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+                if ((AdminManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
                     return BO.Enums.CallStatus.treated_at_risk;
 
                 // Just treated
@@ -163,6 +165,7 @@ namespace Helpers
                     Console.WriteLine($"Assignment {assignment.ID} has expired.");
                     var updatedAssignment = assignment with { TypeOfFinishTreatment = TypeOfFinishTreatment.Treated };
                     s_dal.Assignment.Update(updatedAssignment);
+                    Observers.NotifyItemUpdated(updatedAssignment.ID); //stage 5
                     processedAssignments.Add(assignment.ID);
                 }
                 else if (assignment.EndTimeForTreatment <= newClock.AddHours(2) && !processedAssignments.Contains(assignment.ID))
@@ -174,7 +177,7 @@ namespace Helpers
                     processedAssignments.Add(assignment.ID);
                 }
             }
-
+            Observers.NotifyListUpdated(); //stage 5
             Console.WriteLine("Finished Periodic the Updates successfully.");
         }
 
@@ -192,22 +195,22 @@ namespace Helpers
                 {
                     string subject = "Openning call";
                     string body = $@"
-      Hello {item.Name},
+                    Hello {item.Name},
 
-     A new call has been opened in your area.
-      Call Details:
-      - Call ID: {call.Id}
-      - Call Type: {call.CallType}
-      - Call Address: {call.FullAddress}
-      - Opening Time: {call.Opening_time}
-      - Description: {call.Verbal_description}
-      - Entry Time for Treatment: {call.Max_finish_time}
-      -call Status:{call.CallStatus}
+                    A new call has been opened in your area.
+                    Call Details:
+                    - Call ID: {call.Id}
+                    - Call Type: {call.CallType}
+                    - Call Address: {call.FullAddress}
+                    - Opening Time: {call.Opening_time}
+                    - Description: {call.Verbal_description}
+                    - Entry Time for Treatment: {call.Max_finish_time}
+                    -call Status:{call.CallStatus}
 
-      If you wish to handle this call, please log into the system.
+                    If you wish to handle this call, please log into the system.
 
-      Best regards,  
-     Call Management System";
+                    Best regards,  
+                    Call Management System";
 
                     Tools.SendEmail(item.Email, subject, body);
                 }
@@ -225,20 +228,20 @@ namespace Helpers
 
             string subject = "Assignment Canceled";
             string body = $@"
-      Hello {volunteer.Name},
+              Hello {volunteer.Name},
 
-      Your assignment for handling call {assignment.ID} has been canceled by the administrator.
+              Your assignment for handling call {assignment.ID} has been canceled by the administrator.
 
-      Call Details:
-      - Call ID: {assignment.CallId}
-      - Call Type: {call.TypeOfCall}
-      - Call Address: {call.Address}
-      - Opening Time: {call.OpeningTime}
-      - Description: {call.CallDescription}
-      - Entry Time for Treatment: {assignment.EntryTimeForTreatment}
+              Call Details:
+              - Call ID: {assignment.CallId}
+              - Call Type: {call.TypeOfCall}
+              - Call Address: {call.Address}
+              - Opening Time: {call.OpeningTime}
+              - Description: {call.CallDescription}
+              - Entry Time for Treatment: {assignment.EntryTimeForTreatment}
 
-      Best regards,  
-      Call Management System";
+              Best regards,  
+              Call Management System";
 
             Tools.SendEmail(volunteer.Email, subject, body);
         }

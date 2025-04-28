@@ -16,7 +16,7 @@
         internal static DateTime Clock { get; set; } = new DateTime(2025, 3, 13, 2, 45, 30);
         // Risk range time span
         internal static TimeSpan RiskRange { get; set; } = TimeSpan.FromHours(2);
-
+ 
         /// <summary>
         /// Method to reset initial values
         /// </summary>

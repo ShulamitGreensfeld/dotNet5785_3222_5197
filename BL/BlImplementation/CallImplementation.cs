@@ -75,6 +75,7 @@ internal class CallImplementation : BlApi.ICall
             DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Create(doCall);
             CallManager.SendEmailWhenCallOpened(boCall);
+            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -103,6 +104,8 @@ internal class CallImplementation : BlApi.ICall
             boCall.Longitude = longitude;
             DO.Call updatedCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Update(updatedCall);
+            CallManager.Observers.NotifyItemUpdated(updatedCall.ID);  //stage 5
+            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -126,6 +129,7 @@ internal class CallImplementation : BlApi.ICall
             if (_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) == BO.Enums.CallStatus.opened)
                 throw new BO.BlDeletionException($"Cannot delete volunteer with ID={callId} as they are handling calls.");
             _dal.Call.Delete(callId);
+            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -227,34 +231,6 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer canceling the assignment.</param>
     /// <param name="assignmentId">The ID of the assignment to cancel.</param>
-    //public void MarkCallCancellation(int volunteerId, int assignmentId)
-    //{
-    //    try
-    //    {
-    //        var assignment = _dal.Assignment.Read(assignmentId);
-    //        if (assignment == null)
-    //            throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist");
-    //        var isRequesterManager = _dal.Volunteer?.Read(volunteerId)!.Role;
-    //        if (isRequesterManager != DO.Role.Manager && assignment.VolunteerId != volunteerId)
-    //            throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
-    //        if (assignment.EndTimeForTreatment != null)
-    //            throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
-    //        DO.Assignment copy = assignment with
-    //        {
-    //            EndTimeForTreatment = _dal.Config.Clock,
-    //            TypeOfFinishTreatment = (DO.TypeOfFinishTreatment)((isRequesterManager == DO.Role.Manager) ? BO.Enums.EndType.manager_cancellation : BO.Enums.EndType.self_cancellation)
-    //        };
-    //        _dal.Assignment.Update(copy);
-    //    }
-    //    catch (DO.DalDoesNotExistException ex)
-    //    {
-    //        throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.", ex);
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        throw new BO.BlGeneralException(ex.Message, ex);
-    //    }
-    //}
     public void MarkCallCancellation(int volunteerId, int assignmentId)
     {
         try
@@ -278,6 +254,8 @@ internal class CallImplementation : BlApi.ICall
 
             _dal.Assignment.Update(updatedAssignment);
             CallManager.SendEmailToVolunteer(volunteer, assignment);
+            CallManager.Observers.NotifyItemUpdated(updatedAssignment.ID);  //stage 5
+            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (BO.BlUnauthorizedException ex)
         {
@@ -309,6 +287,8 @@ internal class CallImplementation : BlApi.ICall
                 throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or canceled.");
             DO.Assignment newAssignment = assignment with { EndTimeForTreatment = _dal.Config.Clock, TypeOfFinishTreatment = DO.TypeOfFinishTreatment.Treated };
             _dal.Assignment.Update(newAssignment);
+            CallManager.Observers.NotifyItemUpdated(newAssignment.ID);  //stage 5
+            CallManager.Observers.NotifyListUpdated(); //stage 5  
         }
         catch (BO.BlUnauthorizedException ex)
         {
@@ -425,5 +405,15 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+    #region Stage 5
+    public void AddObserver(Action listObserver) =>
+    CallManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    CallManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    CallManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    CallManager.Observers.RemoveObserver(id, observer); //stage 5
+    #endregion Stage 5
 
 }
