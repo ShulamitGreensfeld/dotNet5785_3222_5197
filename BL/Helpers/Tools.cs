@@ -1,4 +1,4 @@
-﻿using BO;
+﻿//using BO;
 using System.Net.Mail;
 using System.Net;
 using System.Reflection;
@@ -10,13 +10,13 @@ internal static class Tools
     private static readonly DalApi.IDal _dal = DalApi.Factory.Get; //stage 4
 
     // Property to store the selected distance type
-    private static Enums.DistanceTypes _selectedDistanceType = Enums.DistanceTypes.aerial_distance;
+    private static BO.Enums.DistanceTypes _selectedDistanceType = BO.Enums.DistanceTypes.aerial_distance;
 
     /// <summary>
     /// Sets the selected distance type.
     /// </summary>
     /// <param name="distanceType">The distance type to set.</param>
-    public static void SetDistanceType(Enums.DistanceTypes distanceType)
+    public static void SetDistanceType(BO.Enums.DistanceTypes distanceType)
     {
         _selectedDistanceType = distanceType;
     }
@@ -185,13 +185,13 @@ internal static class Tools
     /// <param name="latitudeC">The latitude of the second point.</param>
     /// <param name="longitudeC">The longitude of the second point.</param>
     /// <returns>The calculated distance in kilometers.</returns>
-    public static async Task<double> CalculateDistanceAsync(Enums.DistanceTypes type, double latitudeV, double longitudeV, double latitudeC, double longitudeC)
+    public static async Task<double> CalculateDistanceAsync(BO.Enums.DistanceTypes type, double latitudeV, double longitudeV, double latitudeC, double longitudeC)
     {
         return type switch
         {
-            Enums.DistanceTypes.aerial_distance => CalculateDistance(latitudeV, longitudeV, latitudeC, longitudeC),
-            Enums.DistanceTypes.walking_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "pedestrian"),
-            Enums.DistanceTypes.driving_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "car"),
+            BO.Enums.DistanceTypes.aerial_distance => CalculateDistance(latitudeV, longitudeV, latitudeC, longitudeC),
+            BO.Enums.DistanceTypes.walking_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "pedestrian"),
+            BO.Enums.DistanceTypes.driving_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "car"),
             _ => throw new ArgumentException("Invalid distance type", nameof(type))
         };
     }

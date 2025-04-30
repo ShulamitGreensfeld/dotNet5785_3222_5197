@@ -2,14 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PL;
-internal class CallTypeCollection : IEnumerable
+namespace PL
 {
-    static readonly IEnumerable<BO.Enums.CallType> s_enums =
-(Enum.GetValues(typeof(BO.Enums.CallType)) as IEnumerable<BO.Enums.CallType>)!;
+    internal class CallTypeCollection : IEnumerable
+    {
+        static readonly IEnumerable<string> s_enums =
+            Enum.GetValues(typeof(BO.Enums.CallType))
+                .Cast<BO.Enums.CallType>()
+                .Select(e => e.ToString());
 
-    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+        public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+    }
 }

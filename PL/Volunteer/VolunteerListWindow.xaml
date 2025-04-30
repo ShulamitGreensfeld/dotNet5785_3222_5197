@@ -8,7 +8,8 @@
         Title="VolunteerListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Window.Resources>
-        <CollectionViewSource x:Key="CallTypeCollectionKey" Source="{Binding CallTypeCollection}" />
+        <!-- Wrap the static resource in a CollectionViewSource -->
+        <CollectionViewSource x:Key="CallTypeCollectionView" Source="{StaticResource CallTypeCollectionKey}" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -21,9 +22,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Select Semester:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"
-                Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Label Content="Select volunteer:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <!-- Bind the ComboBox ItemsSource to the CollectionViewSource -->
+            <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionView}}"
+                       SelectedValue="{Binding SelectedCallType, Mode=TwoWay}"
+                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
         <ListView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding VolunteerList}">
             <ListView.View>
