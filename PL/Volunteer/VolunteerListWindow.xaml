@@ -25,10 +25,11 @@
             <Label Content="Select volunteer:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <!-- Bind the ComboBox ItemsSource to the CollectionViewSource -->
             <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionView}}"
-                       SelectedValue="{Binding SelectedCallType, Mode=TwoWay}"
-                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+              SelectedValue="{Binding SelectedCallType, Mode=TwoWay}"
+              Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              SelectedValuePath="."/>
         </Grid>
-        <ListView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding VolunteerList}">
+        <ListView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding FilteredVolunteers}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" />
