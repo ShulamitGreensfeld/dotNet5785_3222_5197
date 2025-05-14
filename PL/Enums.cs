@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace PL
+namespace PL;
+internal class CallTypeCollection : IEnumerable
 {
-    internal class CallTypeCollection : IEnumerable
-    {
-        static readonly IEnumerable<string> s_enums =
-            Enum.GetValues(typeof(BO.Enums.CallType))
-                .Cast<BO.Enums.CallType>()
-                .Select(e => e.ToString());
+    static readonly IEnumerable<BO.Enums.CallType> s_enums =
+        (System.Enum.GetValues(typeof(BO.Enums.CallType)) as IEnumerable<BO.Enums.CallType>)!;
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+internal class RoleCollection : IEnumerable
+{
+    static readonly IEnumerable<BO.Enums.Role> s_enums =
+        (System.Enum.GetValues(typeof(BO.Enums.Role)) as IEnumerable<BO.Enums.Role>)!;
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
 
-        public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
-    }
+internal class DistanceTypesCollection : IEnumerable
+{
+    static readonly IEnumerable<BO.Enums.DistanceTypes> s_enums =
+        (System.Enum.GetValues(typeof(BO.Enums.DistanceTypes)) as IEnumerable<BO.Enums.DistanceTypes>)!;
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }

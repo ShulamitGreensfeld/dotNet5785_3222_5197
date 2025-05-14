@@ -185,12 +185,24 @@ internal class VolunteerImplementation : IVolunteer
             DO.Volunteer existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id)
                 ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
 
-            // Validate the volunteer data
+            // Validate the volunteer data (ללא בדיקת סיסמה)
             VolunteerManager.ValidateVolunteer(boVolunteer);
 
-            // Check password strength if provided
-            if (!string.IsNullOrEmpty(boVolunteer.Password) && !VolunteerManager.IsPasswordStrong(boVolunteer.Password))
-                throw new BO.BlInvalidFormatException("Password is not strong!");
+            // עדכון סיסמה רק אם הוזנה חדשה (שאינה זהה לערך המוצפן)
+            if (!string.IsNullOrWhiteSpace(boVolunteer.Password) && boVolunteer.Password != existingVolunteer.Password)
+            {
+                // בדוק חוזק סיסמה חדשה
+                if (!VolunteerManager.IsPasswordStrong(boVolunteer.Password))
+                    throw new BO.BlInvalidFormatException("Password is not strong!");
+
+                // הצפן את הסיסמה החדשה
+                boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
+            }
+            else
+            {
+                // אם לא הוזנה סיסמה חדשה, שמור את הסיסמה הישנה (המוצפנת)
+                boVolunteer.Password = existingVolunteer.Password;
+            }
 
             // Check authorization to modify role
             if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
@@ -222,6 +234,7 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+
 
     /// <summary>
     /// Deletes a volunteer from the system if they are not handling any active calls.

@@ -4,19 +4,13 @@
         Title="Main Management Screen" Height="800" Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="MainWindow_Closed">
-    <!-- Main Grid -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- System Clock Area -->
             <RowDefinition Height="Auto"/>
-            <!-- Configuration Variables Area -->
             <RowDefinition Height="*"/>
-            <!-- Buttons Area -->
             <RowDefinition Height="Auto"/>
-            <!-- Bottom Button Area -->
         </Grid.RowDefinitions>
-
         <!-- System Clock Area -->
         <Grid Grid.Row="0" Margin="10">
             <Grid.ColumnDefinitions>
@@ -24,18 +18,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <!-- Label for System Clock -->
-            <Label Content="{Binding CurrentTime, StringFormat=dd/MM/yyyy}" FontWeight="Bold" FontSize="20" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="0"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-            <!-- Buttons for advancing the clock -->
+            <Label Content="{Binding CurrentTime, StringFormat=dd/MM/yyyy}" FontWeight="Bold" FontSize="20" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right">
                 <Button Content="Advance Minute" Margin="5" Click="btnAdvanceMinute_Click"/>
                 <Button Content="Advance Hour" Margin="5" Click="btnAdvanceHour_Click"/>
@@ -44,19 +27,15 @@
                 <Button Content="Advance Year" Margin="5" Click="btnAdvanceYear_Click"/>
             </StackPanel>
         </Grid>
-
         <!-- Configuration Variables Area -->
         <Grid Grid.Row="1" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <!-- TextBox for RiskRange variable -->
             <TextBox Text="{Binding RiskRange, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
-            <!-- Button to update RiskRange variable -->
             <Button Content="Update Risk Range" Grid.Column="1" Margin="5" Click="btnUpdateRiskRange_Click"/>
         </Grid>
-
         <!-- Buttons Area -->
         <Grid Grid.Row="2" Margin="10">
             <Grid.ColumnDefinitions>
@@ -69,16 +48,10 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <!-- Button to open the list view screen -->
             <Button Content="Open List View" Grid.Row="0" HorizontalAlignment="Left" Margin="232,5,0,5" Width="200" Grid.Column="1"/>
-            <!-- Button to initialize the database -->
             <Button Content="Initialize Database" Grid.Row="1" HorizontalAlignment="Left" Margin="232,5,0,5" Width="200" Grid.Column="1"/>
-            <!-- Button to reset the database -->
             <Button Content="Reset Database" Grid.Row="2" HorizontalAlignment="Left" Margin="232,5,0,5" Width="200" Grid.Column="1"/>
-            <!-- Button for opening the Volunteer List Window -->
             <Button Content="Handle Volunteers" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="281,0,0,0" Click="btnVolunteers_Click" Grid.Column="1" />
         </Grid>
-
-
     </Grid>
 </Window>

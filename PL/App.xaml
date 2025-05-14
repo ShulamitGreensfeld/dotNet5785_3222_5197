@@ -2,8 +2,12 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PL"
-             StartupUri="MainWindow.xaml">
+             xmlns:vol="clr-namespace:PL.Volunteer"
+             StartupUri="MainWindow.xaml"
+             ShutdownMode="OnLastWindowClose">
     <Application.Resources>
         <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
+        <local:RoleCollection x:Key="RoleCollectionKey"/>
+        <local:DistanceTypesCollection x:Key="DistanceTypesCollectionKey"/>
     </Application.Resources>
 </Application>

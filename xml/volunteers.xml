@@ -10,9 +10,9 @@
     <Address>120 Dizengoff St, Tel Aviv</Address>
     <Latitude>32.0736</Latitude>
     <Longitude>34.7704</Longitude>
-    <LargestDistance>98</LargestDistance>
+    <LargestDistance>56</LargestDistance>
     <DistanceType>WalkingDistance</DistanceType>
-    <Password>a5d35a600f35aa0f45b88265979f09818373062c182ca7b8297836f57b9adc9d</Password>
+    <Password>95df1f635ac99c64230a0d07c3747dde0c7549a39441260e48ac1bb97668c8aa</Password>
   </Volunteer>
   <Volunteer>
     <Id>215525197</Id>
@@ -24,9 +24,9 @@
     <Address>15 Herzl St, Haifa</Address>
     <Latitude>32.0739</Latitude>
     <Longitude>34.8221</Longitude>
-    <LargestDistance>95</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>bf1faf38cc1fbf11dbfabd7fa2be2848f2851ac03faa61d67a549d5b8cd6c2b2</Password>
+    <LargestDistance>43</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>3a5b241ccf0c34d296bafc6c885c4f5a52bb171e5bf60dd2f47a72758feaefa7</Password>
   </Volunteer>
   <Volunteer>
     <Id>328118245</Id>
@@ -38,9 +38,9 @@
     <Address>30 Jaffa St, Jerusalem</Address>
     <Latitude>32.8194</Latitude>
     <Longitude>34.989</Longitude>
-    <LargestDistance>74</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>590d2f961158a70a97619140b857e68efb35cd41f1e848079b1abd849fb2c843</Password>
+    <LargestDistance>6</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>aec0b5a536e199547df90a5721132b9dc53935008ab2f4321ca323d31f119128</Password>
   </Volunteer>
   <Volunteer>
     <Id>214821423</Id>
@@ -52,9 +52,9 @@
     <Address>22 Rothschild Blvd, Tel Aviv</Address>
     <Latitude>32.0702</Latitude>
     <Longitude>34.7915</Longitude>
-    <LargestDistance>49</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>70686b3be7bd13a070ddf750304da9c94d52dbbee65720c32ff885b1dd72b75d</Password>
+    <LargestDistance>48</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>f9f4123b69c995d7574b6008a393cbe3ea513bb4ca142f003d472f6f2e49eb28</Password>
   </Volunteer>
   <Volunteer>
     <Id>326365574</Id>
@@ -66,9 +66,9 @@
     <Address>10 Derech HaShalom, Ramat Gan</Address>
     <Latitude>31.7702</Latitude>
     <Longitude>35.2137</Longitude>
-    <LargestDistance>27</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>110084eac4c251b0985b3991c22c20a030eb7b218db11c6adb1fc6ea7f0aa0ab</Password>
+    <LargestDistance>79</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>e4357ccd7e6284759996a81ea4b463962bcf7fec3d4e2c08100b8b324a1e718a</Password>
   </Volunteer>
   <Volunteer>
     <Id>328128061</Id>
@@ -80,9 +80,9 @@
     <Address>1 HaNassi Blvd, Haifa</Address>
     <Latitude>32.0782</Latitude>
     <Longitude>34.7839</Longitude>
-    <LargestDistance>77</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>e79e327a9847376da7f97e1f3f73bec68849b044d3103e6a6e31444778d655c2</Password>
+    <LargestDistance>10</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>0f1518b6d42670171f7243f0ec71ea0ea4ef9185bd530aaeb3813a90b9bfd512</Password>
   </Volunteer>
   <Volunteer>
     <Id>327770442</Id>
@@ -94,9 +94,9 @@
     <Address>45 HaAtzmaut Blvd, Ashdod</Address>
     <Latitude>32.3212</Latitude>
     <Longitude>34.8573</Longitude>
-    <LargestDistance>99</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>d6dcdb461a1a5983ea19690aca8f7b566c2b82d60b71999682b72f9933b89ab5</Password>
+    <LargestDistance>54</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>5696d97502adb2b20e7209a9068906a38de2736df982381fcd4c169f7b1b9dec</Password>
   </Volunteer>
   <Volunteer>
     <Id>327548194</Id>
@@ -108,9 +108,9 @@
     <Address>88 Allenby St, Tel Aviv</Address>
     <Latitude>32.0951</Latitude>
     <Longitude>34.8874</Longitude>
-    <LargestDistance>26</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>c594f6aa4dfb886b371b6d05b68958ed36d8e91ea44147cfb3ca261508e018cd</Password>
+    <LargestDistance>16</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>097d99c092dcb85517d990fc65eda9e020a5ee0020efca6e5a2ae2a283e49607</Password>
   </Volunteer>
   <Volunteer>
     <Id>215086950</Id>
@@ -122,9 +122,9 @@
     <Address>12 Ben Gurion Blvd, Bat Yam</Address>
     <Latitude>32.1575</Latitude>
     <Longitude>34.7909</Longitude>
-    <LargestDistance>65</LargestDistance>
+    <LargestDistance>22</LargestDistance>
     <DistanceType>AirDistance</DistanceType>
-    <Password>247fe40586132d9d7df135064646b5d07c12f33f9d5f3f0d8edc27980eec62f0</Password>
+    <Password>ef9a6b6adbfd2c94e9e2a9fc163dfd4cd23f18a416932fe41e7ebbef53605679</Password>
   </Volunteer>
   <Volunteer>
     <Id>215215690</Id>
@@ -136,9 +136,9 @@
     <Address>20 King George St, Jerusalem</Address>
     <Latitude>29.5596</Latitude>
     <Longitude>34.9494</Longitude>
-    <LargestDistance>3</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>24b1a82f56dc4fda15944b11b97ce24273caa41449b73e34e3cff66b1350aee8</Password>
+    <LargestDistance>27</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>79510076492aa561783e4207e63264f4dc5753f8791d3ec279d2fa2042e3827c</Password>
   </Volunteer>
   <Volunteer>
     <Id>215252370</Id>
@@ -150,9 +150,9 @@
     <Address>132 Begin Road, Tel Aviv</Address>
     <Latitude>32.1749</Latitude>
     <Longitude>34.7631</Longitude>
-    <LargestDistance>29</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>fff28142ad0e46094a0c96fa071a7e925baaab54bd25a74511b947df865e547d</Password>
+    <LargestDistance>43</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>ec6f3f0476da2eddd0625ac09fb49b9608f87254bc618a8875a7a22f194960af</Password>
   </Volunteer>
   <Volunteer>
     <Id>328177191</Id>
@@ -164,9 +164,9 @@
     <Address>8 Keren Hayesod St, Jerusalem</Address>
     <Latitude>32.0926</Latitude>
     <Longitude>34.8036</Longitude>
-    <LargestDistance>5</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>85edd6ac31d23cd18a646da56eafdcaaf7acd15c621f42a2506267311d244b95</Password>
+    <LargestDistance>25</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>78ecc49e61ecf6b0a61257237ee624b66b7ab6ae67337bddb695cfac5a4e7fd7</Password>
   </Volunteer>
   <Volunteer>
     <Id>328183934</Id>
@@ -178,9 +178,9 @@
     <Address>99 Ben Yehuda St, Tel Aviv</Address>
     <Latitude>32.0814</Latitude>
     <Longitude>34.7862</Longitude>
-    <LargestDistance>41</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>97e34120e153fa4683193c3ade22592d87cf9bee278b72b2955ff2d98bd7a90c</Password>
+    <LargestDistance>69</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>8a0f6551d11ec32b2a0de063ae3b43eaec3eb92af42e355156ea536514a4df7f</Password>
   </Volunteer>
   <Volunteer>
     <Id>327786612</Id>
@@ -192,9 +192,9 @@
     <Address>25 Weizmann St, Kfar Saba</Address>
     <Latitude>32.1311</Latitude>
     <Longitude>34.7927</Longitude>
-    <LargestDistance>81</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>308707c7c148c0564f580a82b0655c6338d4072d01da0df7a6ab277327697a74</Password>
+    <LargestDistance>96</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>bf4df7c8f8c03b00337c6a0a9861d2f2b5359bbdbce0eaa738076a26aa4e2d2b</Password>
   </Volunteer>
   <Volunteer>
     <Id>328306550</Id>
@@ -206,9 +206,9 @@
     <Address>14 Golani Brigade St, Afula</Address>
     <Latitude>31.7665</Latitude>
     <Longitude>34.6292</Longitude>
-    <LargestDistance>34</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>5305d5c0fc085ef0f140f0e0ce42f16cf99b5251240eaa573895c682cbd1a017</Password>
+    <LargestDistance>74</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>2645caa666e433793e9aca57ece5bb3e3aeb67dea9b39b01b06a0c3fa35d4f4b</Password>
   </Volunteer>
   <Volunteer>
     <Id>327820429</Id>
@@ -220,9 +220,9 @@
     <Address>33 Yehuda Halevi St, Tel Aviv</Address>
     <Latitude>32.0509</Latitude>
     <Longitude>34.7657</Longitude>
-    <LargestDistance>34</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>96d3e09857db46f158525e5416ef10a91b122049dc3e4efbf6ac88b4df2c1fd7</Password>
+    <LargestDistance>61</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>935c4d8c806aa61ea22dbb680b57d0294ac0c908a3e74669fb5bcc5dcf04c92b</Password>
   </Volunteer>
   <Volunteer>
     <Id>328276332</Id>
@@ -234,9 +234,9 @@
     <Address>77 HaNassi Blvd, Haifa</Address>
     <Latitude>32.0354</Latitude>
     <Longitude>34.7894</Longitude>
-    <LargestDistance>32</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>65d65bfda82bae94ad424408f55c1ad7a67ec4dca2b561b7c3fe8e138468bfe1</Password>
+    <LargestDistance>54</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>7f9ad9aecbc2f7ec8388ff77b37aedc610e22e48a5b0dfb5bee5781204f85030</Password>
   </Volunteer>
   <Volunteer>
     <Id>328304944</Id>
@@ -248,9 +248,9 @@
     <Address>19 Arlozorov St, Tel Aviv</Address>
     <Latitude>31.9737</Latitude>
     <Longitude>34.836</Longitude>
-    <LargestDistance>66</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>151af5088d5ddb5365f4b26fdcf902854c1e4e5e6bc84cf744914e26ef3ca648</Password>
+    <LargestDistance>1</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>3543b3174dee24b3b7f8ff99b9f554dbefd4de9089ca1a94e99e60df5c8c65d8</Password>
   </Volunteer>
   <Volunteer>
     <Id>215238023</Id>
@@ -262,9 +262,9 @@
     <Address>96 HaHashmonaim St, Tel Aviv</Address>
     <Latitude>32.0656</Latitude>
     <Longitude>34.804</Longitude>
-    <LargestDistance>77</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>b9adbfca811a4952ce74e41907d8dd12ea12a4d50bdc0532a0bbec39d34da092</Password>
+    <LargestDistance>69</LargestDistance>
+    <DistanceType>DrivingDistance</DistanceType>
+    <Password>567eca9493a9582bff6c1e6993175864ce621c7aefadf3af6fae7c01c9e57f6b</Password>
   </Volunteer>
   <Volunteer>
     <Id>327796678</Id>
@@ -276,8 +276,8 @@
     <Address>12 Menachem Begin Blvd, Rishon LeZion</Address>
     <Latitude>31.673</Latitude>
     <Longitude>34.6489</Longitude>
-    <LargestDistance>64</LargestDistance>
+    <LargestDistance>86</LargestDistance>
     <DistanceType>WalkingDistance</DistanceType>
-    <Password>9f0b98529823ac2a40971eaf7c364260812b2d32e8f6d8ebe16b8f6c978ddd87</Password>
+    <Password>f293b9d400adac68496f382bcd40b416fa9443e3721bde64994b66d70a5d8c37</Password>
   </Volunteer>
 </ArrayOfVolunteer>
