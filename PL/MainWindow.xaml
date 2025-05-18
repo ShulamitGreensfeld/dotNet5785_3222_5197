@@ -3,55 +3,105 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Main Management Screen" Height="800" Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Closed="MainWindow_Closed">
-    <Grid>
+        Closed="MainWindow_Closed"
+        Background="#EAF6F6"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- סגנון כללי לכפתורים גדולים וטורקיז ריבועיים -->
+        <Style x:Key="ModernButton_Square" TargetType="Button">
+            <Setter Property="Background" Value="#1ABC9C"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="2" Color="#888"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="0"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#16D2B2" Duration="0:0:0.25"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                            To="#1ABC9C" Duration="0:0:0.25"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#139C89"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <!-- System Clock Area -->
-        <Grid Grid.Row="0" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Label Content="{Binding CurrentTime, StringFormat=dd/MM/yyyy}" FontWeight="Bold" FontSize="20" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-            <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right">
-                <Button Content="Advance Minute" Margin="5" Click="btnAdvanceMinute_Click"/>
-                <Button Content="Advance Hour" Margin="5" Click="btnAdvanceHour_Click"/>
-                <Button Content="Advance Day" Margin="5" Click="btnAdvanceDay_Click"/>
-                <Button Content="Advance Month" Margin="5" Click="btnAdvanceMonth_Click"/>
-                <Button Content="Advance Year" Margin="5" Click="btnAdvanceYear_Click"/>
+
+        <!-- שורת שעון -->
+        <DockPanel Grid.Row="0" LastChildFill="True" Margin="0 0 0 20">
+            <Label Content="{Binding CurrentTime, StringFormat=dd/MM/yyyy}" 
+                   FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Minute" Click="btnAdvanceMinute_Click" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Hour" Click="btnAdvanceHour_Click" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Day" Click="btnAdvanceDay_Click" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Month" Click="btnAdvanceMonth_Click" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Year" Click="btnAdvanceYear_Click" Margin="5 0" Height="30"/>
             </StackPanel>
-        </Grid>
-        <!-- Configuration Variables Area -->
-        <Grid Grid.Row="1" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding RiskRange, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Margin="5" VerticalAlignment="Center"/>
-            <Button Content="Update Risk Range" Grid.Column="1" Margin="5" Click="btnUpdateRiskRange_Click"/>
-        </Grid>
-        <!-- Buttons Area -->
-        <Grid Grid.Row="2" Margin="10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="79*"/>
-                <ColumnDefinition Width="411*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Button Content="Open List View" Grid.Row="0" HorizontalAlignment="Left" Margin="232,5,0,5" Width="200" Grid.Column="1"/>
-            <Button Content="Initialize Database" Grid.Row="1" HorizontalAlignment="Left" Margin="232,5,0,5" Width="200" Grid.Column="1"/>
-            <Button Content="Reset Database" Grid.Row="2" HorizontalAlignment="Left" Margin="232,5,0,5" Width="200" Grid.Column="1"/>
-            <Button Content="Handle Volunteers" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="281,0,0,0" Click="btnVolunteers_Click" Grid.Column="1" />
-        </Grid>
+        </DockPanel>
+
+        <!-- שורת סיכון -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 20" VerticalAlignment="Center">
+            <TextBox Width="200" Text="{Binding RiskRange, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
+            <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Update Risk Range" Width="200" Click="btnUpdateRiskRange_Click"/>
+        </StackPanel>
+
+        <!-- אזור פעולות -->
+        <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="320">
+            <Button Style="{StaticResource ModernButton_Square}" Content="📋 Open List View" Height="50" Margin="0 5" Width="250"/>
+            <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Height="50" Margin="0 5" Width="250"/>
+            <Button Style="{StaticResource ModernButton_Square}" Content="🔄 Reset Database" Height="50" Margin="0 5" Width="250"/>
+            <Button Style="{StaticResource ModernButton_Square}" Content="🤝 Handle Volunteers" Height="50" Margin="0 5" Width="250" Click="btnVolunteers_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

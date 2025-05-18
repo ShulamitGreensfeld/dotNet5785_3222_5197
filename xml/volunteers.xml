@@ -1,20 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer>
   <Volunteer>
-    <Id>215639212</Id>
-    <Name>David Cohen</Name>
-    <Phone>052-1234567</Phone>
-    <Email>davidcohen@example.com</Email>
-    <IsActive>true</IsActive>
-    <Role>Volunteer</Role>
-    <Address>120 Dizengoff St, Tel Aviv</Address>
-    <Latitude>32.0736</Latitude>
-    <Longitude>34.7704</Longitude>
-    <LargestDistance>56</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>95df1f635ac99c64230a0d07c3747dde0c7549a39441260e48ac1bb97668c8aa</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>215525197</Id>
     <Name>Yaara Levy</Name>
     <Phone>052-2345678</Phone>
@@ -55,20 +41,6 @@
     <LargestDistance>48</LargestDistance>
     <DistanceType>AirDistance</DistanceType>
     <Password>f9f4123b69c995d7574b6008a393cbe3ea513bb4ca142f003d472f6f2e49eb28</Password>
-  </Volunteer>
-  <Volunteer>
-    <Id>326365574</Id>
-    <Name>Oren Ben-David</Name>
-    <Phone>052-5678901</Phone>
-    <Email>orenben-david@example.com</Email>
-    <IsActive>true</IsActive>
-    <Role>Volunteer</Role>
-    <Address>10 Derech HaShalom, Ramat Gan</Address>
-    <Latitude>31.7702</Latitude>
-    <Longitude>35.2137</Longitude>
-    <LargestDistance>79</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>e4357ccd7e6284759996a81ea4b463962bcf7fec3d4e2c08100b8b324a1e718a</Password>
   </Volunteer>
   <Volunteer>
     <Id>328128061</Id>
@@ -183,20 +155,6 @@
     <Password>8a0f6551d11ec32b2a0de063ae3b43eaec3eb92af42e355156ea536514a4df7f</Password>
   </Volunteer>
   <Volunteer>
-    <Id>327786612</Id>
-    <Name>Ruth Ziv</Name>
-    <Phone>052-4569876</Phone>
-    <Email>ruthziv@example.com</Email>
-    <IsActive>true</IsActive>
-    <Role>Volunteer</Role>
-    <Address>25 Weizmann St, Kfar Saba</Address>
-    <Latitude>32.1311</Latitude>
-    <Longitude>34.7927</Longitude>
-    <LargestDistance>96</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>bf4df7c8f8c03b00337c6a0a9861d2f2b5359bbdbce0eaa738076a26aa4e2d2b</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>328306550</Id>
     <Name>Doron Barak</Name>
     <Phone>052-5679876</Phone>
@@ -279,5 +237,47 @@
     <LargestDistance>86</LargestDistance>
     <DistanceType>WalkingDistance</DistanceType>
     <Password>f293b9d400adac68496f382bcd40b416fa9443e3721bde64994b66d70a5d8c37</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>327786612</Id>
+    <Name>Ruth Ziv</Name>
+    <Phone>052-4569876</Phone>
+    <Email>ruthziv@example.com</Email>
+    <IsActive>true</IsActive>
+    <Role>Volunteer</Role>
+    <Address>25 Weizmann St, Kfar Saba</Address>
+    <Latitude>32.175</Latitude>
+    <Longitude>34.90694</Longitude>
+    <LargestDistance>96</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>bf4df7c8f8c03b00337c6a0a9861d2f2b5359bbdbce0eaa738076a26aa4e2d2b</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>215639212</Id>
+    <Name>David C</Name>
+    <Phone>052-1234567</Phone>
+    <Email>davidcohen@example.com</Email>
+    <IsActive>true</IsActive>
+    <Role>Volunteer</Role>
+    <Address>120 Dizengoff St, Tel Aviv</Address>
+    <Latitude>32.084319</Latitude>
+    <Longitude>34.781364</Longitude>
+    <LargestDistance>56</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>95df1f635ac99c64230a0d07c3747dde0c7549a39441260e48ac1bb97668c8aa</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>326365574</Id>
+    <Name>Oren Ben-David</Name>
+    <Phone>052-5678901</Phone>
+    <Email>orenben-david@example.com</Email>
+    <IsActive>true</IsActive>
+    <Role>Volunteer</Role>
+    <Address>10 Derech HaShalom, Ramat Gan</Address>
+    <Latitude>32.05636</Latitude>
+    <Longitude>34.835025</Longitude>
+    <LargestDistance>79</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>e4357ccd7e6284759996a81ea4b463962bcf7fec3d4e2c08100b8b324a1e718a</Password>
   </Volunteer>
 </ArrayOfVolunteer>

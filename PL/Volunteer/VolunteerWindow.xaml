@@ -5,118 +5,169 @@
         xmlns:conv="clr-namespace:PL.Volunteer"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Loaded="Window_Loaded" Closed="Window_Closed"
-        Title="VolunteerWindow" Height="700" Width="400">
+        Title="VolunteerWindow" Height="700" Width="500"
+        Background="#FFF5F5F5"
+        WindowStartupLocation="CenterScreen">
+
     <Window.Resources>
         <conv:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
         <conv:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
-        <!-- משאבים נוספים שלך כאן -->
+
+        <!-- סגנון כללי לכפתורים -->
+        <Style TargetType="Button" x:Key="RoundedButtonStyle">
+            <Setter Property="Background" Value="#FF6200EE"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="20"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3700B3"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FF03DAC5"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- כפתור Update -->
+        <Style TargetType="Button" x:Key="UpdateButtonStyle" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Background" Value="#FF00B894"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF019875"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#FF004D40"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- סגנון שדות טקסט -->
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="#FFB0BEC5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- סגנון לתוויות -->
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+
+        <!-- סגנון לקומבו ותיבת סימון -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Padding" Value="4"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
     </Window.Resources>
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="140"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <!-- Id  -->
-        <Label Grid.Row="0" Grid.Column="0" Content="Id:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="0" Grid.Column="1"
-         Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
-         IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <!-- 15 שדות + כפתור -->
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <!-- שדות הנתונים -->
+            <Label Grid.Row="0" Grid.Column="0" Content="Id:"/>
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
 
-        <!-- Full Name -->
-        <Label Grid.Row="1" Grid.Column="0" Content="Full Name:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Full Name:"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay}"/>
 
-        <!-- Cellphone Number -->
-        <Label Grid.Row="2" Grid.Column="0" Content="Cellphone:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="2" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.CellphoneNumber, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Cellphone:"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentVolunteer.CellphoneNumber, Mode=TwoWay}"/>
 
-        <!-- Email -->
-        <Label Grid.Row="3" Grid.Column="0" Content="Email:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="3" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="3" Grid.Column="0" Content="Email:"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentVolunteer.Email, Mode=TwoWay}"/>
 
-        <!-- Password -->
-        <Label Grid.Row="4" Grid.Column="0" Content="Password:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="4" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="4" Grid.Column="0" Content="Password:"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentVolunteer.Password, Mode=TwoWay}"/>
 
-        <!-- Full Address -->
-        <Label Grid.Row="5" Grid.Column="0" Content="Address:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="5" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.FullAddress, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="5" Grid.Column="0" Content="Address:"/>
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding CurrentVolunteer.FullAddress, Mode=TwoWay}"/>
 
-        <!-- Latitude -->
-        <Label Grid.Row="6" Grid.Column="0" Content="Latitude:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="6" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.Latitude, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="6" Grid.Column="0" Content="Latitude:"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding CurrentVolunteer.Latitude, Mode=TwoWay}"/>
 
-        <!-- Longitude -->
-        <Label Grid.Row="7" Grid.Column="0" Content="Longitude:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="7" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.Longitude, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="7" Grid.Column="0" Content="Longitude:"/>
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CurrentVolunteer.Longitude, Mode=TwoWay}"/>
 
-        <!-- Role (Enum) -->
-        <Label Grid.Row="8" Grid.Column="0" Content="Role:" VerticalAlignment="Center"/>
-        <ComboBox Grid.Row="8" Grid.Column="1"
-                  ItemsSource="{Binding Source={StaticResource RoleCollectionKey}}"
-                  SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="8" Grid.Column="0" Content="Role:"/>
+            <ComboBox Grid.Row="8" Grid.Column="1"
+                      ItemsSource="{Binding Source={StaticResource RoleCollectionKey}}"
+                      SelectedValue="{Binding CurrentVolunteer.Role, Mode=TwoWay}"/>
 
-        <!-- IsActive (bool) -->
-        <Label Grid.Row="9" Grid.Column="0" Content="Is Active:" VerticalAlignment="Center"/>
-        <CheckBox Grid.Row="9" Grid.Column="1"
-                  IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="9" Grid.Column="0" Content="Is Active:"/>
+            <CheckBox Grid.Row="9" Grid.Column="1" IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}"/>
 
-        <!-- DistanceType (Enum) -->
-        <Label Grid.Row="10" Grid.Column="0" Content="Distance Type:" VerticalAlignment="Center"/>
-        <ComboBox Grid.Row="10" Grid.Column="1"
-                  ItemsSource="{Binding Source={StaticResource DistanceTypesCollectionKey}}"
-                  SelectedValue="{Binding CurrentVolunteer.DistanceType, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="10" Grid.Column="0" Content="Distance Type:"/>
+            <ComboBox Grid.Row="10" Grid.Column="1"
+                      ItemsSource="{Binding Source={StaticResource DistanceTypesCollectionKey}}"
+                      SelectedValue="{Binding CurrentVolunteer.DistanceType, Mode=TwoWay}"/>
 
-        <!-- MaxDistance -->
-        <Label Grid.Row="11" Grid.Column="0" Content="Max Distance:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="11" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="11" Grid.Column="0" Content="Max Distance:"/>
+            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}"/>
 
-        <!-- TotalHandledCalls -->
-        <Label Grid.Row="12" Grid.Column="0" Content="Handled Calls:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="12" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.TotalHandledCalls, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="12" Grid.Column="0" Content="Handled Calls:"/>
+            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding CurrentVolunteer.TotalHandledCalls, Mode=TwoWay}"/>
 
-        <!-- TotalCanceledCalls -->
-        <Label Grid.Row="13" Grid.Column="0" Content="Canceled Calls:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="13" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.TotalCanceledCalls, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="13" Grid.Column="0" Content="Canceled Calls:"/>
+            <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding CurrentVolunteer.TotalCanceledCalls, Mode=TwoWay}"/>
 
-        <!-- TotalExpiredCalls -->
-        <Label Grid.Row="14" Grid.Column="0" Content="Expired Calls:" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="14" Grid.Column="1"
-                 Text="{Binding CurrentVolunteer.TotalExpiredCalls, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+            <Label Grid.Row="14" Grid.Column="0" Content="Expired Calls:"/>
+            <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding CurrentVolunteer.TotalExpiredCalls, Mode=TwoWay}"/>
 
-        <!-- Add/Update Button -->
-        <Button Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="2"
-                Content="{Binding ButtonText}" Height="40" Margin="0,20,0,0"
-                Click="btnAddUpdate_Click"/>
-    </Grid>
+            <!-- כפתור -->
+            <Button Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="{Binding ButtonText}" Height="40" Margin="0,15,0,0"
+                    Click="btnAddUpdate_Click"
+                    Style="{StaticResource UpdateButtonStyle}"/>
+        </Grid>
+    </ScrollViewer>
 </Window>

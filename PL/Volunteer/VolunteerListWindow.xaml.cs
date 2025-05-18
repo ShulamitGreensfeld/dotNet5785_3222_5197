@@ -120,5 +120,10 @@ namespace PL.Volunteer
                 }
             }
         }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
