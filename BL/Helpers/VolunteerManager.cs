@@ -114,7 +114,7 @@ internal static class VolunteerManager
             CallId = assignedCallId,
             CallType = assignedCallId is not null
                 ? (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.TypeOfCall ?? DO.TypeOfCall.ToPackageFood)
-                : BO.Enums.CallType.ToPackageFood
+                : BO.Enums.CallType.none
         };
     }
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)

@@ -120,22 +120,16 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            // Check if a volunteer with the same ID already exists
             if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
                 throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exists");
 
-            // Validate the volunteer before creating
             VolunteerManager.ValidateVolunteer(boVolunteer);
 
-            // Generate a strong password if none is provided
             if (string.IsNullOrEmpty(boVolunteer.Password))
             {
-                boVolunteer.Password = VolunteerManager.GenerateStrongPassword(); // Generate a strong password
+                boVolunteer.Password = VolunteerManager.GenerateStrongPassword();
             }
-
-            // Encrypt the password
-            boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password); // Encrypt the password
-            // Handle address, if provided, and get coordinates
+            boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
             if (boVolunteer.FullAddress != null && boVolunteer.FullAddress != "")
             {
                 var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
@@ -174,41 +168,29 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            // Fetch the requester and check authorization
             DO.Volunteer requester = _dal.Volunteer.Read(requesterId)
                 ?? throw new BO.BlDoesNotExistException("Requester does not exist!");
 
             if (requester.ID != boVolunteer.Id && requester.Role != DO.Role.Manager)
                 throw new BO.BlUnauthorizedException("Requester is not authorized!");
 
-            // Validate the volunteer exists
             DO.Volunteer existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id)
                 ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
 
-            // Validate the volunteer data (ללא בדיקת סיסמה)
             VolunteerManager.ValidateVolunteer(boVolunteer);
 
-            // עדכון סיסמה רק אם הוזנה חדשה (שאינה זהה לערך המוצפן)
             if (!string.IsNullOrWhiteSpace(boVolunteer.Password) && boVolunteer.Password != existingVolunteer.Password)
             {
-                // בדוק חוזק סיסמה חדשה
                 if (!VolunteerManager.IsPasswordStrong(boVolunteer.Password))
                     throw new BO.BlInvalidFormatException("Password is not strong!");
-
-                // הצפן את הסיסמה החדשה
                 boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
             }
             else
             {
-                // אם לא הוזנה סיסמה חדשה, שמור את הסיסמה הישנה (המוצפנת)
                 boVolunteer.Password = existingVolunteer.Password;
             }
-
-            // Check authorization to modify role
             if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
-
-            // Process address if provided
             if (!string.IsNullOrWhiteSpace(boVolunteer.FullAddress))
             {
                 var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress);
@@ -218,8 +200,6 @@ internal class VolunteerImplementation : IVolunteer
                 boVolunteer.Latitude = latitude;
                 boVolunteer.Longitude = longitude;
             }
-
-            // Convert BO to DO and update in the database
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);
             VolunteerManager.Observers.NotifyItemUpdated(updatedVolunteer.ID);  //stage 5
@@ -282,6 +262,13 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlGeneralException(ex.Message, ex);
         }
     }
+
+    /// <summary>
+    /// Retrieves a list of volunteers, optionally filtered by call type and sorted by a specific field.
+    /// </summary>
+    /// <param name="callTypeFilter">Optional filter for the volunteer's call type.</param>
+    /// <param name="fieldSort">Optional sorting field for the volunteers list.</param>
+    /// <returns>A list of BO.VolunteerInList objects representing the volunteers.</returns>
     public IEnumerable<VolunteerInList> GetVolunteersFilterList(BO.Enums.CallType? callType)//stage
     {
         try
