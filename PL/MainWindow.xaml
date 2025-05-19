@@ -8,8 +8,9 @@
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen">
 
+    <!-- Global Styles and Resources -->
     <Window.Resources>
-        <!-- סגנון כללי לכפתורים גדולים וטורקיז ריבועיים -->
+        <!-- General style for modern turquoise square buttons -->
         <Style x:Key="ModernButton_Square" TargetType="Button">
             <Setter Property="Background" Value="#1ABC9C"/>
             <Setter Property="Foreground" Value="White"/>
@@ -67,7 +68,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
     </Window.Resources>
 
     <Grid Margin="20">
@@ -77,7 +77,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- שורת שעון -->
+        <!-- Clock Header Bar -->
         <DockPanel Grid.Row="0" LastChildFill="True" Margin="0 0 0 20">
             <Label Content="{Binding CurrentTime, StringFormat=dd/MM/yyyy}" 
                    FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
@@ -90,13 +90,13 @@
             </StackPanel>
         </DockPanel>
 
-        <!-- שורת סיכון -->
+        <!-- Risk Range Update Section -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 20" VerticalAlignment="Center">
             <TextBox Width="200" Text="{Binding RiskRange, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
             <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Update Risk Range" Width="200" Click="btnUpdateRiskRange_Click"/>
         </StackPanel>
 
-        <!-- אזור פעולות -->
+        <!-- Main Operations Area -->
         <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="320">
             <Button Style="{StaticResource ModernButton_Square}" Content="📋 Open List View" Height="50" Margin="0 5" Width="250"/>
             <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Height="50" Margin="0 5" Width="250"/>

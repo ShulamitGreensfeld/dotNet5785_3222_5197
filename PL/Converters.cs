@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace PL.Volunteer
 {
-    // קונברטר: אם ButtonText הוא "Update" => true, אחרת false
+    // conveter: if ButtonText is "Update" => true, else false
     public class ConvertUpdateToTrue : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -15,7 +15,7 @@ namespace PL.Volunteer
             => throw new NotImplementedException();
     }
 
-    // קונברטר: אם ButtonText הוא "Update" => Visible, אחרת Collapsed
+    // converter: if ButtonText is "Update" => Visible, else Collapsed
     public class ConvertUpdateToVisible : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -26,6 +26,7 @@ namespace PL.Volunteer
 
         public BO.Enums.CallType SelectedCallType { get; set; } = BO.Enums.CallType.none;
 
+        // Queries the list of volunteers based on the selected call type filter.
         private void QueryVolunteerList()
         {
             try
@@ -37,12 +38,14 @@ namespace PL.Volunteer
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בטעינת רשימת מתנדבים: " + ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error loading volunteer list: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        // Observer method that triggers the list query.
         private void VolunteerListObserver() => QueryVolunteerList();
 
+        // Constructor - Initializes the volunteer list window.
         public VolunteerListWindow()
         {
             try
@@ -51,15 +54,17 @@ namespace PL.Volunteer
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בטעינת חלון מתנדבים: " + ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error loading volunteer window: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        // Handles change of selection in the filter combo box.
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             QueryVolunteerList();
         }
 
+        // Loads initial data and subscribes to volunteer list updates when the window loads.
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -69,11 +74,12 @@ namespace PL.Volunteer
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בטעינת נתוני מתנדבים: " + ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error loading volunteer data: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void Window_Closed(object sender, System.EventArgs e)
+        // Unsubscribes from volunteer list updates when the window is closed.
+        private void Window_Closed(object sender, EventArgs e)
         {
             try
             {
@@ -81,12 +87,13 @@ namespace PL.Volunteer
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בסגירת חלון מתנדבים: " + ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error closing volunteer window: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         public BO.VolunteerInList? SelectedVolunteer { get; set; }
 
+        // Opens the selected volunteer in a new window when double-clicked.
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedVolunteer != null)
@@ -96,17 +103,19 @@ namespace PL.Volunteer
             }
         }
 
+        // Opens the "Add New Volunteer" window.
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new VolunteerWindow();
             window.Show();
         }
 
+        // Deletes a volunteer after confirming with the user.
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag is int id)
             {
-                var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את המתנדב?", "אישור מחיקה", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                var result = MessageBox.Show("Are you sure you want to delete this volunteer?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
                     try
@@ -115,12 +124,13 @@ namespace PL.Volunteer
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("המחיקה נכשלה: " + ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
         }
 
+        // Currently not used – can be used to handle selection change in the volunteer list.
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 

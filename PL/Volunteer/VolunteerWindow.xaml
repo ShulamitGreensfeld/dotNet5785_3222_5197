@@ -13,7 +13,7 @@
         <conv:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
         <conv:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
 
-        <!-- סגנון כללי לכפתורים -->
+        <!-- General style for buttons -->
         <Style TargetType="Button" x:Key="RoundedButtonStyle">
             <Setter Property="Background" Value="#FF6200EE"/>
             <Setter Property="Foreground" Value="White"/>
@@ -45,7 +45,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- כפתור Update -->
+        <!-- Update button -->
         <Style TargetType="Button" x:Key="UpdateButtonStyle" BasedOn="{StaticResource RoundedButtonStyle}">
             <Setter Property="Background" Value="#FF00B894"/>
             <Setter Property="Foreground" Value="White"/>
@@ -60,7 +60,7 @@
             </Style.Triggers>
         </Style>
 
-        <!-- סגנון שדות טקסט -->
+        <!-- Style for text fields -->
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="0,5"/>
             <Setter Property="Padding" Value="5"/>
@@ -68,14 +68,14 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <!-- סגנון לתוויות -->
+        <!-- Style for labels -->
         <Style TargetType="Label">
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0,5"/>
         </Style>
 
-        <!-- סגנון לקומבו ותיבת סימון -->
+        <!-- Style for ComboBox and CheckBox -->
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="0,5"/>
             <Setter Property="Padding" Value="4"/>
@@ -88,7 +88,7 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20">
             <Grid.RowDefinitions>
-                <!-- 15 שדות + כפתור -->
+                <!-- 15 fields + button -->
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -111,7 +111,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- שדות הנתונים -->
+            <!-- Data fields -->
             <Label Grid.Row="0" Grid.Column="0" Content="Id:"/>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
@@ -163,7 +163,6 @@
             <Label Grid.Row="14" Grid.Column="0" Content="Expired Calls:"/>
             <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding CurrentVolunteer.TotalExpiredCalls, Mode=TwoWay}"/>
 
-            <!-- כפתור -->
             <Button Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="2"
                     Content="{Binding ButtonText}" Height="40" Margin="0,15,0,0"
                     Click="btnAddUpdate_Click"
