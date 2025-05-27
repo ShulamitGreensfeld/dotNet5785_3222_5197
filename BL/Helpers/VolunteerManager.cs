@@ -137,7 +137,7 @@ internal static class VolunteerManager
     {
         var random = new Random();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
-        return new string(Enumerable.Repeat(chars, 12) // אורך 12 תווים
+        return new string(Enumerable.Repeat(chars, 12) 
                                .Select(s => s[random.Next(s.Length)])
                                .ToArray());
     }
@@ -146,7 +146,6 @@ internal static class VolunteerManager
     {
         string idStr = id.ToString().PadLeft(9, '0');
 
-        // בדיקה שהאורך הוא 9 ושיש לפחות ספרה אחת שאינה 0
         if (idStr.Length != 9 || idStr.All(c => c == '0'))
             return false;
 
@@ -175,12 +174,15 @@ internal static class VolunteerManager
         if (!Regex.IsMatch(volunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             throw new BO.BlInvalidFormatException("Invalid email!");
 
-        if (volunteer.Password == null && (volunteer.Password!.Length > 12 ||
+        if (volunteer.Password != null)
+        {
+            if(volunteer.Password!.Length > 12 ||
              !Regex.IsMatch(volunteer.Password, "[A-Z]") ||
              !Regex.IsMatch(volunteer.Password, "[a-z]") ||
              !Regex.IsMatch(volunteer.Password, "[0-9]") ||
-             !Regex.IsMatch(volunteer.Password, "[!@#$%^&=*]")))
-            throw new BO.BlInvalidFormatException("Invalid password!");
+             !Regex.IsMatch(volunteer.Password, "[!@#$%^&=*]"))
+                 throw new BO.BlInvalidFormatException("Invalid password!");
+        }
 
         if (volunteer.Role != (BO.Enums.Role.volunteer) && volunteer.Role != (BO.Enums.Role.manager))
             throw new BO.BlInvalidFormatException("Invalid role!");

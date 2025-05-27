@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using Helpers;
 using BlApi;
+using System.Windows.Controls;
 
 namespace PL.Volunteer
 {
@@ -37,6 +39,7 @@ namespace PL.Volunteer
                 try
                 {
                     CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+                    CurrentVolunteer.Password = string.Empty;
                     ButtonText = "Update";
                 }
                 catch
@@ -60,19 +63,26 @@ namespace PL.Volunteer
         {
             try
             {
+                PasswordBox passwordBox = this.FindName("PasswordBox") as PasswordBox;
+
                 if (ButtonText == "Add")
                 {
+                    if (passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password))
+                        CurrentVolunteer!.Password = null;
+                    else
+                        CurrentVolunteer!.Password = passwordBox?.Password;
+
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
                     MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else // Update
                 {
-                    // Retrieve the existing volunteer from BL
                     var oldVolunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer!.Id);
 
-                    // Preserve old password if none was entered
-                    if (string.IsNullOrWhiteSpace(CurrentVolunteer.Password))
-                        CurrentVolunteer.Password = oldVolunteer.Password;
+                    if (passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password))
+                        CurrentVolunteer.Password = oldVolunteer.Password; // Retain original password
+                    else
+                        CurrentVolunteer.Password = passwordBox?.Password;
 
                     s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer.Id, CurrentVolunteer);
                     MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -81,9 +91,22 @@ namespace PL.Volunteer
             }
             catch (System.Exception ex)
             {
-                MessageBox.Show($"Operation failed:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                string userFriendlyMessage;
+
+                if (ex is ArgumentNullException)
+                    userFriendlyMessage = "אחד השדות החיוניים חסר. אנא מלא את כל השדות הנדרשים.";
+                else if (ex is InvalidOperationException)
+                    userFriendlyMessage = "הפעולה אינה חוקית במצב הנוכחי.";
+                else if (ex is BO.BlDoesNotExistException)
+                    userFriendlyMessage = "המתנדב לא נמצא במערכת.";
+                else
+                    userFriendlyMessage = "אירעה שגיאה בלתי צפויה. אנא נסה שוב.";
+
+                MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine($"Error details: {ex}");
             }
         }
+
 
         /// <summary>
         /// Reloads the current volunteer's data from BL if an ID is set.

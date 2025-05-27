@@ -2,10 +2,11 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using BO;
 
 namespace PL.Volunteer
 {
-    // conveter: if ButtonText is "Update" => true, else false
+    // Converter: if ButtonText is "Update" => true, else false
     public class ConvertUpdateToTrue : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -15,7 +16,7 @@ namespace PL.Volunteer
             => throw new NotImplementedException();
     }
 
-    // converter: if ButtonText is "Update" => Visible, else Collapsed
+    // Converter: if ButtonText is "Update" => Visible, else Collapsed
     public class ConvertUpdateToVisible : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

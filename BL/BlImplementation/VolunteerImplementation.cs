@@ -209,6 +209,10 @@ internal class VolunteerImplementation : IVolunteer
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist", ex);
         }
+        catch (BO.BlInvalidFormatException ex)
+        {
+            throw new BO.BlInvalidFormatException($"Invalid format for volunteer details: {ex.Message}", ex);
+        }
         catch (Exception ex)
         {
             throw new BO.BlGeneralException(ex.Message, ex);
@@ -246,12 +250,15 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="name">The name of the volunteer.</param>
     /// <param name="pass">The password of the volunteer.</param>
     /// <returns>The role of the volunteer if login is successful.</returns>
-    public BO.Enums.Role EnterSystem(string name, string pass)
+    public BO.Enums.Role EnterSystem(string id, string pass)
     {
         try
         {
-            var volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.Name == name && VolunteerManager.VerifyPassword(pass, v.Password!));
-            return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid username or password") : (BO.Enums.Role)volunteer.Role;
+            var volunteer = _dal.Volunteer.ReadAll()
+                .FirstOrDefault(v => v!.ID.ToString() == id && VolunteerManager.VerifyPassword(pass, v.Password!));
+            if (volunteer is null)
+                throw new BO.BlUnauthorizedException("Invalid ID or password");
+            return (BO.Enums.Role)volunteer.Role;
         }
         catch (DO.DalDoesNotExistException ex)
         {

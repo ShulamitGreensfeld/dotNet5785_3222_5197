@@ -17,4 +17,9 @@
     <ProjectReference Include="..\BL\BL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assignment\" />
+    <Folder Include="Converters\" />
+  </ItemGroup>
+
 </Project>
