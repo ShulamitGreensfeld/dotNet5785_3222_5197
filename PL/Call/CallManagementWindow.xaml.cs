@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using BlApi;
 using BO;
-using static BO.Enums;
 
 namespace PL
 {
@@ -28,7 +24,7 @@ namespace PL
             set => SetValue(CallListProperty, value);
         }
 
-        public CallType SelectedCallType { get; set; } = CallType.none;
+        public BO.Enums.CallType SelectedCallType { get; set; } = BO.Enums.CallType.none;
 
         public CallInList? SelectedCall { get; set; }
 
@@ -36,9 +32,9 @@ namespace PL
         {
             try
             {
-                CallList = (SelectedCallType == CallType.none)
+                CallList = (SelectedCallType == BO.Enums.CallType.none)
                     ? s_bl.Call.GetCallsList()
-                    : s_bl.Call.GetCallsList(CallInListFields.CallType, SelectedCallType);
+                    : s_bl.Call.GetCallsList(BO.Enums.CallInListFields.CallType, SelectedCallType);
             }
             catch (Exception ex)
             {
@@ -46,11 +42,11 @@ namespace PL
             }
         }
 
-        private void LoadCallList(CallType? filterCallType = null)
+        private void LoadCallList(BO.Enums.CallType? filterCallType = null)
         {
             try
             {
-                CallList = s_bl.Call.GetCallsList(CallInListFields.CallType, filterCallType);
+                CallList = s_bl.Call.GetCallsList(BO.Enums.CallInListFields.CallType, filterCallType);
                 if (!CallList?.Any() ?? true)
                 {
                     MessageBox.Show("No calls found for the selected type.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -64,7 +60,7 @@ namespace PL
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is ComboBox comboBox && comboBox.SelectedItem is CallType selectedType)
+            if (sender is ComboBox comboBox && comboBox.SelectedItem is BO.Enums.CallType selectedType)
             {
                 SelectedCallType = selectedType;
                 QueryCallList();
@@ -75,7 +71,12 @@ namespace PL
         {
             if (sender is Button btn && btn.Tag is CallInList call)
             {
-                if (call.CallStatus != CallStatus.opened || call.TotalAssignments > 0)
+                //if (call.Id == null)
+                //{
+                //    MessageBox.Show("לא ניתן למחוק קריאה ללא מזהה תקין.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                //    return;
+                //}
+                if (call.CallStatus != BO.Enums.CallStatus.opened || call.TotalAssignments > 0)
                 {
                     MessageBox.Show("This call cannot be deleted. Only open calls with no assignments can be deleted.",
                                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -87,7 +88,7 @@ namespace PL
                 {
                     try
                     {
-                        s_bl.Call.DeleteCall(call.Id!.Value);
+                        s_bl.Call.DeleteCall(call.CallId);
                         QueryCallList();
                     }
                     catch (Exception ex)
@@ -122,8 +123,8 @@ namespace PL
         //    }
         //}
 
-        public IEnumerable<CallType> CallTypeCollection =>
-    Enum.GetValues(typeof(CallType)).Cast<CallType>();
+        public IEnumerable<BO.Enums.CallType> CallTypeCollection =>
+    Enum.GetValues(typeof(BO.Enums.CallType)).Cast<BO.Enums.CallType>();
 
 
         private void AddCall_Click(object sender, RoutedEventArgs e)

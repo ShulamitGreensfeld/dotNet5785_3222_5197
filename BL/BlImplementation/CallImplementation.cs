@@ -126,7 +126,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist");
-            if (_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) == BO.Enums.CallStatus.opened)
+            if (_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || !(CallManager.CalculateCallStatus(call) == BO.Enums.CallStatus.opened))
                 throw new BO.BlDeletionException($"Cannot delete volunteer with ID={callId} as they are handling calls.");
             _dal.Call.Delete(callId);
             CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
