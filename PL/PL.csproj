@@ -14,11 +14,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BL\BL.csproj" />
+    <Compile Remove="Assignment\**" />
+    <EmbeddedResource Remove="Assignment\**" />
+    <None Remove="Assignment\**" />
+    <Page Remove="Assignment\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assignment\" />
+    <ProjectReference Include="..\BL\BL.csproj" />
   </ItemGroup>
 
 </Project>
