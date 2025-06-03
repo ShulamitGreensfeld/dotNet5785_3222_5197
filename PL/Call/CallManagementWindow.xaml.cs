@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace PL
 {
@@ -203,6 +204,15 @@ namespace PL
             if (addCallWindow.ShowDialog() == true)
             {
                 UpdateCallList(); // רענון הרשימה אחרי הוספה
+            }
+        }
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedCall != null)
+            {
+                var window = new PL.Call.SingleCallWindow(SelectedCall.CallId);
+                window.ShowDialog();
+                UpdateCallList(); // רענון הרשימה לאחר סגירת החלון
             }
         }
 

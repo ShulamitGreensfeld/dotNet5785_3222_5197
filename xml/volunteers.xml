@@ -113,20 +113,6 @@
     <Password>a87aefcbf29531e038f36cfe21f5d0958f0cdcf8aecc9411fe8e1e91959106c0</Password>
   </Volunteer>
   <Volunteer>
-    <Id>215086950</Id>
-    <Name>Amir Kaplan</Name>
-    <Phone>052-9012345</Phone>
-    <Email>amirkaplan@example.com</Email>
-    <IsActive>true</IsActive>
-    <Role>Volunteer</Role>
-    <Address>12 Ben Gurion Blvd, Bat Yam</Address>
-    <Latitude>32.1575</Latitude>
-    <Longitude>34.7909</Longitude>
-    <LargestDistance>2</LargestDistance>
-    <DistanceType>WalkingDistance</DistanceType>
-    <Password>a866c36811bb1c470ccbd6696568892f7e0fd913f087c8a70651eb18d24c2eac</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>215215690</Id>
     <Name>Lior Avrahami</Name>
     <Phone>052-0123456</Phone>
@@ -279,6 +265,20 @@
     <LargestDistance>86</LargestDistance>
     <DistanceType>DrivingDistance</DistanceType>
     <Password>208ae636577fca4351e018bfc908e5680acf758cdf1d8ab1aa491094690b97d8</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>214323222</Id>
+    <Name>shulamit</Name>
+    <Phone>0583295751</Phone>
+    <Email>shulamit5751@gmail.com</Email>
+    <IsActive>true</IsActive>
+    <Role>Manager</Role>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <LargestDistance>6</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>393b714302023d4b75aa93e268beb59fcc2fa935c357a15c2ecd8be8ce1ad085</Password>
   </Volunteer>
   <Volunteer>
     <Id>338784119</Id>

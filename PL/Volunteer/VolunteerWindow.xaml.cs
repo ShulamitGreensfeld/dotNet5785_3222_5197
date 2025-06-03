@@ -107,7 +107,30 @@ namespace PL.Volunteer
             }
         }
 
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+                return;
 
+            var result = MessageBox.Show("האם אתה בטוח שברצונך למחוק את המתנדב?", "אישור מחיקה", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
+                MessageBox.Show("המתנדב נמחק בהצלחה.", "מחיקה", MessageBoxButton.OK, MessageBoxImage.Information);
+                Close();
+            }
+            catch (BO.BlDeletionException ex)
+            {
+                MessageBox.Show("לא ניתן למחוק מתנדב שמטפל כרגע או שטיפל בעבר בקריאות.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("אירעה שגיאה בלתי צפויה. אנא נסה שוב.\n" + ex.Message, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         /// <summary>
         /// Reloads the current volunteer's data from BL if an ID is set.
         /// </summary>

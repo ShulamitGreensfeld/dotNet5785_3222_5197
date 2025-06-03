@@ -583,4 +583,15 @@
     <CallDescription>dfgyhujio</CallDescription>
     <ID>1057</ID>
   </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-03T18:08:09.4514486+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-30T00:00:00</MaxTimeForClosing>
+    <CallDescription>היהןךהיאנלחךםןוטמ</CallDescription>
+    <ID>1058</ID>
+  </Call>
 </ArrayOfCall>

@@ -110,26 +110,6 @@ namespace PL.Volunteer
             window.Show();
         }
 
-        // Deletes a volunteer after confirming with the user.
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button btn && btn.Tag is int id)
-            {
-                var result = MessageBox.Show("Are you sure you want to delete this volunteer?", "Delete Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes)
-                {
-                    try
-                    {
-                        s_bl.Volunteer.DeleteVolunteer(id);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Delete failed: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
-        }
-
         // Currently not used – can be used to handle selection change in the volunteer list.
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

@@ -5,7 +5,7 @@
         xmlns:conv="clr-namespace:PL.Volunteer"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Loaded="Window_Loaded" Closed="Window_Closed"
-        Title="VolunteerWindow" Height="700" Width="500"
+        Title="VolunteerWindow" Height="800" Width="600"
         Background="#FFF5F5F5"
         WindowStartupLocation="CenterScreen">
 
@@ -164,9 +164,16 @@
             <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding CurrentVolunteer.TotalExpiredCalls, Mode=TwoWay}"/>
 
             <Button Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="2"
-                    Content="{Binding ButtonText}" Height="40" Margin="0,15,0,0"
+                    Content="{Binding ButtonText}" Height="40" Margin="0,60,0,0"
                     Click="btnAddUpdate_Click"
                     Style="{StaticResource UpdateButtonStyle}"/>
+            <Button Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="מחק"
+                    Height="40"
+                    Margin="0,0,0,40"
+                    Click="btnDelete_Click"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
         </Grid>
     </ScrollViewer>
 </Window>

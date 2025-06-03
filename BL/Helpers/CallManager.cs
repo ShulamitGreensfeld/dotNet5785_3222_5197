@@ -1,7 +1,5 @@
 ﻿
-using BO;
 using DalApi;
-using DO;
 
 namespace Helpers
 {
@@ -238,7 +236,7 @@ namespace Helpers
                 {
                     // Assignment has expired - create a new updated assignment
                     Console.WriteLine($"Assignment {assignment.ID} has expired.");
-                    var updatedAssignment = assignment with { TypeOfFinishTreatment = TypeOfFinishTreatment.Treated };
+                    var updatedAssignment = assignment with { TypeOfFinishTreatment = DO.TypeOfFinishTreatment.Treated };
                     s_dal.Assignment.Update(updatedAssignment);
                     Observers.NotifyItemUpdated(updatedAssignment.ID); //stage 5
                     processedAssignments.Add(assignment.ID);

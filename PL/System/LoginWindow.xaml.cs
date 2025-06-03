@@ -34,7 +34,7 @@ namespace PL
                 // Navigate to the appropriate screen
                 if (role == BO.Enums.Role.volunteer)
                 {
-                    new VolunteerWindow(int.Parse(userId)).Show();
+                    new VolunteerSelfWindow(int.Parse(userId)).Show();
                 }
                 else if (role == BO.Enums.Role.manager)
                 {
@@ -47,7 +47,7 @@ namespace PL
                     }
                     else
                     {
-                        new VolunteerWindow(int.Parse(userId)).Show();
+                        new VolunteerSelfWindow(int.Parse(userId)).Show();
                     }
                 }
                 Close();

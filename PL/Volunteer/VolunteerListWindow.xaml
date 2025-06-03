@@ -220,21 +220,6 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-
-                    <!-- Delete Column -->
-                    <GridViewColumn Header="🗑️ Delete" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="🗑️"
-                                        Click="DeleteButton_Click"
-                                        Tag="{Binding Id}"
-                                        Style="{StaticResource ModernButton}"
-                                        Background="#E74C3C"
-                                        Width="45" Height="30"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
                 </GridView>
             </ListView.View>
         </ListView>
