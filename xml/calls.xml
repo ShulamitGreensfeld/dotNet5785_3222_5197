@@ -550,4 +550,37 @@
     <CallDescription>Donate canned goods or non-perishable food items.</CallDescription>
     <ID>1049</ID>
   </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-03T00:07:58.2231433+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>mtdrre</CallDescription>
+    <ID>1053</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-03T02:08:10.6431211+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-21T00:00:00</MaxTimeForClosing>
+    <CallDescription>bobp'</CallDescription>
+    <ID>1056</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-03T03:22:13.8611054+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-21T00:00:00</MaxTimeForClosing>
+    <CallDescription>dfgyhujio</CallDescription>
+    <ID>1057</ID>
+  </Call>
 </ArrayOfCall>

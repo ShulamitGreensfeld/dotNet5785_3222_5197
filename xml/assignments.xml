@@ -400,4 +400,12 @@
     <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
     <ID>2049</ID>
   </Assignment>
+  <Assignment>
+    <CallId>1053</CallId>
+    <VolunteerId>215525197</VolunteerId>
+    <EntryTimeForTreatment>2025-05-29T00:40:55</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-06-03T02:47:10.6996555+03:00</EndTimeForTreatment>
+    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <ID>2050</ID>
+  </Assignment>
 </ArrayOfAssignment>

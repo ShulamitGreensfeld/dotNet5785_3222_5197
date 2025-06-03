@@ -2,56 +2,119 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:PL"
-        Title="Call Management" Height="600" Width="800"
+        Title="Call Management" Height="600" Width="850"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <CollectionViewSource x:Key="CallTypeCollectionKey" Source="{Binding CallTypeCollection}" />
-        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:DeleteButtonVisibilityConverter x:Key="DeleteButtonVisibilityConverter"/>
+        <local:CancelAssignmentVisibilityConverter x:Key="CancelAssignmentVisibilityConverter"/>
+
+        <!-- תבנית להצגת שורה -->
+        <DataTemplate x:Key="CallRowTemplate">
+            <Grid Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="110"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding CallId}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="{Binding CallType}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" Text="{Binding CallStatus}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="3" Text="{Binding Opening_time, StringFormat=dd/MM/yyyy HH:mm}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="4" Text="{Binding LastVolunteerName}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="5" Text="{Binding TotalAssignments}" VerticalAlignment="Center"/>
+                <Button Grid.Column="6" Content="מחק" Margin="2,0,0,0"
+                    Click="DeleteCall_Click"
+                    Visibility="{Binding Path=., Converter={StaticResource DeleteButtonVisibilityConverter}}"
+                    Tag="{Binding}"/>
+                <Button Grid.Column="7" Content="בטל הקצאה" Margin="2,0,0,0"
+                    Click="CancelAssignment_Click"
+                    Visibility="{Binding Path=., Converter={StaticResource CancelAssignmentVisibilityConverter}}"
+                    Tag="{Binding}"/>
+            </Grid>
+        </DataTemplate>
+
+
     </Window.Resources>
 
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <DockPanel>
+        <!-- סרגל סינון/מיון/קיבוץ -->
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10">
+            <TextBlock Text="סנן לפי סוג:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <ComboBox
+             ItemsSource="{Binding CallTypeCollection}"
+             SelectedItem="{Binding SelectedCallType, Mode=TwoWay}"
+             Width="110"
+             Margin="0,0,10,0"
+             VerticalAlignment="Center"
+             SelectionChanged="Filter_Changed"/>
+            <TextBlock Text="סנן לפי סטטוס:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <ComboBox
+             ItemsSource="{Binding CallStatusCollection}"
+             SelectedItem="{Binding SelectedCallStatus, Mode=TwoWay}"
+             Width="110"
+             Margin="0,0,10,0"
+             VerticalAlignment="Center"
+             SelectionChanged="Filter_Changed"/>
+            <TextBlock Text="מיין לפי:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <ComboBox
+                        ItemsSource="{Binding SortFields}"
+        SelectedItem="{Binding SelectedSortField, Mode=TwoWay}"
+        Width="110"
+        Margin="0,0,10,0"
+        VerticalAlignment="Center"
+        SelectionChanged="Filter_Changed"/>
+            <TextBlock Text="קבץ לפי:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <ComboBox
+        ItemsSource="{Binding GroupFields}"
+        SelectedItem="{Binding SelectedGroupField, Mode=TwoWay}"
+        Width="110"
+        VerticalAlignment="Center"
+        SelectionChanged="Filter_Changed"/>
+            <Button Content="הוסף קריאה" Margin="20,0,0,0" Padding="10,2"
+            Click="AddCall_Click"/>
+        </StackPanel>
+        <!-- כותרות -->
+        <Grid DockPanel.Dock="Top" Margin="10,0,10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="80"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="מזהה" FontWeight="Bold"/>
+            <TextBlock Grid.Column="1" Text="סוג קריאה" FontWeight="Bold"/>
+            <TextBlock Grid.Column="2" Text="סטטוס" FontWeight="Bold"/>
+            <TextBlock Grid.Column="3" Text="נפתחה בתאריך" FontWeight="Bold"/>
+            <TextBlock Grid.Column="4" Text="מתנדב אחרון" FontWeight="Bold"/>
+            <TextBlock Grid.Column="5" Text="סה״כ הקצאות" FontWeight="Bold"/>
+            <TextBlock Grid.Column="6" Text="פעולות" FontWeight="Bold"/>
+        </Grid>
 
-        <!-- ComboBox לסינון -->
-        <ComboBox ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"
-                  SelectedItem="{Binding SelectedCallType, Mode=TwoWay}"
-                  SelectionChanged="ComboBox_SelectionChanged"
-                  Margin="0,0,0,10"/>
+        <!-- רשימת קריאות עם קיבוץ -->
+        <ListView ItemsSource="{Binding CallListView}" 
+          ItemTemplate="{StaticResource CallRowTemplate}" 
+          Margin="10" 
+          IsSynchronizedWithCurrentItem="True">
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}" Margin="0,5,0,0"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
 
-        <!-- כפתור הוספת קריאה חדשה -->
-        <Button Content="Add New Call" Grid.Row="0" HorizontalAlignment="Right" Click="AddCall_Click" Margin="0,0,0,10"/>
-
-        <!-- ListView להצגת קריאות -->
-        <ListView Grid.Row="1"
-                  ItemsSource="{Binding CallList}"
-                  SelectedItem="{Binding SelectedCall}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="100"/>
-                    <GridViewColumn Header="Call ID" DisplayMemberBinding="{Binding CallId}" Width="100"/>
-                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding CallType}" Width="150"/>
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding CallStatus}" Width="150"/>
-                    <GridViewColumn Header="Opening Time" DisplayMemberBinding="{Binding Opening_time}" Width="200"/>
-                    <GridViewColumn Header="Time Left" DisplayMemberBinding="{Binding TimeLeft}" Width="150"/>
-                    <GridViewColumn Header="Actions" Width="100">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Delete"
-                                        Click="DeleteCall_Click"
-                                        Tag="{Binding}"
-                                        IsEnabled="{Binding Path=CanBeDeleted}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
+            </ListView.GroupStyle>
         </ListView>
-
-    </Grid>
+    </DockPanel>
 </Window>

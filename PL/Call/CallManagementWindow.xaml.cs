@@ -1,81 +1,175 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using BlApi;
+﻿using BlApi;
 using BO;
+using DO;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace PL
 {
-    public partial class CallManagementWindow : Window
+    public partial class CallManagementWindow : Window, INotifyPropertyChanged
     {
         private static readonly IBl s_bl = Factory.Get();
 
         public CallManagementWindow()
         {
             InitializeComponent();
-            QueryCallList();
+            DataContext = this;
+            UpdateCallList();
         }
 
-        public static readonly DependencyProperty CallListProperty =
-            DependencyProperty.Register(nameof(CallList), typeof(IEnumerable<CallInList>), typeof(CallManagementWindow), new PropertyMetadata(null));
+        // אוספים ל-ComboBox-ים
+        public IEnumerable<BO.Enums.CallType> CallTypeCollection =>
+            Enum.GetValues(typeof(BO.Enums.CallType)).Cast<BO.Enums.CallType>();
 
+        public IEnumerable<BO.Enums.CallStatus> CallStatusCollection =>
+            Enum.GetValues(typeof(BO.Enums.CallStatus)).Cast<BO.Enums.CallStatus>();
+
+        public IEnumerable<string> SortFields => new[] { "Opening_time", "CallType", "CallStatus", "TotalAssignments" };
+        public IEnumerable<string> GroupFields => new[] { "None", "CallType", "CallStatus" };
+
+        // תכונות Binding
+        private BO.Enums.CallType _selectedCallType = BO.Enums.CallType.none;
+        public BO.Enums.CallType SelectedCallType
+        {
+            get => _selectedCallType;
+            set
+            {
+                if (_selectedCallType != value)
+                {
+                    _selectedCallType = value;
+                    OnPropertyChanged(nameof(SelectedCallType));
+                    UpdateCallList();
+                }
+            }
+        }
+
+        private BO.Enums.CallStatus? _selectedCallStatus = null;
+        public BO.Enums.CallStatus? SelectedCallStatus
+        {
+            get => _selectedCallStatus;
+            set
+            {
+                if (_selectedCallStatus != value)
+                {
+                    _selectedCallStatus = value;
+                    OnPropertyChanged(nameof(SelectedCallStatus));
+                    UpdateCallList();
+                }
+            }
+        }
+
+        private string _selectedSortField = "Opening_time";
+        public string SelectedSortField
+        {
+            get => _selectedSortField;
+            set
+            {
+                if (_selectedSortField != value)
+                {
+                    _selectedSortField = value;
+                    OnPropertyChanged(nameof(SelectedSortField));
+                    UpdateCallList();
+                }
+            }
+        }
+
+        private string _selectedGroupField = "None";
+        public string SelectedGroupField
+        {
+            get => _selectedGroupField;
+            set
+            {
+                if (_selectedGroupField != value)
+                {
+                    _selectedGroupField = value;
+                    OnPropertyChanged(nameof(SelectedGroupField));
+                    UpdateCallList();
+                }
+            }
+        }
+
+        // הרשימה בפועל
+        private IEnumerable<CallInList> _callList;
         public IEnumerable<CallInList> CallList
         {
-            get => (IEnumerable<CallInList>)GetValue(CallListProperty);
-            set => SetValue(CallListProperty, value);
+            get => _callList;
+            set
+            {
+                _callList = value;
+                OnPropertyChanged(nameof(CallList));
+            }
         }
 
-        public BO.Enums.CallType SelectedCallType { get; set; } = BO.Enums.CallType.none;
+        private ListCollectionView _callListView;
+        public ListCollectionView CallListView
+        {
+            get => _callListView;
+            set
+            {
+                _callListView = value;
+                OnPropertyChanged(nameof(CallListView));
+            }
+        }
 
         public CallInList? SelectedCall { get; set; }
 
-        private void QueryCallList()
+        // עדכון הרשימה לפי סינון/מיון/קיבוץ
+        private void UpdateCallList()
         {
-            try
+            IEnumerable<CallInList> list = s_bl.Call.GetCallsList();
+
+            // סינון
+            if (SelectedCallType != BO.Enums.CallType.none)
+                list = list.Where(c => c.CallType == SelectedCallType);
+
+            if (SelectedCallStatus != null)
+                list = list.Where(c => c.CallStatus == SelectedCallStatus);
+
+            // מיון
+            switch (SelectedSortField)
             {
-                CallList = (SelectedCallType == BO.Enums.CallType.none)
-                    ? s_bl.Call.GetCallsList()
-                    : s_bl.Call.GetCallsList(BO.Enums.CallInListFields.CallType, SelectedCallType);
+                case "CallType":
+                    list = list.OrderBy(c => c.CallType);
+                    break;
+                case "CallStatus":
+                    list = list.OrderBy(c => c.CallStatus);
+                    break;
+                case "TotalAssignments":
+                    list = list.OrderBy(c => c.TotalAssignments);
+                    break;
+                default:
+                    list = list.OrderBy(c => c.Opening_time);
+                    break;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading call list: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            CallList = list.ToList();
+
+            // קיבוץ
+            var lcv = new ListCollectionView(CallList.ToList());
+            lcv.GroupDescriptions.Clear();
+            if (SelectedGroupField == "CallType")
+                lcv.GroupDescriptions.Add(new PropertyGroupDescription("CallType"));
+            else if (SelectedGroupField == "CallStatus")
+                lcv.GroupDescriptions.Add(new PropertyGroupDescription("CallStatus"));
+
+            CallListView = lcv;
         }
 
-        private void LoadCallList(BO.Enums.CallType? filterCallType = null)
+        // אירוע ל-ComboBox-ים (אם לא רוצים AutoUpdate דרך Setter)
+        private void Filter_Changed(object sender, SelectionChangedEventArgs e)
         {
-            try
-            {
-                CallList = s_bl.Call.GetCallsList(BO.Enums.CallInListFields.CallType, filterCallType);
-                if (!CallList?.Any() ?? true)
-                {
-                    MessageBox.Show("No calls found for the selected type.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading calls: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ComboBox comboBox && comboBox.SelectedItem is BO.Enums.CallType selectedType)
-            {
-                SelectedCallType = selectedType;
-                QueryCallList();
-            }
+            UpdateCallList();
         }
 
         private void DeleteCall_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag is CallInList call)
             {
-                //if (call.Id == null)
-                //{
-                //    MessageBox.Show("לא ניתן למחוק קריאה ללא מזהה תקין.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-                //    return;
-                //}
                 if (call.CallStatus != BO.Enums.CallStatus.opened || call.TotalAssignments > 0)
                 {
                     MessageBox.Show("This call cannot be deleted. Only open calls with no assignments can be deleted.",
@@ -89,7 +183,7 @@ namespace PL
                     try
                     {
                         s_bl.Call.DeleteCall(call.CallId);
-                        QueryCallList();
+                        UpdateCallList();
                     }
                     catch (Exception ex)
                     {
@@ -98,34 +192,6 @@ namespace PL
                 }
             }
         }
-        //private void CancelAssignment_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is Button btn && btn.DataContext is CallInList call)
-        //    {
-        //        if (!call.CanCancelAssignment)
-        //        {
-        //            MessageBox.Show("לא ניתן לבטל הקצאה. רק קריאה בטיפול ניתנת לביטול הקצאה.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            return;
-        //        }
-
-        //        if (MessageBox.Show("האם לבטל את ההקצאה עבור קריאה זו?", "אישור פעולה", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-        //        {
-        //            try
-        //            {
-        //                s_bl.Assignment.CancelAssignmentForCall(call.Id!.Value);
-        //                QueryCallList(); // רענון טבלה
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show($"שגיאה בביטול ההקצאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            }
-        //        }
-        //    }
-        //}
-
-        public IEnumerable<BO.Enums.CallType> CallTypeCollection =>
-    Enum.GetValues(typeof(BO.Enums.CallType)).Cast<BO.Enums.CallType>();
-
 
         private void AddCall_Click(object sender, RoutedEventArgs e)
         {
@@ -136,7 +202,44 @@ namespace PL
 
             if (addCallWindow.ShowDialog() == true)
             {
-                QueryCallList(); // רענון הרשימה אחרי הוספה
+                UpdateCallList(); // רענון הרשימה אחרי הוספה
+            }
+        }
+
+        // INotifyPropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private void CancelAssignment_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is CallInList call)
+            {
+                // בדיקה: רק קריאה בסטטוס בטיפול עם מתנדב מוקצה
+                if (call.CallStatus != BO.Enums.CallStatus.is_treated || string.IsNullOrEmpty(call.LastVolunteerName))
+                {
+                    MessageBox.Show("ניתן לבטל הקצאה רק לקריאה בסטטוס 'בטיפול' עם מתנדב מוקצה.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                int? currentUserId = App.CurrentUserId;
+                int? assignmentId = call.Id;
+                if (currentUserId == null || assignmentId == null)
+                {
+                    MessageBox.Show("חסר מזהה משתמש או מזהה קריאה.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                if (MessageBox.Show("האם לבטל את ההקצאה עבור קריאה זו? תישלח הודעה למתנדב.", "אישור פעולה", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        s_bl.Call.MarkCallCancellation(currentUserId.Value, assignmentId.Value);
+
+                        UpdateCallList(); // רענון טבלה
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"שגיאה בביטול ההקצאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
             }
         }
     }

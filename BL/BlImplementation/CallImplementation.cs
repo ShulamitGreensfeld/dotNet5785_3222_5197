@@ -241,7 +241,7 @@ internal class CallImplementation : BlApi.ICall
             var volunteer = _dal.Volunteer.Read(volunteerId)
                 ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
 
-            if (assignment.VolunteerId != volunteerId)
+            if (assignment.VolunteerId != volunteerId && (BO.Enums.Role)volunteer.Role != BO.Enums.Role.manager)
             {
                 throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this treatment.");
             }
@@ -379,7 +379,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             var call = GetCallDetails(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist.");
-            if (call.CallStatus == BO.Enums.CallStatus.is_treated || call.CallStatus == BO.Enums.CallStatus.opened)
+            if (call.CallStatus == BO.Enums.CallStatus.is_treated || !(call.CallStatus == BO.Enums.CallStatus.opened))
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it.");
             if (call.Max_finish_time < DateTime.Now)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");

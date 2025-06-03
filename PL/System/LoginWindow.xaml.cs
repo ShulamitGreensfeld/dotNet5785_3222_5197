@@ -26,6 +26,7 @@ namespace PL
                     ErrorMessageTextBlock.Text = "User ID is required.";
                     return;
                 }
+                App.CurrentUserId = int.Parse(userId); 
 
                 // Authenticate user
                 var role = s_bl.Volunteer.EnterSystem(userId, password);
