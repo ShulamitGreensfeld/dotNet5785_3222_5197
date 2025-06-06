@@ -120,11 +120,12 @@
                   ItemsSource="{Binding VolunteerList}"
                   SelectedItem="{Binding SelectedVolunteer, Mode=TwoWay}"
                   MouseDoubleClick="ListView_MouseDoubleClick"
+                  SelectionChanged="ListView_SelectionChanged"
                   Margin="20,20,-82,20"
                   Background="White"
                   BorderBrush="#85C1B9"
                   BorderThickness="1"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" RenderTransformOrigin="0.5,0.5" SelectionChanged="ListView_SelectionChanged">
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" RenderTransformOrigin="0.5,0.5">
             <ListView.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

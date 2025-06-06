@@ -2,19 +2,32 @@
 using Helpers;
 using BlApi;
 using System.Windows.Controls;
+using System.ComponentModel;
+using System.Windows.Input;
 
 namespace PL.Volunteer
 {
-    public partial class VolunteerWindow : Window
+    public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
         // BL access object
         private static readonly IBl s_bl = BlApi.Factory.Get();
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         // Dependency property for the Volunteer object
         public BO.Volunteer? CurrentVolunteer
         {
             get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
-            set { SetValue(CurrentVolunteerProperty, value); }
+            set
+            {
+                SetValue(CurrentVolunteerProperty, value);
+                OnPropertyChanged(nameof(CanChooseCall)); // Notify when CurrentVolunteer changes
+            }
         }
         public static readonly DependencyProperty CurrentVolunteerProperty =
             DependencyProperty.Register(nameof(CurrentVolunteer), typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
@@ -54,6 +67,9 @@ namespace PL.Volunteer
                 CurrentVolunteer = new BO.Volunteer();
                 ButtonText = "Add";
             }
+
+            // Ensure DataContext is set for binding
+            DataContext = this;
         }
 
         /// <summary>
@@ -63,14 +79,13 @@ namespace PL.Volunteer
         {
             try
             {
-                PasswordBox passwordBox = this.FindName("PasswordBox") as PasswordBox;
+                PasswordBox? passwordBox = this.FindName("PasswordBox") as PasswordBox;
 
                 if (ButtonText == "Add")
                 {
-                    if (passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password))
-                        CurrentVolunteer!.Password = null;
-                    else
-                        CurrentVolunteer!.Password = passwordBox?.Password;
+                    CurrentVolunteer!.Password = passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password)
+                        ? null
+                        : passwordBox?.Password;
 
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
                     MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -79,10 +94,9 @@ namespace PL.Volunteer
                 {
                     var oldVolunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer!.Id);
 
-                    if (passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password))
-                        CurrentVolunteer.Password = oldVolunteer.Password; // Retain original password
-                    else
-                        CurrentVolunteer.Password = passwordBox?.Password;
+                    CurrentVolunteer.Password = passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password)
+                        ? oldVolunteer.Password
+                        : passwordBox?.Password;
 
                     s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer.Id, CurrentVolunteer);
                     MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -106,7 +120,6 @@ namespace PL.Volunteer
                 Console.WriteLine($"Error details: {ex}");
             }
         }
-
 
         /// <summary>
         /// Reloads the current volunteer's data from BL if an ID is set.
@@ -137,6 +150,122 @@ namespace PL.Volunteer
         {
             if (CurrentVolunteer?.Id != 0)
                 s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
+        }
+
+        private void OpenSelectCallForTreatmentWindow(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+                {
+                    MessageBox.Show("לא ניתן לפתוח היסטוריית קריאות. מתנדב לא קיים או לא נבחר.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var callHistoryWindow = new VolunteerCallHistoryWindow(CurrentVolunteer.Id);
+                callHistoryWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"שגיאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void OpenVolunteerCallsHistoryWindow(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+                {
+                    MessageBox.Show("לא ניתן לפתוח היסטוריית קריאות. מתנדב לא קיים או לא נבחר.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var callHistoryWindow = new VolunteerCallHistoryWindow(CurrentVolunteer.Id);
+                callHistoryWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"שגיאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public BO.VolunteerInList? SelectedVolunteer { get; set; }
+
+        private void OpenCallsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedVolunteer == null || SelectedVolunteer.Id == 0)
+            {
+                MessageBox.Show("Please select a volunteer to view open calls.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // Retrieve the full details of the selected volunteer
+            var volunteerDetails = s_bl.Volunteer.GetVolunteerDetails(SelectedVolunteer.Id);
+
+            if (!volunteerDetails.MaxDistance.HasValue)
+            {
+                MessageBox.Show("Please specify a maximum distance for the selected volunteer.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                // Open the SelectCallForTreatmentWindow
+                var selectCallWindow = new SelectCallForTreatmentWindow(volunteerDetails.Id, volunteerDetails.FullAddress ?? string.Empty, volunteerDetails.MaxDistance.Value, volunteerDetails);
+                selectCallWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while opening the call window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentVolunteer == null || CurrentVolunteer.CallInProgress == null)
+            {
+                MessageBox.Show("למתנדב זה אין קריאה נוכחית בטיפולו.", "מידע", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                // שליפת פרטי הקריאה הנוכחית
+                var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+
+                // פתיחת החלון להצגת פרטי הקריאה
+                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress, CurrentVolunteer.MaxDistance ?? 0, CurrentVolunteer);
+                selectCallWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"אירעה שגיאה בעת שליפת פרטי הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public bool CanChooseCall => CurrentVolunteer?.CallInProgress == null;
+
+        public ICommand OpenSelectCallForTreatmentCommand { get; }
+
+        public VolunteerWindow()
+        {
+            InitializeComponent();
+
+            OpenSelectCallForTreatmentCommand = new RelayCommand(_ => OpenSelectCallForTreatmentWindow());
+            DataContext = this;
+        }
+
+        private void OpenSelectCallForTreatmentWindow()
+        {
+            if (!CanChooseCall)
+            {
+                MessageBox.Show("לא ניתן לבחור קריאה בזמן שיש קריאה בטיפול.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance ?? 0, CurrentVolunteer);
+            selectCallWindow.ShowDialog();
         }
     }
 }

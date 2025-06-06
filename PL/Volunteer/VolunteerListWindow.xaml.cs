@@ -11,6 +11,21 @@ namespace PL.Volunteer
     {
         static readonly IBl s_bl = BlApi.Factory.Get();
 
+        // Add CurrentVolunteer property
+        public BO.Volunteer? CurrentVolunteer { get; set; }
+
+        // Add VolunteerObserver method
+        private void VolunteerObserver()
+        {
+            if (CurrentVolunteer?.Id != 0)
+            {
+                int id = CurrentVolunteer.Id;
+                CurrentVolunteer = null;
+                CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+            }
+        }
+
+
         public IEnumerable<BO.VolunteerInList> VolunteerList
         {
             get { return (IEnumerable<BO.VolunteerInList>)GetValue(VolunteerListProperty); }
@@ -35,12 +50,18 @@ namespace PL.Volunteer
                     VolunteerList = s_bl.Volunteer.GetVolunteersList();
                 else
                     VolunteerList = s_bl.Volunteer.GetVolunteersFilterList(SelectedCallType);
+
+                if (VolunteerList == null || !VolunteerList.Any())
+                {
+                    MessageBox.Show("No volunteers found.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error loading volunteer list: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         // Observer method that triggers the list query.
         private void VolunteerListObserver() => QueryVolunteerList();
@@ -69,7 +90,8 @@ namespace PL.Volunteer
         {
             try
             {
-                s_bl.Volunteer.AddObserver(VolunteerListObserver);
+                if (CurrentVolunteer != null && CurrentVolunteer.Id != 0)
+                    s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
                 QueryVolunteerList();
             }
             catch (Exception ex)
@@ -83,7 +105,8 @@ namespace PL.Volunteer
         {
             try
             {
-                s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
+                if (CurrentVolunteer != null && CurrentVolunteer.Id != 0)
+                    s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
             }
             catch (Exception ex)
             {
@@ -96,11 +119,14 @@ namespace PL.Volunteer
         // Opens the selected volunteer in a new window when double-clicked.
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (SelectedVolunteer != null)
+            if (SelectedVolunteer == null || SelectedVolunteer.Id == 0)
             {
-                var window = new VolunteerWindow(SelectedVolunteer.Id);
-                window.Show();
+                MessageBox.Show("Please select a valid volunteer to view open calls.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
+
+            var window = new VolunteerWindow(SelectedVolunteer.Id);
+            window.Show();
         }
 
         // Opens the "Add New Volunteer" window.
@@ -129,11 +155,19 @@ namespace PL.Volunteer
                 }
             }
         }
-
-        // Currently not used – can be used to handle selection change in the volunteer list.
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if (sender is ListView listView && listView.SelectedItem is BO.VolunteerInList selected)
+            {
+                SelectedVolunteer = selected; // עדכון המתנדב שנבחר
+            }
+            else
+            {
+                SelectedVolunteer = null; // איפוס אם לא נבחר מתנדב
+            }
         }
+
+
+
     }
 }

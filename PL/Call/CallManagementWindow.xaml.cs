@@ -30,7 +30,9 @@ namespace PL
 
         public CallType SelectedCallType { get; set; } = CallType.none;
 
-        public CallInList? SelectedCall { get; set; }
+        public OpenCallInList? SelectedCall { get; set; }
+
+
 
         private void QueryCallList()
         {
