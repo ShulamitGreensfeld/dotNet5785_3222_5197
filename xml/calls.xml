@@ -594,4 +594,26 @@
     <CallDescription>עויףפךלףחחמחך</CallDescription>
     <ID>1053</ID>
   </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-23T20:47:54.0969394+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-26T00:00:00</MaxTimeForClosing>
+    <CallDescription>'קראט</CallDescription>
+    <ID>1054</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-23T20:48:43.8463804+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>wertyhuj</CallDescription>
+    <ID>1055</ID>
+  </Call>
 </ArrayOfCall>
