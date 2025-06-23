@@ -1,0 +1,117 @@
+﻿<Window x:Class="PL.Volunteer.VolunteerSelfWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.Volunteer"
+        mc:Ignorable="d"
+        Title="VolunteerSelfWindow" Height="850" Width="600"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        </Window.Resources>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Volunteer Details -->
+                <Label Grid.Row="0" Grid.Column="0" Content="ת.ז:"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Volunteer.Id}" IsReadOnly="True"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="שם מלא:"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Volunteer.FullName, Mode=TwoWay}"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="טלפון:"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Volunteer.CellphoneNumber, Mode=TwoWay}"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="אימייל:"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Volunteer.Email, Mode=TwoWay}"/>
+
+                <Label Grid.Row="4" Grid.Column="0" Content="סיסמה:"/>
+                <PasswordBox Grid.Row="4" Grid.Column="1" x:Name="PasswordBox"/>
+
+                <Label Grid.Row="5" Grid.Column="0" Content="כתובת:"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Volunteer.FullAddress, Mode=TwoWay}"/>
+
+                <Label Grid.Row="6" Grid.Column="0" Content="סוג מרחק:"/>
+                <ComboBox Grid.Row="6" Grid.Column="1"
+                      ItemsSource="{Binding DistanceTypes}"
+                      SelectedItem="{Binding Volunteer.DistanceType, Mode=TwoWay}"/>
+
+                <Label Grid.Row="7" Grid.Column="0" Content="מרחק מקסימלי:"/>
+                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Volunteer.MaxDistance, Mode=TwoWay}"/>
+
+                <Label Grid.Row="8" Grid.Column="0" Content="פעיל:"/>
+                <CheckBox Grid.Row="8" Grid.Column="1"
+                      IsChecked="{Binding Volunteer.IsActive, Mode=TwoWay}"
+                      IsEnabled="{Binding CanSetInactive}"/>
+
+                <Label Grid.Row="9" Grid.Column="0" Content="תפקיד:"/>
+                <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Volunteer.Role}" IsReadOnly="True"/>
+
+                <Label Grid.Row="10" Grid.Column="0" Content="סהכ קריאות שטופלו:"/>
+            <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Volunteer.TotalHandledCalls}" IsReadOnly="True"/>
+
+                    <Label Grid.Row="11" Grid.Column="0" Content="סהכ קריאות שבוטלו:"/>
+            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Volunteer.TotalCanceledCalls}" IsReadOnly="True"/>
+
+                        <Label Grid.Row="12" Grid.Column="0" Content="סהכ קריאות שפג תוקפן:"/>
+            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Volunteer.TotalExpiredCalls}" IsReadOnly="True"/>
+
+                            <!-- Call In Progress Section -->
+                            <GroupBox Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" Header="קריאה בטיפול" Margin="0,20,0,0"
+                      Visibility="{Binding HasCallInProgress, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Volunteer.CallInProgress.Verbal_description}" FontWeight="Bold"/>
+                                    <TextBlock Text="כתובת: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Volunteer.CallInProgress.FullAddress}" />
+                                    <TextBlock Text="סטטוס קריאה: " FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Volunteer.CallInProgress.CallStatus}" />
+                                    <TextBlock Text="מרחק מהקריאה: " FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Volunteer.CallInProgress.CallDistance, StringFormat={}{0:0.##}קמ}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <Button Content="סיום טיפול" Margin="0,0,10,0"
+                                Click="btnFinishCall_Click"/>
+                        <Button Content="ביטול טיפול"
+                                Click="btnCancelCall_Click"/>
+                    </StackPanel>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <!-- Map Placeholder -->
+                            <Border Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2" Height="200" Margin="0,20,0,0" Background="#EEE">
+                                <TextBlock Text="מפה (לא ממומש)" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Gray"/>
+                            </Border>
+
+                            <!-- Buttons -->
+                            <Button Grid.Row="16" Grid.Column="0" Content="עדכן" Height="40" Margin="0,20,10,0"
+                    Click="btnUpdate_Click"/>
+            <Button Grid.Row="16" Grid.Column="1" Content="היסטוריית קריאות" Height="40" Margin="10,20,0,0" Click="HistoryButton_Click"/>
+            <Button Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="2" Content="בחירת קריאה" Click="OpenCallsButton_Click"
+                    Height="40" Margin="0,20,0,0" IsEnabled="{Binding CanSelectCall}"/>
+        </Grid>
+        </ScrollViewer>
+</Window>

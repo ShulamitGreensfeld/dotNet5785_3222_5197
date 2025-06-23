@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using BlApi;
 //using static BO.Enums;
@@ -52,7 +49,7 @@ namespace PL
                     FullAddress = addressTextBox.Text,
                     Latitude = null,
                     Longitude = null,
-                    Opening_time = openingDatePicker.SelectedDate ?? DateTime.Now,
+                    Opening_time = DateTime.Now,
                     Max_finish_time = maxFinishDatePicker.SelectedDate ?? DateTime.Now,
                     CallStatus = BO.Enums.CallStatus.opened
                 };

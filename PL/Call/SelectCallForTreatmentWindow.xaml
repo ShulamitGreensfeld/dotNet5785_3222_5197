@@ -39,7 +39,7 @@
 
 
         <!-- Calls ListView -->
-        <StackPanel Orientation="Horizontal" Margin="10">
+        <StackPanel Orientation="Horizontal" Margin="10,176,10,154" Grid.Row="1">
             <TextBlock Text="עדכון כתובת:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox Text="{Binding VolunteerAddress}" Width="200" Margin="0,0,10,0"/>
             <Button Content="עדכן" Command="{Binding UpdateAddressCommand}" />

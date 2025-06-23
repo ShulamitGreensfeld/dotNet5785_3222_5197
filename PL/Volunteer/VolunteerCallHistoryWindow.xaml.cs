@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel; // נדרש עבור INotifyPropertyChanged
+using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices; // נדרש עבור [CallerMemberName]
+using System.Runtime.CompilerServices;
 using System.Windows;
 using BlApi;
 using BO;
@@ -33,7 +33,7 @@ namespace PL
             {
                 _selectedCallType = value;
                 OnPropertyChanged(nameof(ClosedCalls));
-                QueryClosedCalls(); // רענון הרשימה בעת שינוי
+                QueryClosedCalls();
             }
         }
 
@@ -45,7 +45,7 @@ namespace PL
             {
                 _selectedSortOption = value;
                 OnPropertyChanged(nameof(ClosedCalls));
-                QueryClosedCalls(); // רענון הרשימה בעת שינוי
+                QueryClosedCalls();
             }
         }
 

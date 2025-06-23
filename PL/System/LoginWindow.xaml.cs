@@ -26,6 +26,7 @@ namespace PL
                     ErrorMessageTextBlock.Text = "User ID is required.";
                     return;
                 }
+                App.CurrentUserId = int.Parse(userId); 
 
                 // Authenticate user
                 var role = s_bl.Volunteer.EnterSystem(userId, password);
@@ -33,7 +34,7 @@ namespace PL
                 // Navigate to the appropriate screen
                 if (role == BO.Enums.Role.volunteer)
                 {
-                    new VolunteerWindow(int.Parse(userId)).Show();
+                    new VolunteerSelfWindow(int.Parse(userId)).Show();
                 }
                 else if (role == BO.Enums.Role.manager)
                 {
@@ -46,7 +47,7 @@ namespace PL
                     }
                     else
                     {
-                        new VolunteerWindow(int.Parse(userId)).Show();
+                        new VolunteerSelfWindow(int.Parse(userId)).Show();
                     }
                 }
                 Close();

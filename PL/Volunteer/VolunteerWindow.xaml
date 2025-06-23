@@ -183,6 +183,13 @@
                     Content="{Binding ButtonText}" Height="40" Margin="0,15,0,0"
                     Click="btnAddUpdate_Click"
                     Style="{StaticResource UpdateButtonStyle}"/>
+            <Button Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="2"
+                    Content="מחק"
+                    Height="40"
+                    Margin="0,0,0,40"
+                    Click="btnDelete_Click"
+                    Style="{StaticResource RoundedButtonStyle}"
+                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
         </Grid>
     </ScrollViewer>
 </Window>

@@ -121,6 +121,29 @@ namespace PL.Volunteer
             }
         }
 
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+                return;
+            try
+            {
+                if (MessageBox.Show("Are you sure you want to delete this volunteer?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
+                    MessageBox.Show("Volunteer deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    Close();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                string userFriendlyMessage = ex is BO.BlDoesNotExistException
+                    ? "המתנדב לא נמצא במערכת."
+                    : "אירעה שגיאה בלתי צפויה. אנא נסה שוב.";
+                MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                Console.WriteLine($"Error details: {ex}");
+            }
+        }
+
         /// <summary>
         /// Reloads the current volunteer's data from BL if an ID is set.
         /// </summary>
@@ -152,24 +175,7 @@ namespace PL.Volunteer
                 s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
         }
 
-        private void OpenSelectCallForTreatmentWindow(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
-                {
-                    MessageBox.Show("לא ניתן לפתוח היסטוריית קריאות. מתנדב לא קיים או לא נבחר.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
 
-                var callHistoryWindow = new VolunteerCallHistoryWindow(CurrentVolunteer.Id);
-                callHistoryWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"שגיאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
 
         private void OpenVolunteerCallsHistoryWindow(object sender, RoutedEventArgs e)
         {
@@ -192,34 +198,7 @@ namespace PL.Volunteer
 
         public BO.VolunteerInList? SelectedVolunteer { get; set; }
 
-        private void OpenCallsButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedVolunteer == null || SelectedVolunteer.Id == 0)
-            {
-                MessageBox.Show("Please select a volunteer to view open calls.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
 
-            // Retrieve the full details of the selected volunteer
-            var volunteerDetails = s_bl.Volunteer.GetVolunteerDetails(SelectedVolunteer.Id);
-
-            if (!volunteerDetails.MaxDistance.HasValue)
-            {
-                MessageBox.Show("Please specify a maximum distance for the selected volunteer.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            try
-            {
-                // Open the SelectCallForTreatmentWindow
-                var selectCallWindow = new SelectCallForTreatmentWindow(volunteerDetails.Id, volunteerDetails.FullAddress ?? string.Empty, volunteerDetails.MaxDistance.Value, volunteerDetails);
-                selectCallWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while opening the call window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
 
         private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
         {
@@ -235,7 +214,7 @@ namespace PL.Volunteer
                 var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
 
                 // פתיחת החלון להצגת פרטי הקריאה
-                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress, CurrentVolunteer.MaxDistance ?? 0, CurrentVolunteer);
+                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress, CurrentVolunteer.MaxDistance.Value, CurrentVolunteer);
                 selectCallWindow.ShowDialog();
             }
             catch (Exception ex)
@@ -246,26 +225,12 @@ namespace PL.Volunteer
 
         public bool CanChooseCall => CurrentVolunteer?.CallInProgress == null;
 
-        public ICommand OpenSelectCallForTreatmentCommand { get; }
 
         public VolunteerWindow()
         {
             InitializeComponent();
 
-            OpenSelectCallForTreatmentCommand = new RelayCommand(_ => OpenSelectCallForTreatmentWindow());
             DataContext = this;
-        }
-
-        private void OpenSelectCallForTreatmentWindow()
-        {
-            if (!CanChooseCall)
-            {
-                MessageBox.Show("לא ניתן לבחור קריאה בזמן שיש קריאה בטיפול.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance ?? 0, CurrentVolunteer);
-            selectCallWindow.ShowDialog();
         }
     }
 }

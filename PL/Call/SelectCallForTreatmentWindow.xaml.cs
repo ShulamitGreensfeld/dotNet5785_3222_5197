@@ -1,13 +1,13 @@
-﻿using System;
+﻿using BlApi;
+using BO;
+using PL.Call;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using BlApi;
-using BO;
 using static BO.Enums;
-using PL.Helpers;
 
 
 namespace PL
@@ -42,7 +42,12 @@ namespace PL
                 try
                 {
                     s_bl.Call.SelectCallForTreatment(volunteerId: VolunteerId, callId: call.Id);
-                    QueryOpenCalls(); // עדכון הרשימה לאחר הבחירה
+
+                    OpenCalls.Remove(call);
+
+                    MessageBox.Show("הקריאה הוקצתה בהצלחה עבורך!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                     this.Close();
                 }
                 catch (Exception ex)
                 {
@@ -50,6 +55,7 @@ namespace PL
                 }
             }
         }
+
 
         //private IEnumerable<OpenCallInList> LoadOpenCalls()
         //{
@@ -83,22 +89,17 @@ namespace PL
         {
             try
             {
-                var calls = s_bl.Call.GetCallsList(null, null, null)
-                    .Where(call => call.CallStatus == CallStatus.opened || call.CallStatus == CallStatus.opened_at_risk)
-                    .Select(call => new OpenCallInList
-                    {
-                        Id = call.CallId,
-                        CallType = call.CallType,
-                        //FullAddress = call.FullAddress,
-                        Start_time = call.Opening_time,
-                        //Max_finish_time = call.Max_finish_time,
-                        CallDistance = ToolsProxy.CalculateDistance(
-                            CurrentVolunteer.Latitude ?? 0,
-                            CurrentVolunteer.Longitude ?? 0,
-                            0, 
-                            0
-                        )
-                    }).ToList();
+                // שליפת הקריאות הפתוחות עבור המתנדב דרך BL
+                var calls = s_bl.Call.GetOpenCallsForVolunteer(
+                    VolunteerId,
+                    SelectedCallType == CallType.none ? null : SelectedCallType,
+                    SelectedSortOption == "Distance" ? BO.Enums.OpenCallInListFields.CallDistance :
+                    SelectedSortOption == "Type" ? BO.Enums.OpenCallInListFields.CallType :
+                    BO.Enums.OpenCallInListFields.Id
+                )
+                // סינון לפי מרחק מקסימלי של המתנדב
+                .Where(call => call.CallDistance <= MaxDistance)
+                .ToList();
 
                 OpenCalls = new ObservableCollection<OpenCallInList>(calls);
             }
@@ -134,13 +135,14 @@ namespace PL
             {
                 var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
 
-                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance ?? 0, CurrentVolunteer)
+                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance.Value, CurrentVolunteer)
                 {
                     DataContext = currentCall,
                     IsReadOnly = true
                 };
                 selectCallWindow.ShowDialog();
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while retrieving the call details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
