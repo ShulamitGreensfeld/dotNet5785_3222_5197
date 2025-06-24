@@ -79,14 +79,9 @@ namespace PL.Volunteer
         {
             try
             {
-                PasswordBox? passwordBox = this.FindName("PasswordBox") as PasswordBox;
-
                 if (ButtonText == "Add")
                 {
-                    CurrentVolunteer!.Password = passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password)
-                        ? null
-                        : passwordBox?.Password;
-
+                    // הסיסמה כבר נמצאת ב-CurrentVolunteer.Password דרך הביינדינג
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
                     MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
@@ -94,9 +89,9 @@ namespace PL.Volunteer
                 {
                     var oldVolunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer!.Id);
 
-                    CurrentVolunteer.Password = passwordBox != null && string.IsNullOrWhiteSpace(passwordBox.Password)
-                        ? oldVolunteer.Password
-                        : passwordBox?.Password;
+                    // אם השדה ריק, שמור את הסיסמה הישנה
+                    if (string.IsNullOrWhiteSpace(CurrentVolunteer.Password))
+                        CurrentVolunteer.Password = oldVolunteer.Password;
 
                     s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer.Id, CurrentVolunteer);
                     MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -302,16 +297,15 @@ namespace PL.Volunteer
         public bool CanChooseCall => CurrentVolunteer?.CallInProgress == null;
 
 
-        public VolunteerWindow()
-        {
-            InitializeComponent();
-
-            DataContext = this;
-        }
-
-        //public void RefreshVolunteerList()
+        //public VolunteerWindow()
         //{
-        //    QueryVolunteerList();
+        //    InitializeComponent();
+
+        //    DataContext = this;
         //}
+        public VolunteerWindow()
+    : this(0) // מפנה לקונסטרקטור עם id = 0
+        { }
+
     }
 }
