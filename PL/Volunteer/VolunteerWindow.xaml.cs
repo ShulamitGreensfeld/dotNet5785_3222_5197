@@ -202,24 +202,29 @@ namespace PL.Volunteer
 
         private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
         {
+            // בדיקה אם יש למתנדב קריאה בטיפול
             if (CurrentVolunteer == null || CurrentVolunteer.CallInProgress == null)
             {
-                MessageBox.Show("למתנדב זה אין קריאה נוכחית בטיפולו.", "מידע", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("למתנדב זה אין כרגע קריאה בטיפול.", "מידע", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             try
             {
-                // שליפת פרטי הקריאה הנוכחית
+                // שליפת פרטי הקריאה המלאים
                 var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
 
-                // פתיחת החלון להצגת פרטי הקריאה
-                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress, CurrentVolunteer.MaxDistance.Value, CurrentVolunteer);
-                selectCallWindow.ShowDialog();
+                // פתיחת חלון צפייה בלבד עם כל הפרטים כולל מרחק
+                var singleCallWindow = new PL.Call.SingleCallWindow(
+                    currentCall,
+                    CurrentVolunteer.CallInProgress.CallDistance,
+                    isReadOnly: true
+                );
+                singleCallWindow.ShowDialog();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"אירעה שגיאה בעת שליפת פרטי הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"שגיאה בשליפת פרטי הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

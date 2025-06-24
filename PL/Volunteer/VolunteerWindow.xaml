@@ -190,6 +190,11 @@
                     Click="btnDelete_Click"
                     Style="{StaticResource RoundedButtonStyle}"
                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+
+
+            <Button Content="צפייה בפרטי הקריאה הנוכחית"
+        Click="ViewCurrentCallDetails_Click"
+        Margin="5"/>
         </Grid>
     </ScrollViewer>
 </Window>

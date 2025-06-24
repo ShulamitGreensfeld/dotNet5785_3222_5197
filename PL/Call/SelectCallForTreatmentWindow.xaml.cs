@@ -176,7 +176,7 @@ namespace PL
         public bool IsManager { get; set; }
         public BO.Volunteer CurrentVolunteer { get; set; }
 
-        public SelectCallForTreatmentWindow(int volunteerId, string volunteerAddress, double maxDistance, BO.Volunteer currentVolunteer, bool isManager)
+        public SelectCallForTreatmentWindow(int volunteerId, string volunteerAddress, double maxDistance, BO.Volunteer currentVolunteer)
         {
             InitializeComponent();
 
@@ -193,7 +193,7 @@ namespace PL
 
             DataContext = this;
 
-            IsManager = isManager;
+            
 
             QueryOpenCalls();
         }
@@ -355,30 +355,30 @@ namespace PL
             }
         }
 
-        private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurrentVolunteer == null || CurrentVolunteer.CallInProgress == null)
-            {
-                MessageBox.Show("This volunteer has no current call assigned.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
+        //private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (CurrentVolunteer == null || CurrentVolunteer.CallInProgress == null)
+        //    {
+        //        MessageBox.Show("This volunteer has no current call assigned.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        //        return;
+        //    }
 
-            try
-            {
-                var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+        //    try
+        //    {
+        //        var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
 
-                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance.Value, CurrentVolunteer, IsManager = CurrentVolunteer.Role == 'manager')
-                {
-                    DataContext = currentCall,
-                    IsReadOnly = true
-                };
-                selectCallWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while retrieving the call details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+        //        var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance.Value, CurrentVolunteer)
+        //        {
+        //            DataContext = currentCall,
+        //            IsReadOnly = true
+        //        };
+        //        selectCallWindow.ShowDialog();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"An error occurred while retrieving the call details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
 
         public bool IsReadOnly { get; set; }
 

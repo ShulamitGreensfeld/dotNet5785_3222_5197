@@ -49,10 +49,5 @@
             <Button Content="עדכן" Command="{Binding UpdateAddressCommand}" Margin="0,0,20,0"/>
             <TextBox Text="{Binding SomeProperty}" IsReadOnly="{Binding IsReadOnly}" Width="200"/>
         </StackPanel>
-
-        <Button Content="צפייה בפרטי הקריאה הנוכחית"
-        Click="ViewCurrentCallDetails_Click"
-        Visibility="{Binding IsManager, Converter={StaticResource BoolToVisibilityConverter}}"
-        Margin="5"/>
     </Grid>
 </Window>

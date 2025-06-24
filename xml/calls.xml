@@ -616,4 +616,37 @@
     <CallDescription>wertyhuj</CallDescription>
     <ID>1055</ID>
   </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>mevo livna 4</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-24T17:46:47.4810546+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>קראע</CallDescription>
+    <ID>1056</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-24T17:47:36.1377684+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-30T00:00:00</MaxTimeForClosing>
+    <CallDescription>vtybunim</CallDescription>
+    <ID>1057</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 1</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2025-06-24T17:49:44.4350194+03:00</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>sdfgb</CallDescription>
+    <ID>1058</ID>
+  </Call>
 </ArrayOfCall>

@@ -8,48 +8,51 @@
         Title="SingleCallWindow" Height="600" Width="600"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- Call Details -->
-            <Label Grid.Row="0" Grid.Column="0" Content="מזהה קריאה:"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Call.Id}" IsReadOnly="True"/>
+        <!-- Call Details -->
+        <Label Grid.Row="0" Grid.Column="0" Content="מזהה קריאה:"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Call.Id}" IsReadOnly="True"/>
 
-            <Label Grid.Row="1" Grid.Column="0" Content="סוג קריאה:"/>
-            <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CallTypes}" SelectedItem="{Binding Call.CallType}" IsEnabled="{Binding IsCallTypeEditable}"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="סוג קריאה:"/>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CallTypes}" SelectedItem="{Binding Call.CallType}" IsEnabled="{Binding IsCallTypeEditable}"/>
 
-            <Label Grid.Row="2" Grid.Column="0" Content="תיאור:"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Call.Verbal_description}" IsReadOnly="{Binding IsDescriptionReadOnly}"/>
+        <Label Grid.Row="2" Grid.Column="0" Content="תיאור:"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Call.Verbal_description}" IsReadOnly="{Binding IsDescriptionReadOnly}"/>
 
-            <Label Grid.Row="3" Grid.Column="0" Content="כתובת:"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Call.FullAddress}" IsReadOnly="{Binding IsAddressReadOnly}"/>
+        <Label Grid.Row="3" Grid.Column="0" Content="כתובת:"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Call.FullAddress}" IsReadOnly="{Binding IsAddressReadOnly}"/>
 
-            <Label Grid.Row="4" Grid.Column="0" Content="סטטוס:"/>
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Call.CallStatus}" IsReadOnly="True"/>
+        <Label Grid.Row="4" Grid.Column="0" Content="סטטוס:"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Call.CallStatus}" IsReadOnly="True"/>
 
-            <Label Grid.Row="5" Grid.Column="0" Content="זמן פתיחה:"/>
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Call.Opening_time}" IsReadOnly="True"/>
+        <Label Grid.Row="5" Grid.Column="0" Content="זמן פתיחה:"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Call.Opening_time}" IsReadOnly="True"/>
 
-            <Label Grid.Row="6" Grid.Column="0" Content="זמן סיום מקסימלי:"/>
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Call.Max_finish_time}" IsReadOnly="{Binding IsMaxFinishTimeReadOnly}"/>
+        <Label Grid.Row="6" Grid.Column="0" Content="זמן סיום מקסימלי:"/>
+        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Call.Max_finish_time}" IsReadOnly="{Binding IsMaxFinishTimeReadOnly}"/>
+
+        <Label Grid.Row="7" Grid.Column="0" Content="מרחק מהמתנדב:"/>
+        <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CallDistance, StringFormat={}{0:F2} קמ}" IsReadOnly="True"/>
 
             <!-- Assignments List -->
-            <Label Grid.Row="7" Grid.Column="0" Content="הקצאות:" VerticalAlignment="Top"/>
-            <ListView Grid.Row="7" Grid.Column="1" ItemsSource="{Binding Call.AssignmentsList}" Height="100">
+            <Label Grid.Row="8" Grid.Column="0" Content="הקצאות:" VerticalAlignment="Top"/>
+            <ListView Grid.Row="8" Grid.Column="1" ItemsSource="{Binding Call.AssignmentsList}" Height="100">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="מתנדב" DisplayMemberBinding="{Binding VolunteerFullName}" Width="120"/>
@@ -60,8 +63,8 @@
                 </ListView.View>
             </ListView>
 
-            <!-- Update Button -->
+            <!-- Update Button (hidden in read-only mode) -->
             <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Content="עדכן" Height="40" Margin="0,20,0,0"
                 Click="UpdateButton_Click" IsEnabled="{Binding IsUpdateEnabled}"/>
-     </Grid>
+    </Grid>
 </Window>
