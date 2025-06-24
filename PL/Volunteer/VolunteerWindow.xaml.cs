@@ -121,10 +121,41 @@ namespace PL.Volunteer
             }
         }
 
+        //private void btnDelete_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+        //        return;
+        //    try
+        //    {
+        //        if (MessageBox.Show("Are you sure you want to delete this volunteer?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+        //        {
+        //            s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
+        //            MessageBox.Show("Volunteer deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        //            foreach (Window window in Application.Current.Windows)
+        //            {
+        //                if (window is PL.Volunteer.VolunteerListWindow listWindow)
+        //                {
+        //                    listWindow.RefreshVolunteerList();
+        //                }
+        //            }
+        //            Close();
+        //        }
+        //    }
+        //    catch (System.Exception ex)
+        //    {
+        //        string userFriendlyMessage = ex is BO.BlDoesNotExistException
+        //            ? "המתנדב לא נמצא במערכת."
+        //: $"אירעה שגיאה בלתי צפויה: {ex.Message}"; // הוסף את פרטי השגיאה
+        //        MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        Console.WriteLine($"Error details: {ex}");
+        //    }
+        //}
+
         private void btnDelete_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
-                return;
+{
+    if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+        return;
+
             try
             {
                 if (MessageBox.Show("Are you sure you want to delete this volunteer?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
@@ -134,14 +165,54 @@ namespace PL.Volunteer
                     Close();
                 }
             }
+            catch (BO.BlDeletionException ex)
+            {
+                MessageBox.Show("לא ניתן למחוק מתנדב שיש לו קריאות (גם היסטוריות).", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch (System.Exception ex)
             {
-                string userFriendlyMessage = ex is BO.BlDoesNotExistException
-                    ? "המתנדב לא נמצא במערכת."
-                    : "אירעה שגיאה בלתי צפויה. אנא נסה שוב.";
-                MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-                Console.WriteLine($"Error details: {ex}");
+                MessageBox.Show($"אירעה שגיאה בלתי צפויה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            //try
+            //{
+            //    // --- הוספה: בדיקה אם יש קריאות פתוחות או היסטוריות ---
+            //    var openCalls = s_bl.Call.GetOpenCallsForVolunteer(CurrentVolunteer.Id);
+            //    var closedCalls = s_bl.Call.GetClosedCallsHandledByVolunteer(CurrentVolunteer.Id);
+
+            //            MessageBox.Show($"openCalls.Count = {openCalls.Count()}");
+            //            MessageBox.Show($"closedCalls.Count = {closedCalls.Count()}");
+
+            //            if (openCalls.Any() || closedCalls.Any())
+            //    {
+            //        MessageBox.Show("לא ניתן למחוק מתנדב שיש לו קריאות (גם היסטוריות).", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            //        return;
+            //    }
+            //    // --- סוף תוספת ---
+
+            //    if (MessageBox.Show("Are you sure you want to delete this volunteer?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            //    {
+            //                s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
+            //                MessageBox.Show("Volunteer deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            //                // רענון כל חלונות רשימת המתנדבים
+            //                //foreach (Window window in Application.Current.Windows)
+            //                //{
+            //                //    if (window is PL.Volunteer.VolunteerListWindow listWindow)
+            //                //    {
+            //                //        listWindow.RefreshVolunteerList();
+            //                //    }
+            //                //}
+            //                Close();
+            //    }
+            //}
+            //catch (System.Exception ex)
+            //{
+            //    string userFriendlyMessage = ex is BO.BlDoesNotExistException
+            //        ? "המתנדב לא נמצא במערכת."
+            //        : $"אירעה שגיאה בלתי צפויה: {ex.Message}";
+            //    MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    Console.WriteLine($"Error details: {ex}");
+            //}
         }
 
         /// <summary>
@@ -237,5 +308,10 @@ namespace PL.Volunteer
 
             DataContext = this;
         }
+
+        //public void RefreshVolunteerList()
+        //{
+        //    QueryVolunteerList();
+        //}
     }
 }
