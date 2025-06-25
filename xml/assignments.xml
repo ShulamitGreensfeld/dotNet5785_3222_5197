@@ -5,7 +5,7 @@
     <VolunteerId>214821423</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T05:18:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T07:18:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>ManagerCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2000</ID>
   </Assignment>
   <Assignment>
@@ -13,7 +13,7 @@
     <VolunteerId>328128061</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T07:12:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T09:12:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2001</ID>
   </Assignment>
   <Assignment>
@@ -29,7 +29,7 @@
     <VolunteerId>215086950</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T03:27:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T05:27:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2003</ID>
   </Assignment>
   <Assignment>
@@ -45,7 +45,7 @@
     <VolunteerId>215215690</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T02:41:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T04:41:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2005</ID>
   </Assignment>
   <Assignment>
@@ -53,7 +53,7 @@
     <VolunteerId>328183934</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T06:00:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T08:00:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2006</ID>
   </Assignment>
   <Assignment>
@@ -69,7 +69,7 @@
     <VolunteerId>328276332</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T01:44:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T03:44:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2008</ID>
   </Assignment>
   <Assignment>
@@ -77,7 +77,7 @@
     <VolunteerId>328177191</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T01:45:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T03:45:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2009</ID>
   </Assignment>
   <Assignment>
@@ -85,7 +85,7 @@
     <VolunteerId>327796678</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T07:37:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T09:37:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2010</ID>
   </Assignment>
   <Assignment>
@@ -93,7 +93,7 @@
     <VolunteerId>215238023</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T05:11:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T07:11:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2011</ID>
   </Assignment>
   <Assignment>
@@ -109,7 +109,7 @@
     <VolunteerId>327770442</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T05:08:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T07:08:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>ManagerCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2013</ID>
   </Assignment>
   <Assignment>
@@ -117,7 +117,7 @@
     <VolunteerId>328177191</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T17:13:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T19:13:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2014</ID>
   </Assignment>
   <Assignment>
@@ -125,7 +125,7 @@
     <VolunteerId>215086950</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T03:02:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T05:02:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>ManagerCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2015</ID>
   </Assignment>
   <Assignment>
@@ -133,7 +133,7 @@
     <VolunteerId>328183934</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T14:46:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T16:46:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2016</ID>
   </Assignment>
   <Assignment>
@@ -141,7 +141,7 @@
     <VolunteerId>215086950</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T08:18:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T10:18:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2017</ID>
   </Assignment>
   <Assignment>
@@ -157,7 +157,7 @@
     <VolunteerId>328177191</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T10:49:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T12:49:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2019</ID>
   </Assignment>
   <Assignment>
@@ -165,7 +165,7 @@
     <VolunteerId>326365574</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T06:45:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T08:45:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>ManagerCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2020</ID>
   </Assignment>
   <Assignment>
@@ -173,7 +173,7 @@
     <VolunteerId>328306550</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T07:50:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T09:50:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2021</ID>
   </Assignment>
   <Assignment>
@@ -181,7 +181,7 @@
     <VolunteerId>215639212</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T09:32:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T11:32:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2022</ID>
   </Assignment>
   <Assignment>
@@ -189,7 +189,7 @@
     <VolunteerId>328183934</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T05:55:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T07:55:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2023</ID>
   </Assignment>
   <Assignment>
@@ -197,7 +197,7 @@
     <VolunteerId>327820429</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T03:30:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T05:30:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2024</ID>
   </Assignment>
   <Assignment>
@@ -205,7 +205,7 @@
     <VolunteerId>215639212</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T07:11:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T09:11:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2025</ID>
   </Assignment>
   <Assignment>
@@ -221,7 +221,7 @@
     <VolunteerId>215252370</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T05:02:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T07:02:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2027</ID>
   </Assignment>
   <Assignment>
@@ -229,7 +229,7 @@
     <VolunteerId>327796678</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T04:34:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T06:34:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>ManagerCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2028</ID>
   </Assignment>
   <Assignment>
@@ -237,7 +237,7 @@
     <VolunteerId>328118245</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T02:53:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T04:53:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2029</ID>
   </Assignment>
   <Assignment>
@@ -245,7 +245,7 @@
     <VolunteerId>328128061</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T11:26:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T13:26:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2030</ID>
   </Assignment>
   <Assignment>
@@ -253,7 +253,7 @@
     <VolunteerId>215525197</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T12:12:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T14:12:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>ManagerCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2031</ID>
   </Assignment>
   <Assignment>
@@ -261,7 +261,7 @@
     <VolunteerId>326365574</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T04:34:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T06:34:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2032</ID>
   </Assignment>
   <Assignment>
@@ -269,7 +269,7 @@
     <VolunteerId>327820429</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T01:16:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T03:16:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2033</ID>
   </Assignment>
   <Assignment>
@@ -277,7 +277,7 @@
     <VolunteerId>327796678</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T07:12:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T09:12:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2034</ID>
   </Assignment>
   <Assignment>
@@ -285,7 +285,7 @@
     <VolunteerId>326365574</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T01:23:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T03:23:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2035</ID>
   </Assignment>
   <Assignment>
@@ -301,7 +301,7 @@
     <VolunteerId>327548194</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T04:13:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T06:13:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2037</ID>
   </Assignment>
   <Assignment>
@@ -309,7 +309,7 @@
     <VolunteerId>328118245</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T04:17:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T06:17:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2038</ID>
   </Assignment>
   <Assignment>
@@ -317,7 +317,7 @@
     <VolunteerId>327770442</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T05:58:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T07:58:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2039</ID>
   </Assignment>
   <Assignment>
@@ -325,7 +325,7 @@
     <VolunteerId>214821423</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T08:54:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T10:54:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2040</ID>
   </Assignment>
   <Assignment>
@@ -333,7 +333,7 @@
     <VolunteerId>327548194</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T09:44:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T11:44:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2041</ID>
   </Assignment>
   <Assignment>
@@ -341,7 +341,7 @@
     <VolunteerId>327820429</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T04:24:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T06:24:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2042</ID>
   </Assignment>
   <Assignment>
@@ -349,7 +349,7 @@
     <VolunteerId>215639212</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T04:59:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T06:59:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>OutOfRangeCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2043</ID>
   </Assignment>
   <Assignment>
@@ -373,7 +373,7 @@
     <VolunteerId>215525197</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T09:55:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T11:55:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2046</ID>
   </Assignment>
   <Assignment>
@@ -381,7 +381,7 @@
     <VolunteerId>215525197</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T08:15:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T10:15:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2047</ID>
   </Assignment>
   <Assignment>
@@ -389,7 +389,7 @@
     <VolunteerId>327770442</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T04:58:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T06:58:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>none</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2048</ID>
   </Assignment>
   <Assignment>
@@ -397,7 +397,7 @@
     <VolunteerId>328128061</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T10:48:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-22T12:48:09</EndTimeForTreatment>
-    <TypeOfFinishTreatment>ManagerCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2049</ID>
   </Assignment>
   <Assignment>
@@ -429,7 +429,7 @@
     <VolunteerId>214323222</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T13:23:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-23T21:05:14.9763814+03:00</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2053</ID>
   </Assignment>
   <Assignment>
@@ -437,15 +437,23 @@
     <VolunteerId>214323222</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T13:23:09</EntryTimeForTreatment>
     <EndTimeForTreatment>2025-06-24T17:39:20.4004137+03:00</EndTimeForTreatment>
-    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2054</ID>
   </Assignment>
   <Assignment>
     <CallId>1058</CallId>
     <VolunteerId>214323222</VolunteerId>
     <EntryTimeForTreatment>2025-06-22T13:23:09</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-06-22T13:23:09</EndTimeForTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
+    <ID>2055</ID>
+  </Assignment>
+  <Assignment>
+    <CallId>1057</CallId>
+    <VolunteerId>214323222</VolunteerId>
+    <EntryTimeForTreatment>2025-06-22T13:23:09</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
     <TypeOfFinishTreatment xsi:nil="true" />
-    <ID>2055</ID>
+    <ID>2056</ID>
   </Assignment>
 </ArrayOfAssignment>

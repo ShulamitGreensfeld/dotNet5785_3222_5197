@@ -1,13 +1,14 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using BlApi;
-//using static BO.Enums;
 
 namespace PL
 {
     public partial class AddCallWindow : Window
     {
         private static readonly IBl s_bl = Factory.Get();
+
+        public DateTime SystemClockDate => s_bl.Admin.GetClock().Date;
 
         public IEnumerable<BO.Enums.CallType> CallTypeCollection =>
             Enum.GetValues(typeof(BO.Enums.CallType)).Cast<BO.Enums.CallType>();
@@ -16,6 +17,9 @@ namespace PL
         {
             InitializeComponent();
             DataContext = this;
+            openingDatePicker.SelectedDate = SystemClockDate;
+            closingDatePicker.SelectedDate = SystemClockDate;
+            openingDatePicker.IsEnabled = true;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -30,11 +34,11 @@ namespace PL
                     return;
                 }
 
-                var stack1 = (StackPanel)grid.Children[0]; // סוג קריאה
-                var stack2 = (StackPanel)grid.Children[1]; // תיאור
-                var stack3 = (StackPanel)grid.Children[2]; // כתובת
-                var stack4 = (StackPanel)grid.Children[3]; // תאריך פתיחה
-                var stack5 = (StackPanel)grid.Children[4]; // תאריך יעד
+                var stack1 = (StackPanel)grid.Children[0]; 
+                var stack2 = (StackPanel)grid.Children[1]; 
+                var stack3 = (StackPanel)grid.Children[2]; 
+                var stack4 = (StackPanel)grid.Children[3]; 
+                var stack5 = (StackPanel)grid.Children[4];
 
                 var callTypeComboBox = (ComboBox)stack1.Children[1];
                 var descriptionTextBox = (TextBox)stack2.Children[1];
@@ -49,8 +53,8 @@ namespace PL
                     FullAddress = addressTextBox.Text,
                     Latitude = null,
                     Longitude = null,
-                    Opening_time = DateTime.Now,
-                    Max_finish_time = maxFinishDatePicker.SelectedDate ?? DateTime.Now,
+                    Opening_time = s_bl.Admin.GetClock(),
+                    Max_finish_time = maxFinishDatePicker.SelectedDate ?? s_bl.Admin.GetClock(),
                     CallStatus = BO.Enums.CallStatus.opened
                 };
 
@@ -62,8 +66,6 @@ namespace PL
                 MessageBox.Show($"Error adding call: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {

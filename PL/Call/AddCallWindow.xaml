@@ -1,7 +1,6 @@
 ﻿<Window x:Class="PL.AddCallWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Add New Call" Height="400" Width="400"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
 
@@ -42,12 +41,12 @@
 
         <StackPanel Grid.Row="5" Margin="0,0,0,5">
             <TextBlock Text="Opening Time:" />
-            <DatePicker SelectedDate="{x:Static sys:DateTime.Now}" />
+            <DatePicker x:Name="openingDatePicker" IsEnabled="False"/>
         </StackPanel>
 
         <StackPanel Grid.Row="6" Margin="0,0,0,5">
             <TextBlock Text="Max Finish Time:" />
-            <DatePicker />
+            <DatePicker x:Name="closingDatePicker"/>
         </StackPanel>
 
         <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
