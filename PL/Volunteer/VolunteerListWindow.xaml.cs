@@ -11,6 +11,8 @@ namespace PL.Volunteer
     {
         static readonly IBl s_bl = BlApi.Factory.Get();
 
+        private readonly Action _refreshListAction;
+
         // Add CurrentVolunteer property
         public BO.Volunteer? CurrentVolunteer { get; set; }
 
@@ -124,16 +126,23 @@ namespace PL.Volunteer
                 MessageBox.Show("Please select a valid volunteer to view open calls.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
             var window = new VolunteerWindow(SelectedVolunteer.Id);
-            window.Show();
+            bool? result = window.ShowDialog();
+            if (result == true)
+            {
+                QueryVolunteerList(); // רענון הרשימה אחרי עדכון
+            }
         }
 
         // Opens the "Add New Volunteer" window.
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new VolunteerWindow();
-            window.Show();
+            bool? result = window.ShowDialog();
+            if (result == true)
+            {
+                QueryVolunteerList(); // רענון הרשימה אחרי הוספה
+            }
         }
 
         // Deletes a volunteer after confirming with the user.

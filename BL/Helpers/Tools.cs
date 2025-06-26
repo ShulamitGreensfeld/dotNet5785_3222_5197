@@ -132,6 +132,9 @@ internal static class Tools
         double latitude = double.Parse(root.GetProperty("lat").GetString());
         double longitude = double.Parse(root.GetProperty("lon").GetString());
 
+        Console.WriteLine($"[GetCoordinatesFromAddress] Address: {address} | Latitude: {latitude} | Longitude: {longitude}");
+
+
         return (latitude, longitude);
     }
 

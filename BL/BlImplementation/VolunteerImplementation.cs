@@ -46,6 +46,13 @@ internal class VolunteerImplementation : IVolunteer
                     };
                 }
             }
+            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId);
+
+            int totalHandled = assignments.Count(a => a.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
+            int totalCanceled = assignments.Count(a =>
+                a.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation ||
+                a.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation);
+            int totalExpired = assignments.Count(a => a.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.OutOfRangeCancellation);
             return new BO.Volunteer
             {
                 Id = volunteerDO.ID,
@@ -60,7 +67,10 @@ internal class VolunteerImplementation : IVolunteer
                 IsActive = volunteerDO.IsActive,
                 MaxDistance = volunteerDO.MaxDistanceForCall,
                 DistanceType = (BO.Enums.DistanceTypes)volunteerDO.DistanceType,
-                CallInProgress = callInProgress
+                CallInProgress = callInProgress,
+                TotalHandledCalls = totalHandled,
+                TotalCanceledCalls = totalCanceled,
+                TotalExpiredCalls = totalExpired
             };
         }
         catch (DO.DalDoesNotExistException ex)

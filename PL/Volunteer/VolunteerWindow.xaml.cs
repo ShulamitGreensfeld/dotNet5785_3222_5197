@@ -84,6 +84,8 @@ namespace PL.Volunteer
                     // הסיסמה כבר נמצאת ב-CurrentVolunteer.Password דרך הביינדינג
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
                     MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.DialogResult = true;
+                    this.Close();
                 }
                 else // Update
                 {
@@ -91,10 +93,12 @@ namespace PL.Volunteer
 
                     // אם השדה ריק, שמור את הסיסמה הישנה
                     if (string.IsNullOrWhiteSpace(CurrentVolunteer.Password))
-                        CurrentVolunteer.Password = oldVolunteer.Password;
+                        CurrentVolunteer.Password = null;
 
                     s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer.Id, CurrentVolunteer);
                     MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.DialogResult = true;
+                    this.Close();
                 }
                 Close();
             }
@@ -110,41 +114,10 @@ namespace PL.Volunteer
                     userFriendlyMessage = "המתנדב לא נמצא במערכת.";
                 else
                     userFriendlyMessage = "אירעה שגיאה בלתי צפויה. אנא נסה שוב.";
-
                 MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
                 Console.WriteLine($"Error details: {ex}");
             }
         }
-
-        //private void btnDelete_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
-        //        return;
-        //    try
-        //    {
-        //        if (MessageBox.Show("Are you sure you want to delete this volunteer?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-        //        {
-        //            s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
-        //            MessageBox.Show("Volunteer deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-        //            foreach (Window window in Application.Current.Windows)
-        //            {
-        //                if (window is PL.Volunteer.VolunteerListWindow listWindow)
-        //                {
-        //                    listWindow.RefreshVolunteerList();
-        //                }
-        //            }
-        //            Close();
-        //        }
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        string userFriendlyMessage = ex is BO.BlDoesNotExistException
-        //            ? "המתנדב לא נמצא במערכת."
-        //: $"אירעה שגיאה בלתי צפויה: {ex.Message}"; // הוסף את פרטי השגיאה
-        //        MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-        //        Console.WriteLine($"Error details: {ex}");
-        //    }
-        //}
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
 {
@@ -157,7 +130,8 @@ namespace PL.Volunteer
                 {
                     s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
                     MessageBox.Show("Volunteer deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Close();
+                    this.DialogResult = true;
+                    this.Close();
                 }
             }
             catch (BO.BlDeletionException ex)
@@ -168,46 +142,6 @@ namespace PL.Volunteer
             {
                 MessageBox.Show($"אירעה שגיאה בלתי צפויה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            //try
-            //{
-            //    // --- הוספה: בדיקה אם יש קריאות פתוחות או היסטוריות ---
-            //    var openCalls = s_bl.Call.GetOpenCallsForVolunteer(CurrentVolunteer.Id);
-            //    var closedCalls = s_bl.Call.GetClosedCallsHandledByVolunteer(CurrentVolunteer.Id);
-
-            //            MessageBox.Show($"openCalls.Count = {openCalls.Count()}");
-            //            MessageBox.Show($"closedCalls.Count = {closedCalls.Count()}");
-
-            //            if (openCalls.Any() || closedCalls.Any())
-            //    {
-            //        MessageBox.Show("לא ניתן למחוק מתנדב שיש לו קריאות (גם היסטוריות).", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-            //        return;
-            //    }
-            //    // --- סוף תוספת ---
-
-            //    if (MessageBox.Show("Are you sure you want to delete this volunteer?", "Confirm Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-            //    {
-            //                s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
-            //                MessageBox.Show("Volunteer deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            //                // רענון כל חלונות רשימת המתנדבים
-            //                //foreach (Window window in Application.Current.Windows)
-            //                //{
-            //                //    if (window is PL.Volunteer.VolunteerListWindow listWindow)
-            //                //    {
-            //                //        listWindow.RefreshVolunteerList();
-            //                //    }
-            //                //}
-            //                Close();
-            //    }
-            //}
-            //catch (System.Exception ex)
-            //{
-            //    string userFriendlyMessage = ex is BO.BlDoesNotExistException
-            //        ? "המתנדב לא נמצא במערכת."
-            //        : $"אירעה שגיאה בלתי צפויה: {ex.Message}";
-            //    MessageBox.Show(userFriendlyMessage, "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    Console.WriteLine($"Error details: {ex}");
-            //}
         }
 
         /// <summary>
@@ -270,16 +204,6 @@ namespace PL.Volunteer
         }
 
         public bool CanChooseCall => CurrentVolunteer?.CallInProgress == null;
-
-
-        //public VolunteerWindow()
-        //{
-        //    InitializeComponent();
-
-        //    DataContext = this;
-        //}
-        public VolunteerWindow()
-    : this(0) // מפנה לקונסטרקטור עם id = 0
-        { }
+        public VolunteerWindow() : this(0) { }
     }
 }

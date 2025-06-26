@@ -673,17 +673,6 @@
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mavo livna 5</Address>
-    <Latitude>43.826598</Latitude>
-    <Longitude>17.004501</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>rftg</CallDescription>
-    <ID>1061</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
     <Address>mevo livna 4</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
@@ -692,5 +681,126 @@
     <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
     <CallDescription>bbbbbbbbb</CallDescription>
     <ID>1062</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-02T00:00:00</MaxTimeForClosing>
+    <CallDescription>asd</CallDescription>
+    <ID>1063</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-05T00:00:00</MaxTimeForClosing>
+    <CallDescription>sertgyj</CallDescription>
+    <ID>1064</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-08T00:00:00</MaxTimeForClosing>
+    <CallDescription>גקרעאי</CallDescription>
+    <ID>1065</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-25T00:00:00</MaxTimeForClosing>
+    <CallDescription>bhjk</CallDescription>
+    <ID>1066</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>rftg</CallDescription>
+    <ID>1061</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Mevo Livne 5, Beit El</Address>
+    <Latitude>48.55889</Latitude>
+    <Longitude>1.615377</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-01T00:00:00</MaxTimeForClosing>
+    <CallDescription>erfgt</CallDescription>
+    <ID>1067</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Mevo Livne 5, Beit El</Address>
+    <Latitude>48.55889</Latitude>
+    <Longitude>1.615377</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-07T00:00:00</MaxTimeForClosing>
+    <CallDescription>ftgybhunjkml</CallDescription>
+    <ID>1068</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Mevo Livne 5, Beit El</Address>
+    <Latitude>48.55889</Latitude>
+    <Longitude>1.615377</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-04T00:00:00</MaxTimeForClosing>
+    <CallDescription>dergt</CallDescription>
+    <ID>1069</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>Derekh Ramal'ah, Ramallah</Address>
+    <Latitude>32.072952</Latitude>
+    <Longitude>34.917167</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-06T00:00:00</MaxTimeForClosing>
+    <CallDescription>vgtbhyjn</CallDescription>
+    <ID>1070</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>Derekh Ramal'ah, Ramallah</Address>
+    <Latitude>32.072952</Latitude>
+    <Longitude>34.917167</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-08-08T00:00:00</MaxTimeForClosing>
+    <CallDescription>כהעניחמצל</CallDescription>
+    <ID>1071</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>Derekh Ramal'ah, Ramallah</Address>
+    <Latitude>32.072952</Latitude>
+    <Longitude>34.917167</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>rctyubi</CallDescription>
+    <ID>1072</ID>
   </Call>
 </ArrayOfCall>

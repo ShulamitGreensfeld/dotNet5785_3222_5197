@@ -22,6 +22,7 @@ namespace PL.Volunteer
     {
         private static readonly IBl s_bl = BlApi.Factory.Get();
 
+        private readonly Action _refreshAction;
         public BO.Volunteer Volunteer { get; set; }
         public IEnumerable<BO.Enums.DistanceTypes> DistanceTypes => Enum.GetValues(typeof(BO.Enums.DistanceTypes)) as BO.Enums.DistanceTypes[];
 
@@ -33,8 +34,26 @@ namespace PL.Volunteer
         {
             InitializeComponent();
             Volunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId);
+            _refreshAction = RefreshVolunteer;
+            s_bl.Volunteer.AddObserver(Volunteer.Id, _refreshAction);
             //OpenSelectCallForTreatmentCommand = new RelayCommand(_ => OpenSelectCallForTreatmentWindow());
             DataContext = this;
+        }
+
+        private void RefreshVolunteer()
+        {
+            Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
+            Dispatcher.Invoke(() =>
+            {
+                DataContext = null;
+                DataContext = this;
+            });
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            s_bl.Volunteer.RemoveObserver(Volunteer.Id, _refreshAction);
         }
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
@@ -132,46 +151,20 @@ namespace PL.Volunteer
                     Volunteer.MaxDistance.Value,
                     Volunteer
                 );
-                selectCallWindow.ShowDialog();
+                bool? result = selectCallWindow.ShowDialog();
+                if (result == true)
+                {
+                    // רענון מיידי של נתוני המתנדב
+                    Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
+                    DataContext = null;
+                    DataContext = this;
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"שגיאה בפתיחת חלון בחירת קריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        private void OpenSelectCallForTreatmentWindow(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (Volunteer == null || Volunteer.Id == 0)
-                {
-                    MessageBox.Show("לא ניתן לפתוח היסטוריית קריאות. מתנדב לא קיים או לא נבחר.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                var callHistoryWindow = new VolunteerCallHistoryWindow(Volunteer.Id);
-                callHistoryWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"שגיאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        //public bool CanChooseCall => Volunteer?.CallInProgress == null;
-
-        //public ICommand OpenSelectCallForTreatmentCommand { get; }
-        //private void OpenSelectCallForTreatmentWindow()
-        //{
-        //    if (!CanChooseCall)
-        //    {
-        //        MessageBox.Show("לא ניתן לבחור קריאה בזמן שיש קריאה בטיפול.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-        //        return;
-        //    }
-
-        //    var selectCallWindow = new SelectCallForTreatmentWindow(Volunteer.Id, Volunteer.FullAddress ?? string.Empty, Volunteer.MaxDistance ?? 0, Volunteer);
-        //    selectCallWindow.ShowDialog();
-        //}
     }
 }
 

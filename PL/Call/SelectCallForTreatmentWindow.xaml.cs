@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using DalApi;
 using DO;
 using PL.Call;
 using System;
@@ -16,10 +17,15 @@ namespace PL
 {
     public partial class SelectCallForTreatmentWindow : Window, INotifyPropertyChanged
     {
-        private static readonly IBl s_bl = Factory.Get();
+        private static readonly IBl s_bl = BlApi.Factory.Get();
+
         public event PropertyChangedEventHandler? PropertyChanged;
-        public bool IsManager { get; set; }
+
+        public IEnumerable<CallType> CallTypeCollection { get; } = Enum.GetValues(typeof(CallType)).Cast<CallType>();
         public BO.Volunteer CurrentVolunteer { get; set; }
+
+        public List<string> SortOptions { get; } = new() { "Distance", "Type", "ID" };
+        public List<string> GroupOptions { get; } = new() { "None", "CallType", "FullAddress" };
 
         public SelectCallForTreatmentWindow(int volunteerId, string volunteerAddress, double maxDistance, BO.Volunteer currentVolunteer)
         {
@@ -44,10 +50,6 @@ namespace PL
 
             QueryOpenCalls();
         }
-
-        public IEnumerable<CallType> CallTypeCollection => Enum.GetValues(typeof(CallType)).Cast<CallType>();
-        public IEnumerable<string> SortOptions => new[] { "Distance", "Type", "ID" };
-        public IEnumerable<string> GroupOptions => new[] { "None", "CallType", "FullAddress" };
 
         private CallType _selectedCallType = CallType.none;
         public CallType SelectedCallType
@@ -142,7 +144,7 @@ namespace PL
                     null,
                     null  
                 )
-                .Where(call => call.CallDistance <= MaxDistance)
+                //.Where(call => call.CallDistance <= MaxDistance)
                 .ToList();
 
                 OpenCalls.Clear();
@@ -171,11 +173,6 @@ namespace PL
             // סינון לפי כתובת
             if (!string.IsNullOrWhiteSpace(AddressFilter) &&
                 (call.FullAddress == null || !call.FullAddress.Contains(AddressFilter, StringComparison.OrdinalIgnoreCase)))
-                return false;
-
-            // סינון לפי תיאור
-            if (!string.IsNullOrWhiteSpace(DescriptionFilter) &&
-                (call.Verbal_description == null || !call.Verbal_description.Contains(DescriptionFilter, StringComparison.OrdinalIgnoreCase)))
                 return false;
 
             // סינון לפי מרחק (כבר בוצע ב-QueryOpenCalls, אבל אפשר להשאיר ליתר ביטחון)
@@ -224,6 +221,7 @@ namespace PL
                     OpenCalls.Remove(call);
 
                     MessageBox.Show("הקריאה הוקצתה בהצלחה עבורך!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.DialogResult = true;
                     this.Close();
                 }
                 catch (Exception ex)
@@ -242,14 +240,19 @@ namespace PL
                     return;
                 }
 
+                // שליפת כל פרטי המתנדב מה-BL
                 var volunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer.Id);
 
+                // עדכון כתובת בלבד
                 volunteer.FullAddress = VolunteerAddress;
 
+                // נטרול הסיסמה כדי שה-BL לא ידרוש הצפנה/ולידציה
                 volunteer.Password = null;
 
+                // שליחת כל האובייקט ל-BL
                 s_bl.Volunteer.UpdateVolunteerDetails(volunteer.Id, volunteer);
 
+                // עדכון בזיכרון המקומי
                 CurrentVolunteer.FullAddress = VolunteerAddress;
 
                 MessageBox.Show("הכתובת עודכנה בהצלחה!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -293,7 +296,6 @@ namespace PL
             }
         }
 
-        // Property להצגת הפירוט המילולי
         public string SelectedCallDescription => SelectedCall?.Verbal_description ?? string.Empty;
     }
 }

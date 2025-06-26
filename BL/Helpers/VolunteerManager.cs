@@ -25,7 +25,7 @@ internal static class VolunteerManager
             var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.ID);
             var totalHandled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
             var totalCanceled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation || a!.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation);
-            var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
+            var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.OutOfRangeCancellation);
             var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTimeForTreatment == null)?.CallId;
             var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.ID && a.EndTimeForTreatment == null).FirstOrDefault();
             BO.CallInProgress? callInProgress = null;
@@ -100,7 +100,7 @@ internal static class VolunteerManager
 
         var totalHandled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
         var totalCanceled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation || a!.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation);
-        var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
+        var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.OutOfRangeCancellation);
         var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTimeForTreatment == null)?.CallId;
 
         return new BO.VolunteerInList

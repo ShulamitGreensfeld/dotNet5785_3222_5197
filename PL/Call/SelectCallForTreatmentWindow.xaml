@@ -23,12 +23,8 @@
             <ComboBox ItemsSource="{Binding CallTypeCollection}" SelectedItem="{Binding SelectedCallType ,Mode=TwoWay}" Width="120" Margin="0,0,20,0"/>
             <TextBlock Text="סנן לפי כתובת:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox Text="{Binding AddressFilter, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,20,0"/>
-            <TextBlock Text="סנן לפי תיאור:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBox Text="{Binding DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,20,0"/>
             <TextBlock Text="מיין לפי:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" Width="120" Margin="0,0,20,0"/>
-            <TextBlock Text="קבץ לפי:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ComboBox ItemsSource="{Binding GroupOptions}" SelectedItem="{Binding SelectedGroupOption}" Width="120"/>
         </StackPanel>
 
         <!-- Calls List -->
@@ -55,13 +51,14 @@
 
         <!-- Verbal Description of Selected Call -->
         <Border Grid.Row="2" Margin="0,0,0,10" Padding="10" BorderBrush="#FFB0BEC5" BorderThickness="1" CornerRadius="6" Background="#FFF8F8FF">
-            <TextBlock Text="{Binding SelectedCall.Verbal_description}"
-                       TextWrapping="Wrap"
-                       FontWeight="Bold"
-                       Foreground="DarkSlateBlue"
-                       FontSize="16"
-                       VerticalAlignment="Center"
-                       />
+            <TextBlock TextWrapping="Wrap"
+               FontWeight="Bold"
+               Foreground="DarkSlateBlue"
+               FontSize="16"
+               VerticalAlignment="Center">
+        <Run Text="Description: "/>
+        <Run Text="{Binding SelectedCall.Verbal_description}"/>
+            </TextBlock>
         </Border>
 
         <!-- Update Address -->
