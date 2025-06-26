@@ -1,16 +1,16 @@
 ﻿<Window x:Class="PL.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
         Title="Main Management Screen" Height="800" Width="1000"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Closed="MainWindow_Closed"
         Background="#EAF6F6"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen">
 
-    <!-- Global Styles and Resources -->
     <Window.Resources>
-        <!-- General style for modern turquoise square buttons -->
         <Style x:Key="ModernButton_Square" TargetType="Button">
             <Setter Property="Background" Value="#1ABC9C"/>
             <Setter Property="Foreground" Value="White"/>
@@ -30,14 +30,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                                Background="{TemplateBinding Background}"
-                                CornerRadius="6"
-                                BorderThickness="0"
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Margin="0"/>
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -79,51 +73,60 @@
 
         <!-- Clock Header Bar -->
         <DockPanel Grid.Row="0" LastChildFill="True" Margin="0 0 0 20">
-            <Label Content="{Binding CurrentTime, StringFormat=dd/MM/yyyy}" 
-                   FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+            <Label Content="{Binding CurrentTime, StringFormat=dd/MM/yyyy}" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
-                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Minute" Click="btnAdvanceMinute_Click" Margin="5 0" Height="30"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Hour" Click="btnAdvanceHour_Click" Margin="5 0" Height="30"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Day" Click="btnAdvanceDay_Click" Margin="5 0" Height="30"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Month" Click="btnAdvanceMonth_Click" Margin="5 0" Height="30"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Year" Click="btnAdvanceYear_Click" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Minute" Command="{Binding PromoteMinuteCommand}" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Hour" Command="{Binding PromoteHourCommand}" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Day" Command="{Binding PromoteDayCommand}" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Month" Command="{Binding PromoteMonthCommand}" Margin="5 0" Height="30"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Year" Command="{Binding PromoteYearCommand}" Margin="5 0" Height="30"/>
             </StackPanel>
         </DockPanel>
 
         <!-- Risk Range Update Section -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 20" VerticalAlignment="Center">
             <TextBox Width="200" Text="{Binding RiskRange, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Update Risk Range" Width="200" Click="btnUpdateRiskRange_Click"/>
+            <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Update Risk Range" Width="200" Command="{Binding UpdateRiskRangeCommand}"/>
         </StackPanel>
 
-        <!-- Main Operations Area -->
-        <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Width="320">
-            <Button Style="{StaticResource ModernButton_Square}" Content="📋 Open List View" Height="50" Margin="0 5" Width="250"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Height="50" Margin="0 5" Width="250" Click ="btnInitializeDatabase_Click"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="🔄 Reset Database" Height="50" Margin="0 5" Width="250" Click="btnResetDatabase_Click"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="🤝 Handle Volunteers" Height="50" Margin="0 5" Width="250" Click="btnVolunteers_Click"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="📞 Handle Calls" Height="50" Margin="0 5" Width="250" Click="btnCalls_Click"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="▶ Start Simulator" Height="50" Margin="0 5" Width="250" Click="btnStartSimulator_Click"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="⏹ Stop Simulator" Height="50" Margin="0 5" Width="250" Click="btnStopSimulator_Click"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
-                <TextBox Width="100" Text="{Binding SimulatorSpeed, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Set Speed" Width="100" Click="btnSetSpeed_Click"/>
+        <!-- Grid פנימי עם עמודות: כפתורים + סטטיסטיקה -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- צד ימין: כפתורי ניהול -->
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="320">
+                <Button Style="{StaticResource ModernButton_Square}" Content="📋 Open List View" Height="50" Margin="0 5" Width="250"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Height="50" Margin="0 5" Width="250" Command="{Binding InitializeDatabaseCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="🔄 Reset Database" Height="50" Margin="0 5" Width="250" Command="{Binding ResetDatabaseCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="🤝 Handle Volunteers" Height="50" Margin="0 5" Width="250" Command="{Binding OpenVolunteersCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="📞 Handle Calls" Height="50" Margin="0 5" Width="250" Command="{Binding OpenCallsCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="▶ Start Simulator" Height="50" Margin="0 5" Width="250" Command="{Binding StartSimulatorCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="⏹ Stop Simulator" Height="50" Margin="0 5" Width="250" Command="{Binding StopSimulatorCommand}"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
+                    <TextBox Width="100" Text="{Binding SimulatorSpeed, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
+                    <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Set Speed" Width="100" Command="{Binding SetSpeedCommand}"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-        <StackPanel Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Margin="0 20">
-            <TextBlock Text="Call Quantities by Status" FontSize="18" FontWeight="Bold" Margin="0 0 0 10" TextAlignment="Center"/>
-            <ListView ItemsSource="{Binding CallQuantities}" SelectionMode="Single" Margin="0 0 0 20">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                            <TextBlock Text="{Binding Status}" FontWeight="Bold" Width="200"/>
-                            <TextBlock Text="{Binding Quantity}" Width="50" TextAlignment="Right"/>
-                            <Button Content="View" Command="{Binding DataContext.ViewCallsCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
-                            CommandParameter="{Binding Status}" Style="{StaticResource ModernButton_Square}" Width="80" Margin="10 0"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+
+            <!-- צד שמאל: סטטיסטיקת קריאות -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Margin="40 20">
+                <TextBlock Text="Call Quantities by Status" FontSize="18" FontWeight="Bold" Margin="0 0 0 10" TextAlignment="Center"/>
+                <ListView ItemsSource="{Binding CallQuantities}" SelectionMode="Single" Margin="0 0 0 20">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="{Binding Status}" FontWeight="Bold" Width="200"/>
+                                <TextBlock Text="{Binding Quantity}" Width="50" TextAlignment="Right"/>
+                                <Button Content="View" Command="{Binding DataContext.ViewCallsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding Status}" Style="{StaticResource ModernButton_Square}" Width="80" Margin="10 0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
