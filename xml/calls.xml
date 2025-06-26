@@ -649,4 +649,48 @@
     <CallDescription>sdfgb</CallDescription>
     <ID>1058</ID>
   </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>fi</CallDescription>
+    <ID>1059</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 3</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-30T00:00:00</MaxTimeForClosing>
+    <CallDescription>sd</CallDescription>
+    <ID>1060</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mavo livna 5</Address>
+    <Latitude>43.826598</Latitude>
+    <Longitude>17.004501</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>rftg</CallDescription>
+    <ID>1061</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 4</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>bbbbbbbbb</CallDescription>
+    <ID>1062</ID>
+  </Call>
 </ArrayOfCall>

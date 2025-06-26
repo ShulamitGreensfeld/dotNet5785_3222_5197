@@ -241,31 +241,6 @@ namespace PL.Volunteer
                 s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
         }
 
-
-
-        private void OpenVolunteerCallsHistoryWindow(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
-                {
-                    MessageBox.Show("לא ניתן לפתוח היסטוריית קריאות. מתנדב לא קיים או לא נבחר.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                var callHistoryWindow = new VolunteerCallHistoryWindow(CurrentVolunteer.Id);
-                callHistoryWindow.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"שגיאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        public BO.VolunteerInList? SelectedVolunteer { get; set; }
-
-
-
         private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
         {
             // בדיקה אם יש למתנדב קריאה בטיפול
@@ -306,6 +281,5 @@ namespace PL.Volunteer
         public VolunteerWindow()
     : this(0) // מפנה לקונסטרקטור עם id = 0
         { }
-
     }
 }

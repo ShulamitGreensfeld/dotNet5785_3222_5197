@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Select Call for Treatment" Height="450" Width="800">
+        Title="Select Call for Treatment" Height="500" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Filters -->
             <RowDefinition Height="*"/>
             <!-- DataGrid -->
+            <RowDefinition Height="Auto"/>
+            <!-- Verbal Description -->
             <RowDefinition Height="Auto"/>
             <!-- Update Address -->
         </Grid.RowDefinitions>
@@ -21,12 +23,21 @@
             <ComboBox ItemsSource="{Binding CallTypeCollection}" SelectedItem="{Binding SelectedCallType ,Mode=TwoWay}" Width="120" Margin="0,0,20,0"/>
             <TextBlock Text="סנן לפי כתובת:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox Text="{Binding AddressFilter, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,20,0"/>
+            <TextBlock Text="סנן לפי תיאור:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding DescriptionFilter, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,20,0"/>
             <TextBlock Text="מיין לפי:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" Width="120"/>
+            <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" Width="120" Margin="0,0,20,0"/>
+            <TextBlock Text="קבץ לפי:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox ItemsSource="{Binding GroupOptions}" SelectedItem="{Binding SelectedGroupOption}" Width="120"/>
         </StackPanel>
 
         <!-- Calls List -->
-        <DataGrid Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding OpenCalls}" IsReadOnly="True" Margin="0,0,0,10">
+        <DataGrid Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding OpenCalls}"
+                  IsReadOnly="True"
+                  Margin="0,0,0,10"
+                  SelectedItem="{Binding SelectedCall, Mode=TwoWay}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="מזהה קריאה" Binding="{Binding Id}" />
                 <DataGridTextColumn Header="סוג קריאה" Binding="{Binding CallType}" />
@@ -42,12 +53,22 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Update Address + ReadOnly TextBox -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,10,0,0">
+        <!-- Verbal Description of Selected Call -->
+        <Border Grid.Row="2" Margin="0,0,0,10" Padding="10" BorderBrush="#FFB0BEC5" BorderThickness="1" CornerRadius="6" Background="#FFF8F8FF">
+            <TextBlock Text="{Binding SelectedCall.Verbal_description}"
+                       TextWrapping="Wrap"
+                       FontWeight="Bold"
+                       Foreground="DarkSlateBlue"
+                       FontSize="16"
+                       VerticalAlignment="Center"
+                       />
+        </Border>
+
+        <!-- Update Address -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,10,0,0">
             <TextBlock Text="עדכון כתובת:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBox Text="{Binding VolunteerAddress}" Width="200" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding VolunteerAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="0,0,10,0"/>
             <Button Content="עדכן" Command="{Binding UpdateAddressCommand}" Margin="0,0,20,0"/>
-            <TextBox Text="{Binding SomeProperty}" IsReadOnly="{Binding IsReadOnly}" Width="200"/>
         </StackPanel>
     </Grid>
 </Window>

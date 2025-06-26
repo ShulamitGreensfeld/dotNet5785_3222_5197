@@ -1,161 +1,6 @@
-﻿//using BlApi;
-//using BO;
-//using PL.Call;
-//using System;
-//using System.Collections.Generic;
-//using System.Collections.ObjectModel;
-//using System.Linq;
-//using System.Windows;
-//using System.Windows.Input;
-//using static BO.Enums;
-
-
-//namespace PL
-//{
-//    public partial class SelectCallForTreatmentWindow : Window
-//    {
-//        private static readonly IBl s_bl = Factory.Get();
-//        public BO.Volunteer CurrentVolunteer { get; set; }
-
-//        public SelectCallForTreatmentWindow(int volunteerId, string volunteerAddress, double maxDistance, BO.Volunteer currentVolunteer)
-//        {
-//            InitializeComponent();
-
-//            VolunteerId = volunteerId;
-//            VolunteerAddress = volunteerAddress;
-//            MaxDistance = maxDistance;
-//            CurrentVolunteer = currentVolunteer;
-
-//            SelectCallCommand = new RelayCommand(param => SelectCall(param));
-//            UpdateAddressCommand = new RelayCommand(param => UpdateAddress(param));
-
-//            OpenCalls = new ObservableCollection<OpenCallInList>();
-//            DataContext = this;
-
-//            QueryOpenCalls();
-//        }
-
-//        private void SelectCall(object parameter)
-//        {
-//            if (parameter is OpenCallInList call)
-//            {
-//                try
-//                {
-//                    s_bl.Call.SelectCallForTreatment(volunteerId: VolunteerId, callId: call.Id);
-
-//                    OpenCalls.Remove(call);
-
-//                    MessageBox.Show("הקריאה הוקצתה בהצלחה עבורך!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
-
-//                     this.Close();
-//                }
-//                catch (Exception ex)
-//                {
-//                    MessageBox.Show($"שגיאה בבחירת הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-//                }
-//            }
-//        }
-
-
-//        //private IEnumerable<OpenCallInList> LoadOpenCalls()
-//        //{
-//        //    return new List<OpenCallInList>
-//        //    {
-//        //        new OpenCallInList()
-//        //    };
-//        //}
-
-//        //private void UpdateCallStatus(int callId, string status)
-//        //{
-//        //    s_bl.Call.SelectCallForTreatment(volunteerId: VolunteerId, callId: callId);
-//        //}
-
-//        public IEnumerable<CallType> CallTypeCollection => Enum.GetValues(typeof(CallType)).Cast<CallType>();
-//        public IEnumerable<string> SortOptions => new[] { "Distance", "Type", "ID" };
-
-//        public CallType SelectedCallType { get; set; } = CallType.none;
-//        public string SelectedSortOption { get; set; } = "Distance";
-//        public string VolunteerAddress { get; set; }
-
-//        public ObservableCollection<OpenCallInList> OpenCalls { get; set; }
-
-//        public ICommand SelectCallCommand { get; }
-//        public ICommand UpdateAddressCommand { get; }
-
-//        public int VolunteerId { get; set; }
-//        public double MaxDistance { get; set; }
-
-//        private void QueryOpenCalls()
-//        {
-//            try
-//            {
-//                // שליפת הקריאות הפתוחות עבור המתנדב דרך BL
-//                var calls = s_bl.Call.GetOpenCallsForVolunteer(
-//                    VolunteerId,
-//                    SelectedCallType == CallType.none ? null : SelectedCallType,
-//                    SelectedSortOption == "Distance" ? BO.Enums.OpenCallInListFields.CallDistance :
-//                    SelectedSortOption == "Type" ? BO.Enums.OpenCallInListFields.CallType :
-//                    BO.Enums.OpenCallInListFields.Id
-//                )
-//                // סינון לפי מרחק מקסימלי של המתנדב
-//                .Where(call => call.CallDistance <= MaxDistance)
-//                .ToList();
-
-//                OpenCalls = new ObservableCollection<OpenCallInList>(calls);
-//            }
-//            catch (Exception ex)
-//            {
-//                MessageBox.Show($"שגיאה בטעינת הקריאות: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-//            }
-//        }
-
-
-//        private void UpdateAddress(object parameter)
-//        {
-//            try
-//            {
-//                s_bl.Volunteer.UpdateVolunteerDetails(VolunteerId, new BO.Volunteer { FullAddress = VolunteerAddress });
-//                QueryOpenCalls(); // עדכון הרשימה לאחר שינוי הכתובת
-//            }
-//            catch (Exception ex)
-//            {
-//                MessageBox.Show($"שגיאה בעדכון הכתובת: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-//            }
-//        }
-
-//        private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
-//        {
-//            if (CurrentVolunteer == null || CurrentVolunteer.CallInProgress == null)
-//            {
-//                MessageBox.Show("This volunteer has no current call assigned.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-//                return;
-//            }
-
-//            try
-//            {
-//                var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-
-//                var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance.Value, CurrentVolunteer)
-//                {
-//                    DataContext = currentCall,
-//                    IsReadOnly = true
-//                };
-//                selectCallWindow.ShowDialog();
-//            }
-
-//            catch (Exception ex)
-//            {
-//                MessageBox.Show($"An error occurred while retrieving the call details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-//            }
-//        }
-
-//        public bool IsReadOnly { get; set; }
-
-
-//    }
-//}
-using BlApi;
+﻿using BlApi;
 using BO;
+using DO;
 using PL.Call;
 using System;
 using System.Collections.Generic;
@@ -180,10 +25,10 @@ namespace PL
         {
             InitializeComponent();
 
-            VolunteerId = volunteerId;
-            VolunteerAddress = volunteerAddress;
-            MaxDistance = maxDistance;
             CurrentVolunteer = currentVolunteer;
+            VolunteerId = volunteerId;
+            VolunteerAddress = currentVolunteer?.FullAddress ?? string.Empty;
+            MaxDistance = maxDistance;
 
             SelectCallCommand = new RelayCommand(param => SelectCall(param));
             UpdateAddressCommand = new RelayCommand(param => UpdateAddress(param));
@@ -191,32 +36,13 @@ namespace PL
             OpenCalls = new ObservableCollection<OpenCallInList>();
             OpenCallsView = (ListCollectionView)CollectionViewSource.GetDefaultView(OpenCalls);
 
+            // הגדרת פילטר ומיון על ה-View
+            OpenCallsView.Filter = FilterCalls;
+            OpenCallsView.SortDescriptions.Add(new SortDescription("CallDistance", ListSortDirection.Ascending));
+
             DataContext = this;
 
-            
-
             QueryOpenCalls();
-        }
-
-        private void SelectCall(object parameter)
-        {
-            if (parameter is OpenCallInList call)
-            {
-                try
-                {
-                    s_bl.Call.SelectCallForTreatment(volunteerId: VolunteerId, callId: call.Id);
-
-                    OpenCalls.Remove(call);
-
-                    MessageBox.Show("הקריאה הוקצתה בהצלחה עבורך!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                    this.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"שגיאה בבחירת הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
         }
 
         public IEnumerable<CallType> CallTypeCollection => Enum.GetValues(typeof(CallType)).Cast<CallType>();
@@ -233,7 +59,7 @@ namespace PL
                 {
                     _selectedCallType = value;
                     OnPropertyChanged(nameof(SelectedCallType));
-                    QueryOpenCalls();
+                    OpenCallsView.Refresh();
                 }
             }
         }
@@ -248,7 +74,7 @@ namespace PL
                 {
                     _selectedSortOption = value;
                     OnPropertyChanged(nameof(SelectedSortOption));
-                    QueryOpenCalls();
+                    ApplySorting();
                 }
             }
         }
@@ -278,7 +104,22 @@ namespace PL
                 {
                     _addressFilter = value;
                     OnPropertyChanged(nameof(AddressFilter));
-                    QueryOpenCalls();
+                    OpenCallsView.Refresh();
+                }
+            }
+        }
+
+        private string _descriptionFilter = string.Empty;
+        public string DescriptionFilter
+        {
+            get => _descriptionFilter;
+            set
+            {
+                if (_descriptionFilter != value)
+                {
+                    _descriptionFilter = value;
+                    OnPropertyChanged(nameof(DescriptionFilter));
+                    OpenCallsView.Refresh();
                 }
             }
         }
@@ -291,7 +132,6 @@ namespace PL
 
         public int VolunteerId { get; set; }
         public double MaxDistance { get; set; }
-        public string VolunteerAddress { get; set; }
 
         private void QueryOpenCalls()
         {
@@ -299,33 +139,19 @@ namespace PL
             {
                 var calls = s_bl.Call.GetOpenCallsForVolunteer(
                     VolunteerId,
-                    SelectedCallType == CallType.none ? null : SelectedCallType,
-                    SelectedSortOption == "Distance" ? BO.Enums.OpenCallInListFields.CallDistance :
-                    SelectedSortOption == "Type" ? BO.Enums.OpenCallInListFields.CallType :
-                    BO.Enums.OpenCallInListFields.Id
-                );
-
-                // סינון לפי כתובת
-                if (!string.IsNullOrWhiteSpace(AddressFilter))
-                    calls = calls.Where(call => call.FullAddress != null && call.FullAddress.Contains(AddressFilter, StringComparison.OrdinalIgnoreCase));
-
-                // סינון לפי מרחק
-                calls = calls.Where(call => call.CallDistance <= MaxDistance);
-
-                // מיון
-                calls = SelectedSortOption switch
-                {
-                    "Distance" => calls.OrderBy(c => c.CallDistance),
-                    "Type" => calls.OrderBy(c => c.CallType),
-                    "ID" => calls.OrderBy(c => c.Id),
-                    _ => calls
-                };
+                    null,
+                    null  
+                )
+                .Where(call => call.CallDistance <= MaxDistance)
+                .ToList();
 
                 OpenCalls.Clear();
                 foreach (var call in calls)
                     OpenCalls.Add(call);
 
+                ApplySorting();
                 ApplyGrouping();
+                OpenCallsView.Refresh();
             }
             catch (Exception ex)
             {
@@ -333,20 +159,101 @@ namespace PL
             }
         }
 
+        private bool FilterCalls(object obj)
+        {
+            if (obj is not OpenCallInList call)
+                return false;
+
+            // סינון לפי סוג קריאה
+            if (SelectedCallType != CallType.none && call.CallType != SelectedCallType)
+                return false;
+
+            // סינון לפי כתובת
+            if (!string.IsNullOrWhiteSpace(AddressFilter) &&
+                (call.FullAddress == null || !call.FullAddress.Contains(AddressFilter, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            // סינון לפי תיאור
+            if (!string.IsNullOrWhiteSpace(DescriptionFilter) &&
+                (call.Verbal_description == null || !call.Verbal_description.Contains(DescriptionFilter, StringComparison.OrdinalIgnoreCase)))
+                return false;
+
+            // סינון לפי מרחק (כבר בוצע ב-QueryOpenCalls, אבל אפשר להשאיר ליתר ביטחון)
+            if (call.CallDistance > MaxDistance)
+                return false;
+
+            return true;
+        }
+
+        private void ApplySorting()
+        {
+            OpenCallsView.SortDescriptions.Clear();
+            switch (SelectedSortOption)
+            {
+                case "Distance":
+                    OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.CallDistance), ListSortDirection.Ascending));
+                    break;
+                case "Type":
+                    OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.CallType), ListSortDirection.Ascending));
+                    break;
+                case "ID":
+                    OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.Id), ListSortDirection.Ascending));
+                    break;
+            }
+            OpenCallsView.Refresh();
+        }
+
         private void ApplyGrouping()
         {
             OpenCallsView.GroupDescriptions.Clear();
             if (SelectedGroupOption == "CallType")
-                OpenCallsView.GroupDescriptions.Add(new PropertyGroupDescription("CallType"));
+                OpenCallsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(OpenCallInList.CallType)));
             else if (SelectedGroupOption == "FullAddress")
-                OpenCallsView.GroupDescriptions.Add(new PropertyGroupDescription("FullAddress"));
+                OpenCallsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(OpenCallInList.FullAddress)));
+            OpenCallsView.Refresh();
         }
 
+        private void SelectCall(object parameter)
+        {
+            if (parameter is OpenCallInList call)
+            {
+                try
+                {
+                    s_bl.Call.SelectCallForTreatment(volunteerId: VolunteerId, callId: call.Id);
+
+                    OpenCalls.Remove(call);
+
+                    MessageBox.Show("הקריאה הוקצתה בהצלחה עבורך!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"שגיאה בבחירת הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
         private void UpdateAddress(object parameter)
         {
             try
             {
-                s_bl.Volunteer.UpdateVolunteerDetails(VolunteerId, new BO.Volunteer { FullAddress = VolunteerAddress });
+                if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+                {
+                    MessageBox.Show("Volunteer ID is missing or invalid.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var volunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer.Id);
+
+                volunteer.FullAddress = VolunteerAddress;
+
+                volunteer.Password = null;
+
+                s_bl.Volunteer.UpdateVolunteerDetails(volunteer.Id, volunteer);
+
+                CurrentVolunteer.FullAddress = VolunteerAddress;
+
+                MessageBox.Show("הכתובת עודכנה בהצלחה!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+
                 QueryOpenCalls();
             }
             catch (Exception ex)
@@ -355,34 +262,38 @@ namespace PL
             }
         }
 
-        //private void ViewCurrentCallDetails_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (CurrentVolunteer == null || CurrentVolunteer.CallInProgress == null)
-        //    {
-        //        MessageBox.Show("This volunteer has no current call assigned.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-        //        return;
-        //    }
-
-        //    try
-        //    {
-        //        var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-
-        //        var selectCallWindow = new SelectCallForTreatmentWindow(CurrentVolunteer.Id, CurrentVolunteer.FullAddress ?? string.Empty, CurrentVolunteer.MaxDistance.Value, CurrentVolunteer)
-        //        {
-        //            DataContext = currentCall,
-        //            IsReadOnly = true
-        //        };
-        //        selectCallWindow.ShowDialog();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"An error occurred while retrieving the call details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        //    }
-        //}
-
-        public bool IsReadOnly { get; set; }
-
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private string _volunteerAddress;
+        public string VolunteerAddress
+        {
+            get => _volunteerAddress;
+            set
+            {
+                if (_volunteerAddress != value)
+                {
+                    _volunteerAddress = value;
+                    OnPropertyChanged(nameof(VolunteerAddress));
+                }
+            }
+        }
+        private OpenCallInList _selectedCall;
+        public OpenCallInList SelectedCall
+        {
+            get => _selectedCall;
+            set
+            {
+                if (_selectedCall != value)
+                {
+                    _selectedCall = value;
+                    OnPropertyChanged(nameof(SelectedCall));
+                    OnPropertyChanged(nameof(SelectedCallDescription));
+                }
+            }
+        }
+
+        // Property להצגת הפירוט המילולי
+        public string SelectedCallDescription => SelectedCall?.Verbal_description ?? string.Empty;
     }
 }
