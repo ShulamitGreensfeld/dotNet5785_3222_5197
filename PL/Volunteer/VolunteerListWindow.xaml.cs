@@ -64,10 +64,6 @@ namespace PL.Volunteer
             }
         }
 
-
-        // Observer method that triggers the list query.
-        private void VolunteerListObserver() => QueryVolunteerList();
-
         // Constructor - Initializes the volunteer list window.
         public VolunteerListWindow()
         {
@@ -175,8 +171,5 @@ namespace PL.Volunteer
                 SelectedVolunteer = null; // איפוס אם לא נבחר מתנדב
             }
         }
-
-
-
     }
 }

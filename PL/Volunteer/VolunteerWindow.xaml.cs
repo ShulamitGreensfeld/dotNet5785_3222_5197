@@ -91,7 +91,6 @@ namespace PL.Volunteer
                 {
                     var oldVolunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer!.Id);
 
-                    // אם השדה ריק, שמור את הסיסמה הישנה
                     if (string.IsNullOrWhiteSpace(CurrentVolunteer.Password))
                         CurrentVolunteer.Password = null;
 
@@ -120,9 +119,9 @@ namespace PL.Volunteer
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
-{
-    if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
-        return;
+        {
+            if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
+                return;
 
             try
             {

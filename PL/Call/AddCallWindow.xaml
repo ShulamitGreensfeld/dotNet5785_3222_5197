@@ -11,11 +11,7 @@
             <RowDefinition Height="Auto"/>
             <!-- Description -->
             <RowDefinition Height="Auto"/>
-            <!-- Address -->
-            <RowDefinition Height="Auto"/>
-            <!-- Latitude -->
-            <RowDefinition Height="Auto"/>
-            <!-- Longitude -->
+            <!-- Full Address -->
             <RowDefinition Height="Auto"/>
             <!-- Opening Time -->
             <RowDefinition Height="Auto"/>
@@ -24,32 +20,39 @@
             <!-- Buttons -->
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="0,0,0,5">
+        <!-- Call Type -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,5">
             <TextBlock Text="Call Type:" />
-            <ComboBox ItemsSource="{Binding CallTypeCollection}" SelectedIndex="0"/>
+            <ComboBox ItemsSource="{Binding CallTypeCollection}" 
+                      SelectedItem="{Binding SelectedCallType}" />
         </StackPanel>
 
+        <!-- Description -->
         <StackPanel Grid.Row="1" Margin="0,0,0,5">
             <TextBlock Text="Description:" />
-            <TextBox />
+            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
+        <!-- Full Address -->
         <StackPanel Grid.Row="2" Margin="0,0,0,5">
             <TextBlock Text="Full Address:" />
-            <TextBox />
+            <TextBox Text="{Binding FullAddress, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="5" Margin="0,0,0,5">
+        <!-- Opening Time -->
+        <StackPanel Grid.Row="3" Margin="0,0,0,5">
             <TextBlock Text="Opening Time:" />
-            <DatePicker x:Name="openingDatePicker" IsEnabled="False"/>
+            <DatePicker SelectedDate="{Binding OpeningDate}" IsEnabled="False"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="6" Margin="0,0,0,5">
+        <!-- Max Finish Time -->
+        <StackPanel Grid.Row="4" Margin="0,0,0,5">
             <TextBlock Text="Max Finish Time:" />
-            <DatePicker x:Name="closingDatePicker"/>
+            <DatePicker SelectedDate="{Binding MaxFinishDate}" />
         </StackPanel>
 
-        <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+        <!-- Buttons -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
             <Button Content="Add" Width="75" Margin="5" Click="AddButton_Click"/>
             <Button Content="Cancel" Width="75" Margin="5" Click="CancelButton_Click"/>
         </StackPanel>

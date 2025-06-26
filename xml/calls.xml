@@ -803,4 +803,15 @@
     <CallDescription>rctyubi</CallDescription>
     <ID>1072</ID>
   </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>קרעיח</CallDescription>
+    <ID>1073</ID>
+  </Call>
 </ArrayOfCall>
