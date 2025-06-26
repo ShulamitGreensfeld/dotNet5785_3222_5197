@@ -253,20 +253,6 @@
     <Password>cbcce04d3824b03bb3d1ae423ad33b705ed3ecd201ca65e34435af73ca7aa4ae</Password>
   </Volunteer>
   <Volunteer>
-    <Id>327548194</Id>
-    <Name>Michal Goldstein</Name>
-    <Phone>052-8901234</Phone>
-    <Email>michalgoldstein@example.com</Email>
-    <IsActive>false</IsActive>
-    <Role>Volunteer</Role>
-    <Address>88 Allenby St, Tel Aviv</Address>
-    <Latitude>32.062991</Latitude>
-    <Longitude>34.772842</Longitude>
-    <LargestDistance>40</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>87a799d62344ec7bc09edc879db4ba49f903e1d41815470f21aafbd0232ca22f</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>215525197</Id>
     <Name>Yaara Levy</Name>
     <Phone>052-2345678</Phone>
@@ -279,5 +265,19 @@
     <LargestDistance>500000000</LargestDistance>
     <DistanceType>DrivingDistance</DistanceType>
     <Password>fcf54686715f0c0e913801274a47380b6681da8440a9652cb92c1261e3af35e6</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>327548194</Id>
+    <Name>Michal Goldstein</Name>
+    <Phone>052-8901234</Phone>
+    <Email>michalgoldstein@example.com</Email>
+    <IsActive>true</IsActive>
+    <Role>Volunteer</Role>
+    <Address>88 Allenby St, Tel Aviv</Address>
+    <Latitude>32.062991</Latitude>
+    <Longitude>34.772842</Longitude>
+    <LargestDistance>40</LargestDistance>
+    <DistanceType>DrivingDistance</DistanceType>
+    <Password>87a799d62344ec7bc09edc879db4ba49f903e1d41815470f21aafbd0232ca22f</Password>
   </Volunteer>
 </ArrayOfVolunteer>
