@@ -59,7 +59,7 @@ namespace PL
             InitializeComponent();
             OpeningDate = s_bl.Admin.GetClock().Date;
             MaxFinishDate = OpeningDate;
-            DataContext = this;
+            //DataContext = this;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -81,6 +81,7 @@ namespace PL
                 s_bl.Call.AddCall(newCall);
                 MessageBox.Show("הקריאה נוספה בהצלחה!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
                 DialogResult = true;
+                Close();
             }
             catch (Exception ex)
             {
@@ -94,3 +95,45 @@ namespace PL
         }
     }
 }
+
+//using System;
+//using System.Windows;
+//using BlApi;
+//using PL.ViewModels;
+
+//namespace PL
+//{
+//    public partial class AddCallWindow : Window
+//    {
+//        private static readonly IBl s_bl = Factory.Get();
+//        private readonly AddCallViewModel _vm;
+
+//        public AddCallWindow()
+//        {
+//            InitializeComponent();
+//            _vm = new AddCallViewModel();
+//            DataContext = _vm; // לא Self
+//        }
+
+//        private void AddButton_Click(object sender, RoutedEventArgs e)
+//        {
+//            try
+//            {
+//                var newCall = _vm.CreateCall();
+//                s_bl.Call.AddCall(newCall);
+//                MessageBox.Show("הקריאה נוספה בהצלחה!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+//                DialogResult = true;
+//                Close();
+//            }
+//            catch (Exception ex)
+//            {
+//                MessageBox.Show($"אירעה שגיאה בעת הוספת הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+//            }
+//        }
+
+//        private void CancelButton_Click(object sender, RoutedEventArgs e)
+//        {
+//            DialogResult = false;
+//        }
+//    }
+//}

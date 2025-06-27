@@ -57,20 +57,6 @@
     <Password>baf281a9885b44e0cc482fea0d9f9f7d70fc93f8b26a4d1201e5d8c830fd297f</Password>
   </Volunteer>
   <Volunteer>
-    <Id>328128061</Id>
-    <Name>Yael Peretz</Name>
-    <Phone>052-6789012</Phone>
-    <Email>yaelperetz@example.com</Email>
-    <IsActive>true</IsActive>
-    <Role>Volunteer</Role>
-    <Address>1 HaNassi Blvd, Haifa</Address>
-    <Latitude>32.0782</Latitude>
-    <Longitude>34.7839</Longitude>
-    <LargestDistance>77</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>9fff7015a7ec5d5a9aa28683e42330d043c5748ab51aac63380f03cdfa41578b</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>215086950</Id>
     <Name>Amir Kaplan</Name>
     <Phone>052-9012345</Phone>
@@ -139,20 +125,6 @@
     <LargestDistance>1</LargestDistance>
     <DistanceType>AirDistance</DistanceType>
     <Password>258ff7e8788fe82f404151df3a5adbfd08a49f06d8a73e3706ca63a76d3af01a</Password>
-  </Volunteer>
-  <Volunteer>
-    <Id>327786612</Id>
-    <Name>Ruth Ziv</Name>
-    <Phone>052-4569876</Phone>
-    <Email>ruthziv@example.com</Email>
-    <IsActive>true</IsActive>
-    <Role>Volunteer</Role>
-    <Address>25 Weizmann St, Kfar Saba</Address>
-    <Latitude>32.1311</Latitude>
-    <Longitude>34.7927</Longitude>
-    <LargestDistance>80</LargestDistance>
-    <DistanceType>AirDistance</DistanceType>
-    <Password>2a9895dfb27ca86b768ef31d3b87cac1db39c87ed39174ee31acd71ce849c7f8</Password>
   </Volunteer>
   <Volunteer>
     <Id>328306550</Id>
@@ -253,20 +225,6 @@
     <Password>cbcce04d3824b03bb3d1ae423ad33b705ed3ecd201ca65e34435af73ca7aa4ae</Password>
   </Volunteer>
   <Volunteer>
-    <Id>215525197</Id>
-    <Name>Yaara Levy</Name>
-    <Phone>052-2345678</Phone>
-    <Email>yaaralevy@example.com</Email>
-    <IsActive>false</IsActive>
-    <Role>Volunteer</Role>
-    <Address>120 Dizengoff St, Tel Aviv</Address>
-    <Latitude>32.084319</Latitude>
-    <Longitude>34.781364</Longitude>
-    <LargestDistance>500000000</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
-    <Password>fcf54686715f0c0e913801274a47380b6681da8440a9652cb92c1261e3af35e6</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>327548194</Id>
     <Name>Michal Goldstein</Name>
     <Phone>052-8901234</Phone>
@@ -279,5 +237,47 @@
     <LargestDistance>40</LargestDistance>
     <DistanceType>DrivingDistance</DistanceType>
     <Password>87a799d62344ec7bc09edc879db4ba49f903e1d41815470f21aafbd0232ca22f</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>327786612</Id>
+    <Name>Ruth Ziv</Name>
+    <Phone>052-4569876</Phone>
+    <Email>ruthziv@example.com</Email>
+    <IsActive>false</IsActive>
+    <Role>Volunteer</Role>
+    <Address>25 Weizmann St, Kfar Saba</Address>
+    <Latitude>32.175</Latitude>
+    <Longitude>34.90694</Longitude>
+    <LargestDistance>80</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>2a9895dfb27ca86b768ef31d3b87cac1db39c87ed39174ee31acd71ce849c7f8</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>328128061</Id>
+    <Name>Yael Peretz</Name>
+    <Phone>052-6789012</Phone>
+    <Email>yaelperetz@example.com</Email>
+    <IsActive>false</IsActive>
+    <Role>Volunteer</Role>
+    <Address>1 HaNassi Blvd, Haifa</Address>
+    <Latitude>32.792761</Latitude>
+    <Longitude>34.995336</Longitude>
+    <LargestDistance>77</LargestDistance>
+    <DistanceType>AirDistance</DistanceType>
+    <Password>9fff7015a7ec5d5a9aa28683e42330d043c5748ab51aac63380f03cdfa41578b</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>215525197</Id>
+    <Name>Yaara Levy</Name>
+    <Phone>052-2345678</Phone>
+    <Email>yaaralevy@example.com</Email>
+    <IsActive>true</IsActive>
+    <Role>Volunteer</Role>
+    <Address>mevo livna 4</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <LargestDistance>500000000</LargestDistance>
+    <DistanceType>DrivingDistance</DistanceType>
+    <Password>fcf54686715f0c0e913801274a47380b6681da8440a9652cb92c1261e3af35e6</Password>
   </Volunteer>
 </ArrayOfVolunteer>

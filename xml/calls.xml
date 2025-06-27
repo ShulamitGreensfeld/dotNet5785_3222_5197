@@ -814,4 +814,37 @@
     <CallDescription>קרעיח</CallDescription>
     <ID>1073</ID>
   </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T14:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
+    <CallDescription>efrgthyjyhtg</CallDescription>
+    <ID>1075</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T14:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-27T00:00:00</MaxTimeForClosing>
+    <CallDescription>tvybuji</CallDescription>
+    <ID>1076</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-09-03T00:00:00</MaxTimeForClosing>
+    <CallDescription>tgyhu</CallDescription>
+    <ID>1077</ID>
+  </Call>
 </ArrayOfCall>

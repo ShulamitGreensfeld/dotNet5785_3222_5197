@@ -21,9 +21,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="6"
-                                SnapsToDevicePixels="True">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -56,9 +54,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    CornerRadius="12"
-                                    SnapsToDevicePixels="True">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="12">
                                 <ToggleButton Name="ToggleButton"
                                               Background="{TemplateBinding Background}"
                                               Foreground="{TemplateBinding Foreground}"
@@ -75,7 +71,7 @@
                                    IsOpen="{TemplateBinding IsDropDownOpen}"
                                    AllowsTransparency="True"
                                    Focusable="False">
-                                <Border Background="White" CornerRadius="12" SnapsToDevicePixels="True">
+                                <Border Background="White" CornerRadius="12">
                                     <ScrollViewer>
                                         <ItemsPresenter/>
                                     </ScrollViewer>
@@ -99,33 +95,25 @@
         <TextBlock Text="Volunteer List" FontSize="28" FontWeight="Bold"
                    Foreground="#117A8B" Margin="0,20,0,20" HorizontalAlignment="Center"/>
 
-        <!-- Combo box to filter the call type -->
+        <!-- Filter ComboBox -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <!-- Label for the ComboBox -->
             <TextBlock Text="📋 Sort:" FontSize="14" FontWeight="Bold" Foreground="#117A8B" VerticalAlignment="Center" Margin="0,0,5,0"/>
-
-            <!-- ComboBox for sorting -->
             <ComboBox Width="180" Height="30"
-              ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"
-              SelectedItem="{Binding SelectedCallType, Mode=TwoWay}"
-              SelectionChanged="ComboBox_SelectionChanged"
-              Style="{StaticResource ModernComboBox}">
-            </ComboBox>
+                      ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"
+                      SelectedItem="{Binding SelectedCallType, Mode=TwoWay}"
+                      Style="{StaticResource ModernComboBox}"/>
         </StackPanel>
-
-
 
         <!-- Volunteer List -->
         <ListView Grid.Row="1"
                   ItemsSource="{Binding VolunteerList}"
                   SelectedItem="{Binding SelectedVolunteer, Mode=TwoWay}"
                   MouseDoubleClick="ListView_MouseDoubleClick"
-                  SelectionChanged="ListView_SelectionChanged"
                   Margin="20,20,-82,20"
                   Background="White"
                   BorderBrush="#85C1B9"
                   BorderThickness="1"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" RenderTransformOrigin="0.5,0.5">
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -141,7 +129,6 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="" Margin="0,0,5,0"/>
                                     <TextBlock Text="{Binding Id}"/>
                                 </StackPanel>
                             </DataTemplate>
@@ -225,7 +212,7 @@
             </ListView.View>
         </ListView>
 
-        <!-- Add Button -->
+        <!-- Add Volunteer Button -->
         <Button Content="➕ Add Volunteer" Grid.Row="2"
                 HorizontalAlignment="Center" Height="45" Width="180"
                 Margin="0,20,0,20"

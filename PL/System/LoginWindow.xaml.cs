@@ -70,8 +70,13 @@ namespace PL
                     else
                         new VolunteerSelfWindow(parsedId).Show();
                 }
-
-                Application.Current.Windows[0]?.Close();
+                UserId = "";
+                Password = "";
+                ErrorMessage = "";
+                OnPropertyChanged(nameof(UserId));
+                OnPropertyChanged(nameof(Password));
+                OnPropertyChanged(nameof(ErrorMessage));
+                //Application.Current.Windows[0]?.Close();
             }
             catch (BO.BlDoesNotExistException)
             {
