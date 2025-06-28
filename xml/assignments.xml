@@ -528,4 +528,12 @@
     <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2065</ID>
   </Assignment>
+  <Assignment>
+    <CallId>1075</CallId>
+    <VolunteerId>214323222</VolunteerId>
+    <EntryTimeForTreatment>2027-08-24T15:26:09</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+    <TypeOfFinishTreatment xsi:nil="true" />
+    <ID>2066</ID>
+  </Assignment>
 </ArrayOfAssignment>
