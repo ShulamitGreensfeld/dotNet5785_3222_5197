@@ -1,4 +1,5 @@
 ﻿using BO;
+using DO;
 using Helpers;
 
 
@@ -75,7 +76,7 @@ internal class CallImplementation : BlApi.ICall
             boCall.Longitude = longitude;
             DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Create(doCall);
-            CallManager.SendEmailWhenCallOpened(boCall);
+            CallManager.SendEmailWhenCallOpenedAsync(boCall).GetAwaiter().GetResult();
             CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalAlreadyExistsException ex)
@@ -195,15 +196,29 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="callTypeFilter">Optional filter for the type of calls.</param>
     /// <param name="sortField">Optional field by which to sort the list of calls.</param>
     /// <returns>A list of open calls for the volunteer.</returns>
-    public IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null)
+    public async Task<IEnumerable<BO.OpenCallInList>> GetOpenCallsForVolunteerAsync(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null)
     {
         try
         {
             var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
-            var openCalls = _dal.Call.ReadAll()
+            BO.Enums.DistanceTypes volunteerDistanceType = (BO.Enums.DistanceTypes)volunteer.DistanceType;
+
+            var calls = _dal.Call.ReadAll()
                 .Where(c =>
-                    (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk))
-                .Select(c => new BO.OpenCallInList
+                    (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk) &&
+                    (callTypeFilter == null || (BO.Enums.CallType)c.TypeOfCall == callTypeFilter));
+
+            var callTasks = calls.Select(async c =>
+            {
+                double distance = await Tools.CalculateDistanceAsync(
+                    volunteerDistanceType,
+                    volunteer.Latitude ?? 0.0,
+                    volunteer.Longitude ?? 0.0,
+                    c.Latitude,
+                    c.Longitude
+                );
+
+                return new BO.OpenCallInList
                 {
                     Id = c.ID,
                     CallType = (BO.Enums.CallType)c.TypeOfCall,
@@ -211,11 +226,15 @@ internal class CallImplementation : BlApi.ICall
                     FullAddress = c.Address,
                     Start_time = c.OpeningTime,
                     Max_finish_time = c.MaxTimeForClosing,
-                    CallDistance = Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, c.Latitude, c.Longitude)
-                });
+                    CallDistance = distance
+                };
+            });
+
+            var result = await Task.WhenAll(callTasks);
+
             return sortField.HasValue
-                ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString()!)?.GetValue(c))
-                : openCalls.OrderBy(c => c.Id);
+                ? result.OrderBy(c => c.GetType().GetProperty(sortField.ToString()!)?.GetValue(c))
+                : result.OrderBy(c => c.Id);
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -256,7 +275,9 @@ internal class CallImplementation : BlApi.ICall
             _dal.Assignment.Update(updatedAssignment);
             CallManager.SendEmailToVolunteer(volunteer, assignment);
             CallManager.Observers.NotifyItemUpdated(updatedAssignment.ID);  //stage 5
-            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
+            CallManager.Observers.NotifyListUpdated(); //stage 5
+            VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+            CallManager.Observers.NotifyItemUpdated(assignment.CallId);
         }
         catch (BO.BlUnauthorizedException ex)
         {
@@ -290,6 +311,8 @@ internal class CallImplementation : BlApi.ICall
             _dal.Assignment.Update(newAssignment);
             CallManager.Observers.NotifyItemUpdated(newAssignment.ID);  //stage 5
             CallManager.Observers.NotifyListUpdated(); //stage 5  
+            VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+            CallManager.Observers.NotifyItemUpdated(assignment.CallId);
         }
         catch (BO.BlUnauthorizedException ex)
         {
@@ -396,6 +419,9 @@ internal class CallImplementation : BlApi.ICall
                 TypeOfFinishTreatment = null
             };
             _dal.Assignment.Create(newAssignment);
+            VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
+            CallManager.Observers.NotifyItemUpdated(callId);
+            CallManager.Observers.NotifyListUpdated();
         }
         catch (DO.DalDoesNotExistException ex)
         {

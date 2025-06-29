@@ -830,6 +830,17 @@
     <Address>mevo livna 5</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-09-03T00:00:00</MaxTimeForClosing>
+    <CallDescription>tgyhu</CallDescription>
+    <ID>1077</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
     <OpeningTime>2027-08-24T14:26:09</OpeningTime>
     <RiskRange xsi:nil="true" />
     <MaxTimeForClosing>2027-08-27T00:00:00</MaxTimeForClosing>
@@ -843,8 +854,162 @@
     <Longitude>35.2213043</Longitude>
     <OpeningTime>2027-08-24T15:26:09</OpeningTime>
     <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>חלך</CallDescription>
+    <ID>1078</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Mevo Livne 5, Beit El</Address>
+    <Latitude>48.55889</Latitude>
+    <Longitude>1.615377</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-09-01T00:00:00</MaxTimeForClosing>
+    <CallDescription>קראטיוחל</CallDescription>
+    <ID>1080</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Mevo Livne 5, Beit El</Address>
+    <Latitude>48.55889</Latitude>
+    <Longitude>1.615377</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-09-01T00:00:00</MaxTimeForClosing>
+    <CallDescription>קראטיוחל</CallDescription>
+    <ID>1081</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Derekh Ramal'ah, Ramallah</Address>
+    <Latitude>32.072952</Latitude>
+    <Longitude>34.917167</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>hijokpl</CallDescription>
+    <ID>1082</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Mevo Livne 5, Beit El</Address>
+    <Latitude>48.55889</Latitude>
+    <Longitude>1.615377</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>derfghj</CallDescription>
+    <ID>1083</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>Mevo Livne 5, Beit El</Address>
+    <Latitude>48.55889</Latitude>
+    <Longitude>1.615377</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-30T00:00:00</MaxTimeForClosing>
+    <CallDescription>aaaaaaaaaaaaaaa</CallDescription>
+    <ID>1084</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
+    <CallDescription>sdf</CallDescription>
+    <ID>1085</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>יחם'</CallDescription>
+    <ID>1086</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-09-02T00:00:00</MaxTimeForClosing>
+    <CallDescription>crtvyb</CallDescription>
+    <ID>1087</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
     <MaxTimeForClosing>2027-09-03T00:00:00</MaxTimeForClosing>
-    <CallDescription>tgyhu</CallDescription>
-    <ID>1077</ID>
+    <CallDescription>bbbbbbbbbbbbbbbb</CallDescription>
+    <ID>1088</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>עכג</CallDescription>
+    <ID>1089</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>ghjkl</CallDescription>
+    <ID>1090</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>ghjkl</CallDescription>
+    <ID>1091</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>גכעיחל</CallDescription>
+    <ID>1092</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
+    <CallDescription>rcvtby</CallDescription>
+    <ID>1093</ID>
   </Call>
 </ArrayOfCall>

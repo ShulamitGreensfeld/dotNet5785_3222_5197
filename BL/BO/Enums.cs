@@ -55,7 +55,8 @@ public class Enums
         opened,
         closed,
         expired,
-        opened_at_risk
+        opened_at_risk,
+        none
     }
 
     public enum VolunteerInListFields

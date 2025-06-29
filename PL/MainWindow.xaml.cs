@@ -355,6 +355,7 @@ namespace PL
         private bool _isSimulatorRunning = false;
         private int _simulatorSpeed = 1;
         private CancellationTokenSource? _cancellationTokenSource;
+        private readonly Action _refreshCallQuantities;
 
         public int SimulatorSpeed
         {
@@ -432,10 +433,12 @@ namespace PL
             StopSimulatorCommand = new RelayCommand(_ => StopSimulator());
             SetSpeedCommand = new RelayCommand(_ => SetSimulatorSpeed());
 
-            RiskRange = (int)s_bl.Admin.GetRiskTimeRange().TotalDays / 365;
+        RiskRange = (int)s_bl.Admin.GetRiskTimeRange().TotalDays / 365;
             CurrentTime = s_bl.Admin.GetClock();
             s_bl.Admin.AddClockObserver(clockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
+            _refreshCallQuantities = LoadCallQuantities;
+            s_bl.Call.AddObserver(_refreshCallQuantities);
             LoadCallQuantities();
             DataContext = this;
         }
@@ -466,10 +469,10 @@ namespace PL
 
         private void ViewCallsByStatus(object parameter)
         {
-            if (parameter is CallStatus status)
-                new FilteredCallManagementWindow(status).Show();
+            if (parameter is BO.Enums.CallStatus status)
+                new CallManagementWindow(status).Show();
             else
-                ShowError("Invalid status selected.");
+                MessageBox.Show("Invalid status selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void StartSimulator()
@@ -529,11 +532,17 @@ namespace PL
 
         private void ConfirmAndRun(string actionName, Action dbAction)
         {
-            var result = MessageBox.Show($"Are you sure you want to {actionName.ToLower()} the database?", $"Confirm {actionName}", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var result = MessageBox.Show(
+                $"Are you sure you want to {actionName.ToLower()} the database?",
+                $"Confirm {actionName}",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
             if (result == MessageBoxResult.Yes)
             {
                 try
                 {
+                    Mouse.OverrideCursor = Cursors.Wait; // 🕐 שינוי לאייקון שעון חול
                     dbAction();
                     MessageBox.Show($"Database {actionName.ToLower()}ed successfully.", "Success");
                 }
@@ -541,8 +550,13 @@ namespace PL
                 {
                     ShowError(ex.Message);
                 }
+                finally
+                {
+                    Mouse.OverrideCursor = null; // ✅ החזרת סמן ברירת מחדל
+                }
             }
         }
+
 
         private void OpenWindow<T>() where T : Window, new()
         {
@@ -568,6 +582,8 @@ namespace PL
             base.OnClosed(e);
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+            s_bl.Call.RemoveObserver(_refreshCallQuantities);
+            App.IsAdminLoggedIn = false;
         }
     }
 }

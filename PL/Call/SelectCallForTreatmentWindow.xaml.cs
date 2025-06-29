@@ -26,6 +26,8 @@ namespace PL
 
         public List<string> SortOptions { get; } = new() { "Distance", "Type", "ID" };
         public List<string> GroupOptions { get; } = new() { "None", "CallType", "FullAddress" };
+        private static readonly HashSet<int> _openCallIds = new();
+
 
         public SelectCallForTreatmentWindow(int volunteerId, string volunteerAddress, double maxDistance, BO.Volunteer currentVolunteer)
         {
@@ -42,7 +44,7 @@ namespace PL
             OpenCalls = new ObservableCollection<OpenCallInList>();
             OpenCallsView = (ListCollectionView)CollectionViewSource.GetDefaultView(OpenCalls);
 
-            // הגדרת פילטר ומיון על ה-View
+            // Setting up a filter and sorting on the View 
             OpenCallsView.Filter = FilterCalls;
             OpenCallsView.SortDescriptions.Add(new SortDescription("CallDistance", ListSortDirection.Ascending));
 
@@ -139,12 +141,11 @@ namespace PL
         {
             try
             {
-                var calls = s_bl.Call.GetOpenCallsForVolunteer(
-                    VolunteerId,
-                    null,
-                    null  
-                )
-                //.Where(call => call.CallDistance <= MaxDistance)
+                var calls = s_bl.Call.GetOpenCallsForVolunteerAsync(
+                VolunteerId,
+                null,
+                null
+                ).GetAwaiter().GetResult()
                 .ToList();
 
                 OpenCalls.Clear();
@@ -157,7 +158,7 @@ namespace PL
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"שגיאה בטעינת הקריאות: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading calls: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -166,16 +167,16 @@ namespace PL
             if (obj is not OpenCallInList call)
                 return false;
 
-            // סינון לפי סוג קריאה
+            // Filter by call type
             if (SelectedCallType != CallType.none && call.CallType != SelectedCallType)
                 return false;
 
-            // סינון לפי כתובת
+            // Filter by address
             if (!string.IsNullOrWhiteSpace(AddressFilter) &&
-                (call.FullAddress == null || !call.FullAddress.Contains(AddressFilter, StringComparison.OrdinalIgnoreCase)))
+            (call.FullAddress == null || !call.FullAddress.Contains(AddressFilter, StringComparison.OrdinalIgnoreCase)))
                 return false;
 
-            // סינון לפי מרחק (כבר בוצע ב-QueryOpenCalls, אבל אפשר להשאיר ליתר ביטחון)
+            // Filter by distance (already done in QueryOpenCalls, but can be left for safety)
             if (call.CallDistance > MaxDistance)
                 return false;
 
@@ -190,10 +191,10 @@ namespace PL
                 case "Distance":
                     OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.CallDistance), ListSortDirection.Ascending));
                     break;
-                case "Type":
+            case "Type":
                     OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.CallType), ListSortDirection.Ascending));
                     break;
-                case "ID":
+            case "ID":
                     OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.Id), ListSortDirection.Ascending));
                     break;
             }
@@ -220,53 +221,54 @@ namespace PL
 
                     OpenCalls.Remove(call);
 
-                    MessageBox.Show("הקריאה הוקצתה בהצלחה עבורך!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("The call has been successfully assigned for you!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.DialogResult = true;
                     this.Close();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"שגיאה בבחירת הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"Error selecting call: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+
         private void UpdateAddress(object parameter)
         {
             try
             {
                 if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
                 {
-                    MessageBox.Show("Volunteer ID is missing or invalid.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Volunteer ID is missing or invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                // שליפת כל פרטי המתנדב מה-BL
+                // Retrieve all volunteer details from the BL
                 var volunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer.Id);
 
-                // עדכון כתובת בלבד
+                // Update address only
                 volunteer.FullAddress = VolunteerAddress;
 
-                // נטרול הסיסמה כדי שה-BL לא ידרוש הצפנה/ולידציה
+                // Disable password so that the BL does not require encryption/validation
                 volunteer.Password = null;
 
-                // שליחת כל האובייקט ל-BL
+                // Send the entire object to BL
                 s_bl.Volunteer.UpdateVolunteerDetails(volunteer.Id, volunteer);
 
-                // עדכון בזיכרון המקומי
+                // Update in local memory
                 CurrentVolunteer.FullAddress = VolunteerAddress;
 
-                MessageBox.Show("הכתובת עודכנה בהצלחה!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Address updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 QueryOpenCalls();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"שגיאה בעדכון הכתובת: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error updating address: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private string _volunteerAddress;
         public string VolunteerAddress

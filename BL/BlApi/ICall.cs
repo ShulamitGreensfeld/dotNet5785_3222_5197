@@ -58,7 +58,7 @@
         /// <param name="callTypeFilter">An optional filter to limit calls by type.</param>
         /// <param name="sortField">An optional field to sort the open calls by.</param>
         /// <returns>A collection of open calls assigned to the volunteer.</returns>
-        IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null);
+        //IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null);
 
         /// <summary>
         /// Marks a call as completed by a specific volunteer and assignment.
@@ -80,5 +80,7 @@
         /// <param name="volunteerId">The ID of the volunteer selecting the call.</param>
         /// <param name="callId">The ID of the call being selected for treatment.</param>
         void SelectCallForTreatment(int volunteerId, int callId);
+
+        Task<IEnumerable<BO.OpenCallInList>> GetOpenCallsForVolunteerAsync(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null);
     }
 }

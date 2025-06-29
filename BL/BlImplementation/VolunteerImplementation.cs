@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using DO;
 using Helpers;
 using System.Net;
 
@@ -22,6 +23,7 @@ internal class VolunteerImplementation : IVolunteer
         {
             var volunteerDO = _dal.Volunteer.Read(volunteerId) ??
                 throw new BO.BlNotFoundException($"Volunteer with ID={volunteerId} does not exist.");
+            BO.Enums.DistanceTypes volunteerDistanceType = (BO.Enums.DistanceTypes)volunteerDO.DistanceType;
 
             var currentAssignment = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment == null).FirstOrDefault();
 
@@ -41,7 +43,7 @@ internal class VolunteerImplementation : IVolunteer
                         Opening_time = callDetails.OpeningTime,
                         Max_finish_time = callDetails.MaxTimeForClosing ?? throw new InvalidOperationException("MaxTimeForClosing cannot be null"),
                         Start_time = currentAssignment.EntryTimeForTreatment,
-                        CallDistance = Tools.CalculateDistance(volunteerDO.Latitude!, volunteerDO.Longitude!, callDetails.Latitude, callDetails.Longitude),
+                        CallDistance = Tools.CalculateDistanceAsync(volunteerDistanceType,volunteerDO.Latitude ?? 0, volunteerDO.Longitude ?? 0, callDetails.Latitude, callDetails.Longitude).Result,
                         CallStatus = CalculateStatus(callDetails, 30)
                     };
                 }
@@ -106,7 +108,6 @@ internal class VolunteerImplementation : IVolunteer
                 BO.Enums.VolunteerInListFields.TotalHandledCalls => allVolunteersInList.OrderBy(v => v?.TotalHandledCalls).ToList(),
                 BO.Enums.VolunteerInListFields.TotalCanceledCalls => allVolunteersInList.OrderBy(v => v?.TotalCanceledCalls).ToList(),
                 BO.Enums.VolunteerInListFields.TotalExpiredCalls => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
-                //BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
                 BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),
                 _ => allVolunteersInList.OrderBy(v => v?.Id).ToList(),
             } : allVolunteersInList.OrderBy(v => v?.Id).ToList();

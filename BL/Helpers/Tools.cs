@@ -1,5 +1,4 @@
-﻿//using BO;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
@@ -174,10 +173,10 @@ internal static class Tools
     /// <param name="latitudeC">The latitude of the second point.</param>
     /// <param name="longitudeC">The longitude of the second point.</param>
     /// <returns>The calculated distance in kilometers.</returns>
-    public static async Task<double> CalculateDistanceAsync(double latitudeV, double longitudeV, double latitudeC, double longitudeC)
-    {
-        return await CalculateDistanceAsync(_selectedDistanceType, latitudeV, longitudeV, latitudeC, longitudeC);
-    }
+    //public static async Task<double> CalculateDistanceAsync(double latitudeV, double longitudeV, double latitudeC, double longitudeC)
+    //{
+    //    return await CalculateDistanceAsync(_selectedDistanceType, latitudeV, longitudeV, latitudeC, longitudeC);
+    //}
 
     /// <summary>
     /// Asynchronously calculates the distance between two geographical points based on the specified distance type.
@@ -193,8 +192,8 @@ internal static class Tools
         return type switch
         {
             BO.Enums.DistanceTypes.aerial_distance => CalculateDistance(latitudeV, longitudeV, latitudeC, longitudeC),
-            BO.Enums.DistanceTypes.walking_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "pedestrian"),
-            BO.Enums.DistanceTypes.driving_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "car"),
+            BO.Enums.DistanceTypes.walking_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "walking"),
+            BO.Enums.DistanceTypes.driving_distance => await GetRouteDistanceAsync(latitudeV, longitudeV, latitudeC, longitudeC, "driving"),
             _ => throw new ArgumentException("Invalid distance type", nameof(type))
         };
     }
@@ -208,33 +207,64 @@ internal static class Tools
     /// <param name="longitudeC">The longitude of the destination.</param>
     /// <param name="travelMode">The mode of travel (e.g., pedestrian, car).</param>
     /// <returns>The calculated route distance in kilometers, or double.MaxValue if an error occurs.</returns>
-    private static async Task<double> GetRouteDistanceAsync(double latitudeV, double longitudeV, double latitudeC, double longitudeC, string travelMode)
+    private static async Task<double> GetRouteDistanceAsync(
+    double latitudeV, double longitudeV,
+    double latitudeC, double longitudeC,
+    string travelMode)
     {
         using HttpClient client = new HttpClient();
-        string apiKey = Environment.GetEnvironmentVariable("TOMTOM_API_KEY") ?? throw new InvalidOperationException("API key is missing");
-        string url = $"https://api.tomtom.com/routing/1/calculateRoute/{latitudeV},{longitudeV}:{latitudeC},{longitudeC}/json?key={apiKey}&travelMode={travelMode}";
+
+        string apiKey = "AIzaSyBA-EmNEQuxNPdTVE4BxFV-pzukM7x6pAM";
+        string url = $"https://maps.googleapis.com/maps/api/distancematrix/json" +
+                     $"?origins={latitudeV},{longitudeV}&destinations={latitudeC},{longitudeC}&mode={travelMode}&key={apiKey}";
 
         try
         {
-            HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = client.GetAsync(url).GetAwaiter().GetResult();
+
             if (!response.IsSuccessStatusCode)
+            {
+                Console.Error.WriteLine($"API call failed with status code: {response.StatusCode}");
                 return double.MaxValue;
+            }
 
             string responseContent = await response.Content.ReadAsStringAsync();
             using JsonDocument doc = JsonDocument.Parse(responseContent);
 
-            if (doc.RootElement.TryGetProperty("routes", out var routes) && routes.GetArrayLength() > 0 &&
-                routes[0].TryGetProperty("summary", out var summary) &&
-                summary.TryGetProperty("lengthInMeters", out var length))
+            string status = doc.RootElement.GetProperty("status").GetString();
+            if (status != "OK")
             {
-                return length.GetDouble() / 1000.0; // Convert meters to km
+                Console.Error.WriteLine($"API error: {status}");
+                return double.MaxValue;
             }
 
+            var element = doc.RootElement
+                .GetProperty("rows")[0]
+                .GetProperty("elements")[0];
+
+            string elementStatus = element.GetProperty("status").GetString();
+            if (elementStatus != "OK")
+            {
+                Console.Error.WriteLine($"Element error: {elementStatus}");
+                return double.MaxValue;
+            }
+
+            double distanceInMeters = element.GetProperty("distance").GetProperty("value").GetDouble();
+            return distanceInMeters / 1000.0;
+        }
+        catch (TaskCanceledException)
+        {
+            Console.Error.WriteLine("Request timed out.");
+            return double.MaxValue;
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.Error.WriteLine($"Network error: {ex.Message}");
             return double.MaxValue;
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"Error fetching route distance: {ex.Message}");
+            Console.Error.WriteLine($"Unexpected error: {ex.Message}");
             return double.MaxValue;
         }
     }

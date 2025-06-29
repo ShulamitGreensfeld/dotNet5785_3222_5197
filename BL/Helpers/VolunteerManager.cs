@@ -1,24 +1,25 @@
-﻿using DalApi;
+﻿using BlApi;
+using BO;
+using DalApi;
 using DO;
+using Microsoft.VisualBasic;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using static BO.Enums;
-using BO;
-using Microsoft.VisualBasic;
+//using static BO.Enums;
 
 namespace Helpers;
 
 internal static class VolunteerManager
 {
-    private readonly static IDal s_dal = Factory.Get;
+    private readonly static IDal s_dal = DalApi.Factory.Get;
     internal static ObserverManager Observers = new(); //stage 5 
     public static event Action? CallsListUpdated;
     private static readonly ConcurrentDictionary<int, Action<DO.Call>> callObservers = new();
 
-    public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
+    public static async Task<BO.Volunteer> ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
         try
         {
@@ -29,6 +30,8 @@ internal static class VolunteerManager
             var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTimeForTreatment == null)?.CallId;
             var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.ID && a.EndTimeForTreatment == null).FirstOrDefault();
             BO.CallInProgress? callInProgress = null;
+            BO.Enums.DistanceTypes volunteerDistanceType = (BO.Enums.DistanceTypes)doVolunteer.DistanceType;
+
             if (currentAssignment is not null)
             {
                 var callDetails = s_dal.Call.Read(currentAssignment.CallId);
@@ -44,7 +47,7 @@ internal static class VolunteerManager
                         Opening_time = callDetails.OpeningTime,
                         Max_finish_time = (DateTime)callDetails.MaxTimeForClosing!,
                         Start_time = currentAssignment.EntryTimeForTreatment,
-                        CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude),
+                        CallDistance = await Tools.CalculateDistanceAsync(volunteerDistanceType, doVolunteer.Latitude ?? 0, doVolunteer.Longitude ?? 0, callDetails.Latitude, callDetails.Longitude),
                         CallStatus = CallManager.CalculateCallStatus(callDetails)
                     };
                 }

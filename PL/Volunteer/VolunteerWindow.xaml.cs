@@ -14,6 +14,7 @@ namespace PL.Volunteer
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -26,7 +27,8 @@ namespace PL.Volunteer
             set
             {
                 SetValue(CurrentVolunteerProperty, value);
-                OnPropertyChanged(nameof(CanChooseCall)); // Notify when CurrentVolunteer changes
+                OnPropertyChanged(nameof(CanChooseCall));
+                OnPropertyChanged(nameof(CanSetInactive)); // עדכון גם CanSetInactive בכל שינוי
             }
         }
         public static readonly DependencyProperty CurrentVolunteerProperty =
@@ -194,7 +196,7 @@ namespace PL.Volunteer
                     CurrentVolunteer.CallInProgress.CallDistance,
                     isReadOnly: true
                 );
-                singleCallWindow.ShowDialog();
+                singleCallWindow.Show();
             }
             catch (Exception ex)
             {
@@ -203,6 +205,10 @@ namespace PL.Volunteer
         }
 
         public bool CanChooseCall => CurrentVolunteer?.CallInProgress == null;
+
+        // תכונה חדשה: האם מותר לסמן את המתנדב כלא פעיל
+        public bool CanSetInactive => CurrentVolunteer?.CallInProgress == null;
+
         public VolunteerWindow() : this(0) { }
     }
 }

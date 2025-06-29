@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerSelfWindow" Height="850" Width="600"
+        Title="VolunteerSelfWindow" Height="630" Width="600"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -104,11 +104,6 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-
-            <!-- Map Placeholder -->
-            <Border Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2" Height="200" Margin="0,20,0,0" Background="#EEE">
-                <TextBlock Text="מפה (לא ממומש)" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Gray"/>
-            </Border>
 
             <!-- Buttons -->
             <Button Grid.Row="16" Grid.Column="0" Content="עדכן" Height="40" Margin="0,20,10,0"

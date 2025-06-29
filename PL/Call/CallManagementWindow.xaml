@@ -7,9 +7,7 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
-        <local:DeleteButtonVisibilityConverter x:Key="DeleteButtonVisibilityConverter"/>
-        <local:CancelAssignmentVisibilityConverter x:Key="CancelAssignmentVisibilityConverter"/>
-
+        <!-- Template for displaying each call row -->
         <DataTemplate x:Key="CallRowTemplate">
             <Grid Margin="2">
                 <Grid.ColumnDefinitions>
@@ -22,17 +20,23 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="110"/>
                 </Grid.ColumnDefinitions>
+
+                <!-- Bind each call detail to respective column -->
                 <TextBlock Grid.Column="0" Text="{Binding CallId}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="1" Text="{Binding CallType}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="2" Text="{Binding CallStatus}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="3" Text="{Binding Opening_time, StringFormat=dd/MM/yyyy HH:mm}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="4" Text="{Binding LastVolunteerName}" VerticalAlignment="Center"/>
                 <TextBlock Grid.Column="5" Text="{Binding TotalAssignments}" VerticalAlignment="Center"/>
-                <Button Grid.Column="6" Content="מחק" Margin="2,0,0,0"
+
+                <!-- Delete call button -->
+                <Button Grid.Column="6" Content="Delete" Margin="2,0,0,0"
                         Visibility="{Binding Path=., Converter={StaticResource DeleteButtonVisibilityConverter}}"
                         Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                         CommandParameter="{Binding}"/>
-                <Button Grid.Column="7" Content="בטל הקצאה" Margin="2,0,0,0"
+
+                <!-- Cancel assignment button -->
+                <Button Grid.Column="7" Content="Cancel Assignment" Margin="2,0,0,0"
                         Visibility="{Binding Path=., Converter={StaticResource CancelAssignmentVisibilityConverter}}"
                         Command="{Binding DataContext.CancelAssignmentCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                         CommandParameter="{Binding}"/>
@@ -41,26 +45,28 @@
     </Window.Resources>
 
     <DockPanel>
+        <!-- Filter and sort section -->
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10">
-            <TextBlock Text="סנן לפי סוג:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Filter by Type:" Margin="0,0,5,0" VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding CallTypeCollection}" SelectedItem="{Binding SelectedCallType}" Width="110" Margin="0,0,10,0"/>
 
-            <TextBlock Text="סנן לפי סטטוס:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Filter by Status:" Margin="0,0,5,0" VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding CallStatusCollection}" SelectedItem="{Binding SelectedCallStatus}" Width="110" Margin="0,0,10,0"/>
 
-            <TextBlock Text="מיין לפי:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Sort by:" Margin="0,0,5,0" VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding SortFields}" SelectedItem="{Binding SelectedSortField}" Width="110" Margin="0,0,10,0"/>
 
-            <TextBlock Text="קבץ לפי:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Group by:" Margin="0,0,5,0" VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding GroupFields}" SelectedItem="{Binding SelectedGroupField}" Width="110"/>
 
-            <Button Content="הוסף קריאה"
-        Margin="20,0,0,0"
-        Padding="10,2"
-        Command="{Binding DataContext.AddCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-
+            <!-- Add call button -->
+            <Button Content="Add Call"
+                    Margin="20,0,0,0"
+                    Padding="10,2"
+                    Command="{Binding AddCommand}"/>
         </StackPanel>
 
+        <!-- Header row of the table -->
         <Grid DockPanel.Dock="Top" Margin="10,0,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
@@ -71,19 +77,27 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="מזהה" FontWeight="Bold"/>
-            <TextBlock Grid.Column="1" Text="סוג קריאה" FontWeight="Bold"/>
-            <TextBlock Grid.Column="2" Text="סטטוס" FontWeight="Bold"/>
-            <TextBlock Grid.Column="3" Text="נפתחה בתאריך" FontWeight="Bold"/>
-            <TextBlock Grid.Column="4" Text="מתנדב אחרון" FontWeight="Bold"/>
-            <TextBlock Grid.Column="5" Text="סה״כ הקצאות" FontWeight="Bold"/>
-            <TextBlock Grid.Column="6" Text="פעולות" FontWeight="Bold"/>
+            <TextBlock Grid.Column="0" Text="ID" FontWeight="Bold"/>
+            <TextBlock Grid.Column="1" Text="Call Type" FontWeight="Bold"/>
+            <TextBlock Grid.Column="2" Text="Status" FontWeight="Bold"/>
+            <TextBlock Grid.Column="3" Text="Opened At" FontWeight="Bold"/>
+            <TextBlock Grid.Column="4" Text="Last Volunteer" FontWeight="Bold"/>
+            <TextBlock Grid.Column="5" Text="Total Assignments" FontWeight="Bold"/>
+            <TextBlock Grid.Column="6" Text="Actions" FontWeight="Bold"/>
         </Grid>
 
+        <!-- List of calls shown -->
         <ListView ItemsSource="{Binding CallListView}" 
                   ItemTemplate="{StaticResource CallRowTemplate}" 
                   Margin="10"
-                  SelectedItem="{Binding SelectedCall, Mode=TwoWay}">
+                  SelectedItem="{Binding SelectedCall, Mode=TwoWay}"
+                  MouseDoubleClick="ListView_MouseDoubleClick">
+            <ListView.InputBindings>
+                <!-- Instead of using MouseDoubleClick event -->
+                <MouseBinding Gesture="LeftDoubleClick"
+                              Command="{Binding OpenCallDetailsCommand}" />
+            </ListView.InputBindings>
+
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>

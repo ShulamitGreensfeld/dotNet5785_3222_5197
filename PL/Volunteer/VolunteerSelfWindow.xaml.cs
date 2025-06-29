@@ -12,6 +12,8 @@ namespace PL.Volunteer
 
         private readonly Action _refreshAction;
 
+        private static readonly HashSet<int> _openHistoryWindows = new();
+
         private BO.Volunteer _volunteer;
         public BO.Volunteer Volunteer
         {
@@ -108,8 +110,20 @@ namespace PL.Volunteer
 
         private void HistoryButton_Click(object sender, RoutedEventArgs e)
         {
-            var historyWindow = new VolunteerCallHistoryWindow(Volunteer.Id);
-            historyWindow.ShowDialog();
+            //var historyWindow = new VolunteerCallHistoryWindow(Volunteer.Id);
+            //historyWindow.Show();
+            int id = Volunteer.Id;
+            if (_openHistoryWindows.Contains(id))
+            {
+                MessageBox.Show("היסטוריית הקריאות כבר פתוחה.", "שים לב", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            _openHistoryWindows.Add(id);
+
+            var historyWindow = new VolunteerCallHistoryWindow(id);
+            historyWindow.Closed += (_, _) => _openHistoryWindows.Remove(id);
+            historyWindow.Show();
         }
 
         private void OpenCallsButton_Click(object sender, RoutedEventArgs e)

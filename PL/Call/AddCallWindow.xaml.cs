@@ -8,6 +8,9 @@ using BO;
 
 namespace PL
 {
+    /// <summary>
+    /// Interaction logic for AddCallWindow.xaml
+    /// </summary>
     public partial class AddCallWindow : Window, INotifyPropertyChanged
     {
         private static readonly IBl s_bl = Factory.Get();
@@ -16,9 +19,11 @@ namespace PL
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        // List of call types for the ComboBox binding
         public IEnumerable<Enums.CallType> CallTypeCollection =>
             Enum.GetValues(typeof(Enums.CallType)).Cast<Enums.CallType>();
 
+        // The selected call type
         private Enums.CallType _selectedCallType;
         public Enums.CallType SelectedCallType
         {
@@ -26,6 +31,7 @@ namespace PL
             set { _selectedCallType = value; OnPropertyChanged(nameof(SelectedCallType)); }
         }
 
+        // The description entered by the user
         private string? _description;
         public string? Description
         {
@@ -33,6 +39,7 @@ namespace PL
             set { _description = value; OnPropertyChanged(nameof(Description)); }
         }
 
+        // The full address entered by the user
         private string? _fullAddress;
         public string? FullAddress
         {
@@ -40,6 +47,7 @@ namespace PL
             set { _fullAddress = value; OnPropertyChanged(nameof(FullAddress)); }
         }
 
+        // Automatically set opening date (read-only for user)
         private DateTime _openingDate;
         public DateTime OpeningDate
         {
@@ -47,6 +55,7 @@ namespace PL
             set { _openingDate = value; OnPropertyChanged(nameof(OpeningDate)); }
         }
 
+        // User-selected maximum allowed finish time
         private DateTime _maxFinishDate;
         public DateTime MaxFinishDate
         {
@@ -54,14 +63,15 @@ namespace PL
             set { _maxFinishDate = value; OnPropertyChanged(nameof(MaxFinishDate)); }
         }
 
+        // Constructor: initializes default dates
         public AddCallWindow()
         {
             InitializeComponent();
             OpeningDate = s_bl.Admin.GetClock().Date;
             MaxFinishDate = OpeningDate;
-            //DataContext = this;
         }
 
+        // Called when the Add button is clicked – attempts to create the new call
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -79,61 +89,21 @@ namespace PL
                 };
 
                 s_bl.Call.AddCall(newCall);
-                MessageBox.Show("הקריאה נוספה בהצלחה!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
-                DialogResult = true;
+
+                MessageBox.Show("Call added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"אירעה שגיאה בעת הוספת הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred while adding the call: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        // Called when the Cancel button is clicked – closes the window
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+            Close();
         }
     }
 }
-
-//using System;
-//using System.Windows;
-//using BlApi;
-//using PL.ViewModels;
-
-//namespace PL
-//{
-//    public partial class AddCallWindow : Window
-//    {
-//        private static readonly IBl s_bl = Factory.Get();
-//        private readonly AddCallViewModel _vm;
-
-//        public AddCallWindow()
-//        {
-//            InitializeComponent();
-//            _vm = new AddCallViewModel();
-//            DataContext = _vm; // לא Self
-//        }
-
-//        private void AddButton_Click(object sender, RoutedEventArgs e)
-//        {
-//            try
-//            {
-//                var newCall = _vm.CreateCall();
-//                s_bl.Call.AddCall(newCall);
-//                MessageBox.Show("הקריאה נוספה בהצלחה!", "הצלחה", MessageBoxButton.OK, MessageBoxImage.Information);
-//                DialogResult = true;
-//                Close();
-//            }
-//            catch (Exception ex)
-//            {
-//                MessageBox.Show($"אירעה שגיאה בעת הוספת הקריאה: {ex.Message}", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
-//            }
-//        }
-
-//        private void CancelButton_Click(object sender, RoutedEventArgs e)
-//        {
-//            DialogResult = false;
-//        }
-//    }
-//}

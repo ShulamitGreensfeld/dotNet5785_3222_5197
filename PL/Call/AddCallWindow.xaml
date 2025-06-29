@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Add New Call" Height="400" Width="400"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-          DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Grid Margin="10">
+        <!-- Define vertical layout for each input section -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Call Type -->
@@ -21,38 +22,38 @@
             <!-- Buttons -->
         </Grid.RowDefinitions>
 
-        <!-- Call Type -->
+        <!-- Call Type selection -->
         <StackPanel Grid.Row="0" Margin="0,0,0,5">
             <TextBlock Text="Call Type:" />
             <ComboBox ItemsSource="{Binding CallTypeCollection}" 
                       SelectedItem="{Binding SelectedCallType}" />
         </StackPanel>
 
-        <!-- Description -->
+        <!-- Call Description -->
         <StackPanel Grid.Row="1" Margin="0,0,0,5">
             <TextBlock Text="Description:" />
             <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <!-- Full Address -->
+        <!-- Full Address input -->
         <StackPanel Grid.Row="2" Margin="0,0,0,5">
             <TextBlock Text="Full Address:" />
             <TextBox Text="{Binding FullAddress, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <!-- Opening Time -->
+        <!-- Opening time (readonly) -->
         <StackPanel Grid.Row="3" Margin="0,0,0,5">
             <TextBlock Text="Opening Time:" />
             <DatePicker SelectedDate="{Binding OpeningDate}" IsEnabled="False"/>
         </StackPanel>
 
-        <!-- Max Finish Time -->
+        <!-- Maximum allowed finish time -->
         <StackPanel Grid.Row="4" Margin="0,0,0,5">
             <TextBlock Text="Max Finish Time:" />
             <DatePicker SelectedDate="{Binding MaxFinishDate}" />
         </StackPanel>
 
-        <!-- Buttons -->
+        <!-- Add/Cancel buttons -->
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
             <Button Content="Add" Width="75" Margin="5" Click="AddButton_Click"/>
             <Button Content="Cancel" Width="75" Margin="5" Click="CancelButton_Click"/>

@@ -59,16 +59,43 @@ namespace PL
                 var role = s_bl.Volunteer.EnterSystem(UserId, Password);
 
                 if (role == BO.Enums.Role.volunteer)
+                {
                     new VolunteerSelfWindow(parsedId).Show();
+                }
                 else if (role == BO.Enums.Role.manager)
                 {
-                    var result = MessageBox.Show("Do you want to enter the management screen?", "Login as Manager",
-                        MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (App.IsAdminLoggedIn)
+                    {
+                        var result = MessageBox.Show(
+                            "מנהל כבר מחובר. בחר האם להכנס כמתנדב או לצאת מהמערכת",
+                            "כניסת מנהל",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
 
-                    if (result == MessageBoxResult.Yes)
-                        new MainWindow().Show();
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            new VolunteerSelfWindow(parsedId).Show();
+                        }
+                        // אם לא, לא קורה כלום
+                    }
                     else
-                        new VolunteerSelfWindow(parsedId).Show();
+                    {
+                        var result = MessageBox.Show(
+                            "Do you want to enter the management screen?",
+                            "Login as Manager",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question);
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            App.IsAdminLoggedIn = true;
+                            new MainWindow().Show();
+                        }
+                        else
+                        {
+                            new VolunteerSelfWindow(parsedId).Show();
+                        }
+                    }
                 }
                 UserId = "";
                 Password = "";
@@ -76,7 +103,6 @@ namespace PL
                 OnPropertyChanged(nameof(UserId));
                 OnPropertyChanged(nameof(Password));
                 OnPropertyChanged(nameof(ErrorMessage));
-                //Application.Current.Windows[0]?.Close();
             }
             catch (BO.BlDoesNotExistException)
             {

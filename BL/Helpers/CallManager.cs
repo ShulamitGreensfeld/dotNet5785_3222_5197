@@ -34,9 +34,13 @@ namespace Helpers
     var assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.ID).ToList();
         var lastAssignment = assignments.LastOrDefault(a => a?.CallId == call.ID);
 
-    // 1. Closed: If the last assignment has an end time
-    if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
-        return BO.Enums.CallStatus.closed;
+            // 1. Closed: If the last assignment has an end time
+            if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
+            {
+                if (lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation || lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation)
+                    return BO.Enums.CallStatus.opened;
+                return BO.Enums.CallStatus.closed;
+            }
 
     // 2. Expired: If the max time for closing has passed
     if (call.MaxTimeForClosing<AdminManager.Now)
@@ -59,69 +63,12 @@ namespace Helpers
     // 5. Opened: Default
     return BO.Enums.CallStatus.opened;
 }
-        //public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
-        //{
-        //    List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.ID).ToList()!;
-        //    var lastAssignment = assignments.LastOrDefault(a => a!.CallId == call.ID);
-
-        //    // If the maximum time for closing the call has passed
-        //    if (call.MaxTimeForClosing < AdminManager.Now)
-        //        return BO.Enums.CallStatus.expired;
-
-        //    // If the call is open and is ending during the risk period
-        //    if ((AdminManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
-        //        return BO.Enums.CallStatus.opened_at_risk;
-
-        //    // If the call is being treated
-        //    if (lastAssignment != null)
-        //    {
-        //        // Treated at risk
-        //        if ((AdminManager.Now - lastAssignment?.EntryTimeForTreatment) > s_dal.Config.RiskRange)
-        //            return BO.Enums.CallStatus.treated_at_risk;
-
-        //        // Just treated
-        //        else
-        //            return BO.Enums.CallStatus.is_treated;
-        //    }
-
-        //    // If the call is closed (last assignment has an end time)
-        //    if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
-        //        return BO.Enums.CallStatus.closed;
-
-        //    // If the call is open
-        //    return BO.Enums.CallStatus.opened;
-        //}
 
         /// <summary>
         /// Converts a collection of DO.Call objects to a collection of BO.CallInList objects.
         /// </summary>
         /// <param name="calls">The list of DO.Call objects to be converted.</param>
         /// <returns>A collection of BO.CallInList objects.</returns>
-        //public static IEnumerable<BO.CallInList> ConvertToCallInList(IEnumerable<DO.Call> calls)
-        //        {
-        //            return calls.Select(call =>
-        //            {
-        //                List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.ID).ToList()!;
-        //                var lastAssignment = assignments.LastOrDefault(a => a!.CallId == call.ID);
-        //                var activeAssignment = assignments.LastOrDefault(a => a!.CallId == call.ID && a.EndTimeForTreatment == null);
-        //                var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)!.Name : null;
-        //                TimeSpan? timeLeft = call.MaxTimeForClosing > DateTime.Now ? call.MaxTimeForClosing - DateTime.Now : null;
-        //                BO.Enums.CallStatus callStatus = CalculateCallStatus(call);
-        //                TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.closed ? (call.MaxTimeForClosing - call.OpeningTime) : null;
-        //                return new BO.CallInList
-        //                {
-        //                    Id = lastAssignment?.ID,
-        //                    CallId = call.ID,
-        //                    CallType = (BO.Enums.CallType)call.TypeOfCall,
-        //                    Opening_time = call.OpeningTime,
-        //                    TimeLeft = timeLeft,
-        //                    LastVolunteerName = lastVolunteerName,
-        //                    TotalTime = totalTime,
-        //                    CallStatus = callStatus,
-        //                    TotalAssignments = assignments.Count()
-        //                };
-        //            }).ToList();
-        //        }
         public static IEnumerable<BO.CallInList> ConvertToCallInList(IEnumerable<DO.Call> calls)
         {
             return calls.Select(call =>
@@ -226,7 +173,6 @@ namespace Helpers
                 if (assignment.EndTimeForTreatment <= newClock && !processedAssignments.Contains(assignment.ID))
                 {
                     // Assignment has expired - create a new updated assignment
-                    Console.WriteLine($"Assignment {assignment.ID} has expired.");
                     var updatedAssignment = assignment with { TypeOfFinishTreatment = DO.TypeOfFinishTreatment.Treated };
                     s_dal.Assignment.Update(updatedAssignment);
                     Observers.NotifyItemUpdated(updatedAssignment.ID); //stage 5
@@ -235,7 +181,6 @@ namespace Helpers
                 else if (assignment.EndTimeForTreatment <= newClock.AddHours(2) && !processedAssignments.Contains(assignment.ID))
                 {
                     // Assignment is at risk - mark as risk
-                    Console.WriteLine($"Assignment {assignment.ID} is at risk.");
                     // Update the assignment status or trigger notification
                     // (Implementation depends on your existing notification system)
                     processedAssignments.Add(assignment.ID);
@@ -248,32 +193,40 @@ namespace Helpers
         /// <summary>
         /// Sends an email notification to all volunteers within the specified distance from a new call.
         /// </summary>
-        /// <param name="call">The call object that was opened.</param>
-        internal static void SendEmailWhenCallOpened(BO.Call call)
+        internal static async Task SendEmailWhenCallOpenedAsync(BO.Call call)
         {
-            var volunteer = s_dal.Volunteer.ReadAll();
-            foreach (var item in volunteer)
+            var volunteers = s_dal.Volunteer.ReadAll();
+            foreach (var item in volunteers)
             {
+                BO.Enums.DistanceTypes volunteerDistanceType = (BO.Enums.DistanceTypes)item.DistanceType;
 
-                if (item.MaxDistanceForCall >= Tools.CalculateDistance(item.Latitude ?? 0.0, item.Longitude ?? 0.0, call.Latitude ?? 0.0, call.Longitude ?? 0.0))
+                double distance = await Tools.CalculateDistanceAsync(
+                    volunteerDistanceType,
+                    item.Latitude ?? 0.0,
+                    item.Longitude ?? 0.0,
+                    call.Latitude ?? 0.0,
+                    call.Longitude ?? 0.0
+                );
+
+                if (item.MaxDistanceForCall >= distance)
                 {
-                    string subject = "Openning call";
+                    string subject = "Opening Call";
                     string body = $@"
-                    Hello {item.Name},
+            Hello {item.Name},
 
-                    A new call has been opened in your area.
-                    Call Details:
-                    - Call Type: {call.CallType}
-                    - Call Address: {call.FullAddress}
-                    - Opening Time: {call.Opening_time}
-                    - Description: {call.Verbal_description}
-                    - Entry Time for Treatment: {call.Max_finish_time}
-                    -call Status:{call.CallStatus}
+            A new call has been opened in your area.
+            Call Details:
+            - Call Type: {call.CallType}
+            - Call Address: {call.FullAddress}
+            - Opening Time: {call.Opening_time}
+            - Description: {call.Verbal_description}
+            - Entry Time for Treatment: {call.Max_finish_time}
+            - Call Status: {call.CallStatus}
 
-                    If you wish to handle this call, please log into the system.
+            If you wish to handle this call, please log into the system.
 
-                    Best regards,  
-                    Call Management System";
+            Best regards,  
+            Call Management System";
 
                     Tools.SendEmail(item.Email, subject, body);
                 }

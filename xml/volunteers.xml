@@ -255,16 +255,30 @@
   <Volunteer>
     <Id>215525197</Id>
     <Name>Yaara Levy</Name>
-    <Phone>052-2345678</Phone>
-    <Email>yaaralevy@example.com</Email>
+    <Phone>052-2345675</Phone>
+    <Email>yaaralevy@examplle.com</Email>
     <IsActive>true</IsActive>
     <Role>Volunteer</Role>
     <Address>mevo livna 4</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
     <LargestDistance>500000000</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
+    <DistanceType>WalkingDistance</DistanceType>
     <Password>fcf54686715f0c0e913801274a47380b6681da8440a9652cb92c1261e3af35e6</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>65679300</Id>
+    <Name>ghj</Name>
+    <Phone>0526566565</Phone>
+    <Email>h@exe.com</Email>
+    <IsActive>true</IsActive>
+    <Role>Volunteer</Role>
+    <Address>mavo livna 5</Address>
+    <Latitude>43.826598</Latitude>
+    <Longitude>17.004501</Longitude>
+    <LargestDistance>3232</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
+    <Password>96d2d1a36259d0516370397b27d79880a41f24042da4edab5d8c42cbd6ccea30</Password>
   </Volunteer>
   <Volunteer>
     <Id>214323222</Id>
@@ -276,8 +290,8 @@
     <Address>mevo livna 5</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
-    <LargestDistance>35</LargestDistance>
-    <DistanceType>DrivingDistance</DistanceType>
+    <LargestDistance>3500000</LargestDistance>
+    <DistanceType>WalkingDistance</DistanceType>
     <Password>fcf54686715f0c0e913801274a47380b6681da8440a9652cb92c1261e3af35e6</Password>
   </Volunteer>
 </ArrayOfVolunteer>

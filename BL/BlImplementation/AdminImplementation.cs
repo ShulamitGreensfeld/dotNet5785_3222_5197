@@ -46,8 +46,7 @@ internal class AdminImplementation : IAdmin
                 break;
         }
 
-        AdminManager.UpdateClock(newClock); 
-        CallManager.PeriodicVolunteersUpdates(oldClock, newClock);
+        AdminManager.UpdateClock(newClock);
     }
 
     /// <summary>

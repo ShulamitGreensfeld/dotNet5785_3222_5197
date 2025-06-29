@@ -182,7 +182,7 @@ namespace BlTest
                             GetClosedCallsHandledByVolunteer();
                             break;
                         case "6":
-                            GetOpenCallsForVolunteer();
+                            GetOpenCallsForVolunteerAsync();
                             break;
                         case "7":
                             MarkCallCancellation();
@@ -406,13 +406,13 @@ namespace BlTest
             }
 
         }
-        private static void GetOpenCallsForVolunteer()
+        private static void GetOpenCallsForVolunteerAsync()
         {
             Console.Write("Enter Volunteer ID: ");
             int.TryParse(Console.ReadLine(), out int volunteerId);
             try
             {
-                var openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId);
+                var openCalls = s_bl.Call.GetOpenCallsForVolunteerAsync(volunteerId).GetAwaiter().GetResult();
                 foreach (var call in openCalls)
                 {
                     Console.WriteLine(call);

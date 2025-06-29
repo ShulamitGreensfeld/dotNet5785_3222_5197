@@ -9,6 +9,7 @@ namespace PL
     /// </summary>
     public partial class App : Application
     {
+        public static bool IsAdminLoggedIn { get; set; }
         public static int? CurrentUserId { get; set; }
     }
 

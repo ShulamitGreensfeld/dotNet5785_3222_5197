@@ -2,12 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PL"
-             xmlns:vol="clr-namespace:PL.Volunteer"
+             xmlns:vol="clr-namespace:PL"
              StartupUri="System/LoginWindow.xaml"
              ShutdownMode="OnLastWindowClose">
     <Application.Resources>
         <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
         <local:RoleCollection x:Key="RoleCollectionKey"/>
         <local:DistanceTypesCollection x:Key="DistanceTypesCollectionKey"/>
+        <local:DeleteButtonVisibilityConverter x:Key="DeleteButtonVisibilityConverter"/>
+        <local:CancelAssignmentVisibilityConverter x:Key="CancelAssignmentVisibilityConverter"/>
+        <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
+        <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
     </Application.Resources>
 </Application>

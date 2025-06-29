@@ -26,7 +26,7 @@
                 <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
                 <DataGridTextColumn Header="Type" Binding="{Binding CallType}" Width="Auto"/>
                 <DataGridTextColumn Header="Address" Binding="{Binding FullAddress}" Width="*"/>
-                <DataGridTextColumn Header="Finish Time" Binding="{Binding Max_finish_time}" Width="Auto"/>
+                <DataGridTextColumn Header="Finish Time" Binding="{Binding End_time, StringFormat=dd/MM/yyyy HH:mm}" Width="Auto"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
