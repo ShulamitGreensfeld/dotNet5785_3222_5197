@@ -45,5 +45,8 @@
         /// <param name="volunteer">The volunteer object to add.</param>
         void AddVolunteer(BO.Volunteer volunteer);
         IEnumerable<BO.VolunteerInList> GetVolunteersFilterList(BO.Enums.CallType? callType);//stage 5
+
+        void LogoutVolunteer(int id);
+
     }
 }

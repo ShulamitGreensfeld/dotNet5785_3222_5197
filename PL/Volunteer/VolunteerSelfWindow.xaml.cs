@@ -81,7 +81,7 @@ namespace PL.Volunteer
             base.OnClosed(e);
             s_bl.Volunteer.RemoveObserver(Volunteer.Id, _refreshAction);
             App.IsAdminLoggedIn = false;
-            //s_bl.Volunteer.LogoutVolunteer(Volunteer.Id);
+            s_bl.Volunteer.LogoutVolunteer(Volunteer.Id);
         }
 
         /// <summary>
