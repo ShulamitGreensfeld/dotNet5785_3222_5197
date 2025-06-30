@@ -696,4 +696,12 @@
     <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
     <ID>2086</ID>
   </Assignment>
+  <Assignment>
+    <CallId>1090</CallId>
+    <VolunteerId>215525197</VolunteerId>
+    <EntryTimeForTreatment>2027-08-24T15:30:09</EntryTimeForTreatment>
+    <EndTimeForTreatment xsi:nil="true" />
+    <TypeOfFinishTreatment xsi:nil="true" />
+    <ID>2087</ID>
+  </Assignment>
 </ArrayOfAssignment>

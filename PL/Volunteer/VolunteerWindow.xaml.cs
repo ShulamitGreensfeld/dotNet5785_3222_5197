@@ -87,6 +87,7 @@ namespace PL.Volunteer
                 if (ButtonText == "Add")
                 {
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
+                    CurrentVolunteer.Password = string.Empty;
                     MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     DialogResult = true;
                     Close();
@@ -94,6 +95,7 @@ namespace PL.Volunteer
                 else // Update
                 {
                     s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer!.Id, CurrentVolunteer);
+                    CurrentVolunteer.Password = string.Empty;
                     MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     DialogResult = true;
                     Close();
@@ -188,13 +190,8 @@ namespace PL.Volunteer
             try
             {
                 var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-
-                var singleCallWindow = new PL.Call.SingleCallWindow(
-                    currentCall,
-                    CurrentVolunteer.CallInProgress.CallDistance,
-                    isReadOnly: true
-                );
-                singleCallWindow.Show();
+                var callDetailsWindow = new PL.Call.CallDetailsWindow(currentCall.Id);
+                callDetailsWindow.Show();
             }
             catch (System.Exception ex)
             {

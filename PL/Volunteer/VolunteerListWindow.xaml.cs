@@ -156,12 +156,17 @@ namespace PL.Volunteer
                 return;
             }
 
-            var window = new VolunteerWindow(SelectedVolunteer.Id);
-            bool? result = window.ShowDialog();
-            if (result == true)
+            foreach (Window w in Application.Current.Windows)
             {
-                QueryVolunteerList();
+                if (w is PL.Volunteer.VolunteerWindow volWin && volWin.CurrentVolunteer?.Id == SelectedVolunteer.Id)
+                {
+                    w.Activate();
+                    MessageBox.Show("The volunteer is already open in another window.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
             }
+            var win = new PL.Volunteer.VolunteerWindow(SelectedVolunteer.Id);
+            win.Show();
         }
 
         // Opens the add volunteer window

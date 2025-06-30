@@ -26,5 +26,7 @@
 
         <!-- Converter to determine visibility based on update status -->
         <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
+
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Application.Resources>
 </Application>

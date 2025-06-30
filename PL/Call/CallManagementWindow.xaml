@@ -4,7 +4,8 @@
         xmlns:local="clr-namespace:PL"
         Title="Call Management" Height="400" Width="900"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+         Background="#F4F6F8">
 
     <Window.Resources>
         <!-- Template for displaying each call row -->
@@ -60,10 +61,10 @@
             <ComboBox ItemsSource="{Binding GroupFields}" SelectedItem="{Binding SelectedGroupField}" Width="110"/>
 
             <!-- Add call button -->
-            <Button Content="Add Call"
+            <Button Content="➕ Add Call"
                     Margin="20,0,0,0"
                     Padding="10,2"
-                    Command="{Binding AddCommand}"/>
+                    Command="{Binding AddCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
 
         <!-- Header row of the table -->

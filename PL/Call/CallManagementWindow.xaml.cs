@@ -1,6 +1,8 @@
 ﻿using BlApi;
 using BO;
+using DO;
 using PL.Call;
+using PL.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using PL.Commands;
 
 namespace PL
 {
@@ -207,8 +208,9 @@ namespace PL
         {
             try
             {
-                var addCallWindow = new AddCallWindow { Owner = this };
-                addCallWindow.Show();
+                var win = new CallDetailsWindow();
+                win.ShowDialog();
+                UpdateCallList();
             }
             catch (Exception ex)
             {
@@ -222,9 +224,17 @@ namespace PL
 
             try
             {
-                var window = new SingleCallWindow(SelectedCall.CallId);
-                window.Owner = this;
-                window.Show();
+                foreach (Window w in Application.Current.Windows)
+                {
+                    if (w is PL.Call.CallDetailsWindow detailsWin && detailsWin.Call.Id == SelectedCall.CallId)
+                    {
+                        w.Activate();
+                        MessageBox.Show("The call is already open in another window.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+                }
+                var win = new PL.Call.CallDetailsWindow(SelectedCall.CallId);
+                win.Show();
                 UpdateCallList();
             }
             catch (Exception ex)
