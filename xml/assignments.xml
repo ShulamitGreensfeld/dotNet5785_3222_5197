@@ -680,4 +680,20 @@
     <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
     <ID>2084</ID>
   </Assignment>
+  <Assignment>
+    <CallId>1091</CallId>
+    <VolunteerId>215525197</VolunteerId>
+    <EntryTimeForTreatment>2027-08-24T15:30:09</EntryTimeForTreatment>
+    <EndTimeForTreatment>2027-08-24T15:30:09</EndTimeForTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
+    <ID>2085</ID>
+  </Assignment>
+  <Assignment>
+    <CallId>1093</CallId>
+    <VolunteerId>215525197</VolunteerId>
+    <EntryTimeForTreatment>2027-08-24T15:30:09</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-06-30T10:59:58.7119782+03:00</EndTimeForTreatment>
+    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <ID>2086</ID>
+  </Assignment>
 </ArrayOfAssignment>

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BlApi;
 using PL.Volunteer;
+using PL.Commands;
 
 namespace PL
 {
+    /// <summary>
+    /// Code-behind for Login Window. Contains only the constructor.
+    /// </summary>
     public partial class LoginWindow : Window
     {
         public LoginWindow()
@@ -16,6 +21,9 @@ namespace PL
         }
     }
 
+    /// <summary>
+    /// ViewModel for LoginWindow. Implements login logic, input validation and navigation.
+    /// </summary>
     public class LoginViewModel : INotifyPropertyChanged
     {
         private static readonly IBl s_bl = Factory.Get();
@@ -30,73 +38,58 @@ namespace PL
             set { _errorMessage = value; OnPropertyChanged(nameof(ErrorMessage)); }
         }
 
+        // Command for login button
         public ICommand LoginCommand { get; }
 
+        // Constructor
         public LoginViewModel()
         {
             LoginCommand = new RelayCommand(_ => Login());
         }
 
+        /// <summary>
+        /// Handles login process: verifies input, checks credentials via BL, and opens the appropriate window.
+        /// Also ensures that a volunteer cannot log in more than once.
+        /// </summary>
+        /// <summary>
+        /// Handles login process: validates input, checks credentials via BL, and opens appropriate window.
+        /// Prevents multiple admin logins by using a BL-based internal flag.
+        /// </summary>
         private void Login()
         {
             ErrorMessage = "";
 
-            if (string.IsNullOrWhiteSpace(UserId))
-            {
-                ErrorMessage = "User ID is required.";
-                return;
-            }
-
-            if (!int.TryParse(UserId, out int parsedId))
-            {
-                ErrorMessage = "Invalid ID format.";
-                return;
-            }
-
             try
             {
-                App.CurrentUserId = parsedId;
                 var role = s_bl.Volunteer.EnterSystem(UserId, Password);
+
+                int volunteerId = int.Parse(UserId);
 
                 if (role == BO.Enums.Role.volunteer)
                 {
-                    new VolunteerSelfWindow(parsedId).Show();
+                    new VolunteerSelfWindow(volunteerId).Show();
                 }
                 else if (role == BO.Enums.Role.manager)
                 {
-                    if (App.IsAdminLoggedIn)
-                    {
-                        var result = MessageBox.Show(
-                            "מנהל כבר מחובר. בחר האם להכנס כמתנדב או לצאת מהמערכת",
-                            "כניסת מנהל",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Question);
+                    var result = MessageBox.Show(
+                        "Do you want to enter the management screen?",
+                        "Login as Manager",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
 
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            new VolunteerSelfWindow(parsedId).Show();
-                        }
-                        // אם לא, לא קורה כלום
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        App.IsAdminLoggedIn = true;
+                        //App.LoggedAdminId = adminId;
+                        new MainWindow().Show();
                     }
                     else
                     {
-                        var result = MessageBox.Show(
-                            "Do you want to enter the management screen?",
-                            "Login as Manager",
-                            MessageBoxButton.YesNo,
-                            MessageBoxImage.Question);
-
-                        if (result == MessageBoxResult.Yes)
-                        {
-                            App.IsAdminLoggedIn = true;
-                            new MainWindow().Show();
-                        }
-                        else
-                        {
-                            new VolunteerSelfWindow(parsedId).Show();
-                        }
+                        new VolunteerSelfWindow(volunteerId).Show();
                     }
                 }
+
+                // Clear sensitive data
                 UserId = "";
                 Password = "";
                 ErrorMessage = "";
@@ -104,13 +97,17 @@ namespace PL
                 OnPropertyChanged(nameof(Password));
                 OnPropertyChanged(nameof(ErrorMessage));
             }
+            catch (BO.BlInvalidFormatException ex)
+            {
+                ErrorMessage = ex.Message;
+            }
+            catch (BO.BlUnauthorizedException ex)
+            {
+                ErrorMessage = ex.Message;
+            }
             catch (BO.BlDoesNotExistException)
             {
                 ErrorMessage = "User not found.";
-            }
-            catch (BO.BlInvalidFormatException)
-            {
-                ErrorMessage = "Invalid ID or password.";
             }
             catch (Exception ex)
             {
@@ -123,6 +120,9 @@ namespace PL
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
+    /// <summary>
+    /// Helper class for binding PasswordBox via attached property
+    /// </summary>
     public static class PasswordBinding
     {
         public static readonly DependencyProperty BoundPasswordProperty =
@@ -159,28 +159,6 @@ namespace PL
                 pb.Password = (string)e.NewValue;
                 pb.PasswordChanged += (s, ev) => SetBoundPassword(pb, pb.Password);
             }
-        }
-    }
-
-    public class RelayCommand : ICommand
-    {
-        private readonly Action<object> _execute;
-        private readonly Predicate<object>? _canExecute;
-
-        public RelayCommand(Action<object> execute, Predicate<object>? canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter) => _canExecute?.Invoke(parameter) ?? true;
-
-        public void Execute(object parameter) => _execute(parameter);
-
-        public event EventHandler? CanExecuteChanged
-        {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
         }
     }
 }

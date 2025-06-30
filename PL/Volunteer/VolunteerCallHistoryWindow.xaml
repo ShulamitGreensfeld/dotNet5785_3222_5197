@@ -16,7 +16,7 @@
             <TextBlock Text="Filter by Call Type:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <ComboBox ItemsSource="{Binding CallTypeCollection}" SelectedItem="{Binding SelectedCallType}" Width="150" Margin="0,0,20,0"/>
             <TextBlock Text="Sort by:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <ComboBox ItemsSource="{Binding SortOptions}" SelectedItem="{Binding SelectedSortOption}" Width="150"/>
+            <ComboBox ItemsSource="{Binding SortFields}" SelectedItem="{Binding SelectedSortField}" Width="150"/>
         </StackPanel>
 
 

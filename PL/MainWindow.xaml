@@ -98,7 +98,6 @@
 
             <!-- צד ימין: כפתורי ניהול -->
             <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="320">
-                <Button Style="{StaticResource ModernButton_Square}" Content="📋 Open List View" Height="50" Margin="0 5" Width="250"/>
                 <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Height="50" Margin="0 5" Width="250" Command="{Binding InitializeDatabaseCommand}"/>
                 <Button Style="{StaticResource ModernButton_Square}" Content="🔄 Reset Database" Height="50" Margin="0 5" Width="250" Command="{Binding ResetDatabaseCommand}"/>
                 <Button Style="{StaticResource ModernButton_Square}" Content="🤝 Handle Volunteers" Height="50" Margin="0 5" Width="250" Command="{Binding OpenVolunteersCommand}"/>

@@ -3,15 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PL"
              xmlns:vol="clr-namespace:PL"
-             StartupUri="System/LoginWindow.xaml"
+             StartupUri="LoginWindow.xaml"
              ShutdownMode="OnLastWindowClose">
     <Application.Resources>
+        <!-- Resource collection for Call Types -->
         <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
+
+        <!-- Resource collection for User Roles -->
         <local:RoleCollection x:Key="RoleCollectionKey"/>
+
+        <!-- Resource collection for Distance Types -->
         <local:DistanceTypesCollection x:Key="DistanceTypesCollectionKey"/>
+
+        <!-- Converter for Delete Button Visibility -->
         <local:DeleteButtonVisibilityConverter x:Key="DeleteButtonVisibilityConverter"/>
+
+        <!-- Converter for Assignment Cancellation Visibility -->
         <local:CancelAssignmentVisibilityConverter x:Key="CancelAssignmentVisibilityConverter"/>
+
+        <!-- Converter to determine if update should return true -->
         <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
+
+        <!-- Converter to determine visibility based on update status -->
         <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
     </Application.Resources>
 </Application>

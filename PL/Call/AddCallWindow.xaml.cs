@@ -72,23 +72,22 @@ namespace PL
         }
 
         // Called when the Add button is clicked – attempts to create the new call
-        private void AddButton_Click(object sender, RoutedEventArgs e)
+
+                   private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var newCall = new BO.Call
+                var call = new BO.Call
                 {
                     CallType = SelectedCallType,
                     Verbal_description = Description,
                     FullAddress = FullAddress,
-                    Latitude = null,
-                    Longitude = null,
-                    Opening_time = s_bl.Admin.GetClock(),
                     Max_finish_time = MaxFinishDate,
-                    CallStatus = Enums.CallStatus.opened
+                    Opening_time = s_bl.Admin.GetClock(),
+                    CallStatus = BO.Enums.CallStatus.opened
                 };
 
-                s_bl.Call.AddCall(newCall);
+                s_bl.Call.AddCall(call);
 
                 MessageBox.Show("Call added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 Close();

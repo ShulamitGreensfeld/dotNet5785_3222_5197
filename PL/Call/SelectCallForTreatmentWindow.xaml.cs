@@ -1,8 +1,6 @@
 ﻿using BlApi;
 using BO;
-using DalApi;
-using DO;
-using PL.Call;
+using PL.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,41 +15,23 @@ namespace PL
 {
     public partial class SelectCallForTreatmentWindow : Window, INotifyPropertyChanged
     {
-        private static readonly IBl s_bl = BlApi.Factory.Get();
+        private static readonly IBl s_bl = Factory.Get();
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public IEnumerable<CallType> CallTypeCollection { get; } = Enum.GetValues(typeof(CallType)).Cast<CallType>();
+        public List<string> SortOptions { get; } = new() { "Distance", "Type", "ID" };
+
+        public int VolunteerId { get; set; }
+        public double MaxDistance { get; set; }
+
         public BO.Volunteer CurrentVolunteer { get; set; }
 
-        public List<string> SortOptions { get; } = new() { "Distance", "Type", "ID" };
-        public List<string> GroupOptions { get; } = new() { "None", "CallType", "FullAddress" };
-        private static readonly HashSet<int> _openCallIds = new();
+        public ICommand SelectCallCommand { get; }
+        public ICommand UpdateAddressCommand { get; }
 
-
-        public SelectCallForTreatmentWindow(int volunteerId, string volunteerAddress, double maxDistance, BO.Volunteer currentVolunteer)
-        {
-            InitializeComponent();
-
-            CurrentVolunteer = currentVolunteer;
-            VolunteerId = volunteerId;
-            VolunteerAddress = currentVolunteer?.FullAddress ?? string.Empty;
-            MaxDistance = maxDistance;
-
-            SelectCallCommand = new RelayCommand(param => SelectCall(param));
-            UpdateAddressCommand = new RelayCommand(param => UpdateAddress(param));
-
-            OpenCalls = new ObservableCollection<OpenCallInList>();
-            OpenCallsView = (ListCollectionView)CollectionViewSource.GetDefaultView(OpenCalls);
-
-            // Setting up a filter and sorting on the View 
-            OpenCallsView.Filter = FilterCalls;
-            OpenCallsView.SortDescriptions.Add(new SortDescription("CallDistance", ListSortDirection.Ascending));
-
-            DataContext = this;
-
-            QueryOpenCalls();
-        }
+        public ObservableCollection<OpenCallInList> OpenCalls { get; set; } = new();
+        public ListCollectionView OpenCallsView { get; set; }
 
         private CallType _selectedCallType = CallType.none;
         public CallType SelectedCallType
@@ -59,12 +39,9 @@ namespace PL
             get => _selectedCallType;
             set
             {
-                if (_selectedCallType != value)
-                {
-                    _selectedCallType = value;
-                    OnPropertyChanged(nameof(SelectedCallType));
-                    OpenCallsView.Refresh();
-                }
+                _selectedCallType = value;
+                OnPropertyChanged(nameof(SelectedCallType));
+                QueryOpenCalls();
             }
         }
 
@@ -74,27 +51,9 @@ namespace PL
             get => _selectedSortOption;
             set
             {
-                if (_selectedSortOption != value)
-                {
-                    _selectedSortOption = value;
-                    OnPropertyChanged(nameof(SelectedSortOption));
-                    ApplySorting();
-                }
-            }
-        }
-
-        private string _selectedGroupOption = "None";
-        public string SelectedGroupOption
-        {
-            get => _selectedGroupOption;
-            set
-            {
-                if (_selectedGroupOption != value)
-                {
-                    _selectedGroupOption = value;
-                    OnPropertyChanged(nameof(SelectedGroupOption));
-                    ApplyGrouping();
-                }
+                _selectedSortOption = value;
+                OnPropertyChanged(nameof(SelectedSortOption));
+                QueryOpenCalls();
             }
         }
 
@@ -104,12 +63,9 @@ namespace PL
             get => _addressFilter;
             set
             {
-                if (_addressFilter != value)
-                {
-                    _addressFilter = value;
-                    OnPropertyChanged(nameof(AddressFilter));
-                    OpenCallsView.Refresh();
-                }
+                _addressFilter = value;
+                OnPropertyChanged(nameof(AddressFilter));
+                QueryOpenCalls();
             }
         }
 
@@ -119,96 +75,60 @@ namespace PL
             get => _descriptionFilter;
             set
             {
-                if (_descriptionFilter != value)
-                {
-                    _descriptionFilter = value;
-                    OnPropertyChanged(nameof(DescriptionFilter));
-                    OpenCallsView.Refresh();
-                }
+                _descriptionFilter = value;
+                OnPropertyChanged(nameof(DescriptionFilter));
+                QueryOpenCalls();
             }
         }
 
-        public ObservableCollection<OpenCallInList> OpenCalls { get; set; }
-        public ListCollectionView OpenCallsView { get; set; }
+        public SelectCallForTreatmentWindow(int volunteerId, string volunteerAddress, double maxDistance, BO.Volunteer currentVolunteer)
+        {
+            InitializeComponent();
 
-        public ICommand SelectCallCommand { get; }
-        public ICommand UpdateAddressCommand { get; }
+            VolunteerId = volunteerId;
+            MaxDistance = maxDistance;
+            CurrentVolunteer = currentVolunteer;
+            VolunteerAddress = currentVolunteer.FullAddress;
 
-        public int VolunteerId { get; set; }
-        public double MaxDistance { get; set; }
+            SelectCallCommand = new RelayCommand(param => SelectCall(param));
+            UpdateAddressCommand = new RelayCommand(param => UpdateAddress(param));
+
+            OpenCallsView = (ListCollectionView)CollectionViewSource.GetDefaultView(OpenCalls);
+            DataContext = this;
+
+            QueryOpenCalls();
+        }
 
         private void QueryOpenCalls()
         {
             try
             {
-                var calls = s_bl.Call.GetOpenCallsForVolunteerAsync(
-                VolunteerId,
-                null,
-                null
+                var result = s_bl.Call.GetOpenCallsForVolunteerAsync(
+                    VolunteerId,
+                    SelectedCallType != CallType.none ? SelectedCallType : null,
+                    SelectedSortOption switch
+                    {
+                        "Type" => BO.Enums.OpenCallInListFields.CallType,
+                        "Distance" => BO.Enums.OpenCallInListFields.CallDistance,
+                        "ID" => BO.Enums.OpenCallInListFields.Id,
+                        _ => null
+                    }
                 ).GetAwaiter().GetResult()
+                .Where(c =>
+                    (string.IsNullOrWhiteSpace(AddressFilter) || c.FullAddress?.Contains(AddressFilter, StringComparison.OrdinalIgnoreCase) == true) &&
+                    (string.IsNullOrWhiteSpace(DescriptionFilter) || c.Verbal_description?.Contains(DescriptionFilter, StringComparison.OrdinalIgnoreCase) == true) &&
+                    (c.CallDistance <= MaxDistance)
+                )
                 .ToList();
 
                 OpenCalls.Clear();
-                foreach (var call in calls)
+                foreach (var call in result)
                     OpenCalls.Add(call);
-
-                ApplySorting();
-                ApplyGrouping();
-                OpenCallsView.Refresh();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading calls: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
-
-        private bool FilterCalls(object obj)
-        {
-            if (obj is not OpenCallInList call)
-                return false;
-
-            // Filter by call type
-            if (SelectedCallType != CallType.none && call.CallType != SelectedCallType)
-                return false;
-
-            // Filter by address
-            if (!string.IsNullOrWhiteSpace(AddressFilter) &&
-            (call.FullAddress == null || !call.FullAddress.Contains(AddressFilter, StringComparison.OrdinalIgnoreCase)))
-                return false;
-
-            // Filter by distance (already done in QueryOpenCalls, but can be left for safety)
-            if (call.CallDistance > MaxDistance)
-                return false;
-
-            return true;
-        }
-
-        private void ApplySorting()
-        {
-            OpenCallsView.SortDescriptions.Clear();
-            switch (SelectedSortOption)
-            {
-                case "Distance":
-                    OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.CallDistance), ListSortDirection.Ascending));
-                    break;
-            case "Type":
-                    OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.CallType), ListSortDirection.Ascending));
-                    break;
-            case "ID":
-                    OpenCallsView.SortDescriptions.Add(new SortDescription(nameof(OpenCallInList.Id), ListSortDirection.Ascending));
-                    break;
-            }
-            OpenCallsView.Refresh();
-        }
-
-        private void ApplyGrouping()
-        {
-            OpenCallsView.GroupDescriptions.Clear();
-            if (SelectedGroupOption == "CallType")
-                OpenCallsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(OpenCallInList.CallType)));
-            else if (SelectedGroupOption == "FullAddress")
-                OpenCallsView.GroupDescriptions.Add(new PropertyGroupDescription(nameof(OpenCallInList.FullAddress)));
-            OpenCallsView.Refresh();
         }
 
         private void SelectCall(object parameter)
@@ -218,9 +138,7 @@ namespace PL
                 try
                 {
                     s_bl.Call.SelectCallForTreatment(volunteerId: VolunteerId, callId: call.Id);
-
                     OpenCalls.Remove(call);
-
                     MessageBox.Show("The call has been successfully assigned for you!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     this.DialogResult = true;
                     this.Close();
@@ -236,29 +154,12 @@ namespace PL
         {
             try
             {
-                if (CurrentVolunteer == null || CurrentVolunteer.Id == 0)
-                {
-                    MessageBox.Show("Volunteer ID is missing or invalid.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
-                // Retrieve all volunteer details from the BL
                 var volunteer = s_bl.Volunteer.GetVolunteerDetails(CurrentVolunteer.Id);
-
-                // Update address only
                 volunteer.FullAddress = VolunteerAddress;
-
-                // Disable password so that the BL does not require encryption/validation
                 volunteer.Password = null;
-
-                // Send the entire object to BL
                 s_bl.Volunteer.UpdateVolunteerDetails(volunteer.Id, volunteer);
-
-                // Update in local memory
                 CurrentVolunteer.FullAddress = VolunteerAddress;
-
                 MessageBox.Show("Address updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
                 QueryOpenCalls();
             }
             catch (Exception ex)
@@ -267,37 +168,32 @@ namespace PL
             }
         }
 
-        protected void OnPropertyChanged(string propertyName) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
         private string _volunteerAddress;
         public string VolunteerAddress
         {
             get => _volunteerAddress;
             set
             {
-                if (_volunteerAddress != value)
-                {
-                    _volunteerAddress = value;
-                    OnPropertyChanged(nameof(VolunteerAddress));
-                }
+                _volunteerAddress = value;
+                OnPropertyChanged(nameof(VolunteerAddress));
             }
         }
+
         private OpenCallInList _selectedCall;
         public OpenCallInList SelectedCall
         {
             get => _selectedCall;
             set
             {
-                if (_selectedCall != value)
-                {
-                    _selectedCall = value;
-                    OnPropertyChanged(nameof(SelectedCall));
-                    OnPropertyChanged(nameof(SelectedCallDescription));
-                }
+                _selectedCall = value;
+                OnPropertyChanged(nameof(SelectedCall));
+                OnPropertyChanged(nameof(SelectedCallDescription));
             }
         }
 
         public string SelectedCallDescription => SelectedCall?.Verbal_description ?? string.Empty;
+
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

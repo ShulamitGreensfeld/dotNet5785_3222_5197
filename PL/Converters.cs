@@ -6,7 +6,9 @@ using System.Windows.Data;
 
 namespace PL
 {
-    // Converter: if ButtonText is "Update" => true, else false
+    /// <summary>
+    /// Converts the string "Update" to true; otherwise returns false.
+    /// </summary>
     public class ConvertUpdateToTrue : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -16,7 +18,9 @@ namespace PL
             => throw new NotImplementedException();
     }
 
-    // Converter: if ButtonText is "Update" => Visible, else Collapsed
+    /// <summary>
+    /// Converts the string "Update" to Visibility.Visible; otherwise returns Visibility.Collapsed.
+    /// </summary>
     public class ConvertUpdateToVisible : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -25,6 +29,10 @@ namespace PL
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Converts true to Visibility.Visible and false to Visibility.Collapsed.
+    /// </summary>
     public class BooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -34,6 +42,9 @@ namespace PL
             => throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Converts a CallInList to Visibility.Visible only if the call is open and has no assignments.
+    /// </summary>
     public class DeleteButtonVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -51,7 +62,9 @@ namespace PL
             => throw new NotImplementedException();
     }
 
-    // כפתור ביטול הקצאה - מוצג רק אם הקריאה בטיפול ויש לה מתנדב
+    /// <summary>
+    /// Converts a CallInList to Visibility.Visible only if the call is being treated and has an assigned volunteer.
+    /// </summary>
     public class CancelAssignmentVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -69,6 +82,9 @@ namespace PL
             => throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Converts false to Visibility.Visible and true to Visibility.Collapsed.
+    /// </summary>
     public class InverseBoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -81,6 +97,10 @@ namespace PL
             return (value is Visibility v && v == Visibility.Collapsed);
         }
     }
+
+    /// <summary>
+    /// Converts null to Visibility.Collapsed and non-null to Visibility.Visible.
+    /// </summary>
     public class NullToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -1,5 +1,4 @@
-﻿
-using BlApi;
+﻿using BlApi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,13 +12,13 @@ namespace PL.Volunteer
     public partial class VolunteerListWindow : Window, INotifyPropertyChanged
     {
         static readonly IBl s_bl = BlApi.Factory.Get();
-        private static readonly HashSet<int> _openVolunteerWindows = new();
 
-
+        // Event for notifying the UI of property changes
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        // Currently logged-in volunteer (used for observer)
         private BO.Volunteer? _currentVolunteer;
         public BO.Volunteer? CurrentVolunteer
         {
@@ -31,6 +30,7 @@ namespace PL.Volunteer
             }
         }
 
+        // Filter for the call type dropdown
         private BO.Enums.CallType _selectedCallType = BO.Enums.CallType.none;
         public BO.Enums.CallType SelectedCallType
         {
@@ -41,11 +41,12 @@ namespace PL.Volunteer
                 {
                     _selectedCallType = value;
                     OnPropertyChanged(nameof(SelectedCallType));
-                    QueryVolunteerList(); // קריאה אחת ל-BL מותרת
+                    QueryVolunteerList();
                 }
             }
         }
 
+        // Selected volunteer in the list
         private BO.VolunteerInList? _selectedVolunteer;
         public BO.VolunteerInList? SelectedVolunteer
         {
@@ -57,12 +58,14 @@ namespace PL.Volunteer
             }
         }
 
+        // List of volunteers displayed in the view
         public IEnumerable<BO.VolunteerInList> VolunteerList
         {
             get => (IEnumerable<BO.VolunteerInList>)GetValue(VolunteerListProperty);
             set => SetValue(VolunteerListProperty, value);
         }
 
+        // DependencyProperty backing VolunteerList
         public static readonly DependencyProperty VolunteerListProperty =
             DependencyProperty.Register(
                 nameof(VolunteerList),
@@ -70,12 +73,13 @@ namespace PL.Volunteer
                 typeof(VolunteerListWindow),
                 new PropertyMetadata(null));
 
+        // Constructor initializes the window
         public VolunteerListWindow()
         {
             try
             {
                 InitializeComponent();
-                // אין להגדיר DataContext כאן
+                // DataContext is set via XAML
             }
             catch (Exception ex)
             {
@@ -83,6 +87,7 @@ namespace PL.Volunteer
             }
         }
 
+        // Runs when the window loads; sets observer and queries list
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -97,6 +102,7 @@ namespace PL.Volunteer
             }
         }
 
+        // Runs when the window closes; removes observer
         private void Window_Closed(object sender, EventArgs e)
         {
             try
@@ -110,6 +116,7 @@ namespace PL.Volunteer
             }
         }
 
+        // Refreshes CurrentVolunteer by fetching it again from BL
         private void VolunteerObserver()
         {
             if (CurrentVolunteer?.Id != 0)
@@ -120,6 +127,7 @@ namespace PL.Volunteer
             }
         }
 
+        // Queries the volunteer list from BL and applies optional filtering
         private void QueryVolunteerList()
         {
             try
@@ -139,34 +147,24 @@ namespace PL.Volunteer
             }
         }
 
+        // Opens the selected volunteer in a window when double-clicked
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedVolunteer == null || SelectedVolunteer.Id == 0)
             {
-                MessageBox.Show("יש לבחור מתנדב תקין.", "שגיאה", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please select a valid volunteer to view open calls.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            int id = SelectedVolunteer.Id;
-
-            if (_openVolunteerWindows.Contains(id))
-            {
-                MessageBox.Show("החלון של מתנדב זה כבר פתוח.", "שים לב", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            _openVolunteerWindows.Add(id);
-
-            var window = new VolunteerWindow(id);
-            window.Closed += (_, _) => _openVolunteerWindows.Remove(id);
-
-            bool? result = window.ShowDialog(); // השתמש במקום Show()
+            var window = new VolunteerWindow(SelectedVolunteer.Id);
+            bool? result = window.ShowDialog();
             if (result == true)
+            {
                 QueryVolunteerList();
+            }
         }
 
-
-
+        // Opens the add volunteer window
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new VolunteerWindow();

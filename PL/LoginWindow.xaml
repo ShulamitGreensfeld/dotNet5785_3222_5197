@@ -5,6 +5,7 @@
         Title="Login" Height="300" Width="400"
         WindowStartupLocation="Manual">
 
+    <!-- Bind DataContext to the LoginViewModel -->
     <Window.DataContext>
         <local:LoginViewModel/>
     </Window.DataContext>

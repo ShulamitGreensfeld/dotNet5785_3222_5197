@@ -11,7 +11,6 @@ internal class VolunteerImplementation : IVolunteer
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
-
     /// <summary>
     /// Retrieves the details of a volunteer by their ID.
     /// </summary>
@@ -261,23 +260,78 @@ internal class VolunteerImplementation : IVolunteer
     /// <param name="name">The name of the volunteer.</param>
     /// <param name="pass">The password of the volunteer.</param>
     /// <returns>The role of the volunteer if login is successful.</returns>
+    private static readonly HashSet<int> _loggedInVolunteers = new();
+    private static int? _managerId = null;
+
     public BO.Enums.Role EnterSystem(string id, string pass)
     {
         try
         {
+            // Validate ID format
+            if (string.IsNullOrWhiteSpace(id))
+                throw new BO.BlInvalidFormatException("User ID is required.");
+
+            if (!int.TryParse(id, out int volunteerId))
+                throw new BO.BlInvalidFormatException("Invalid ID format. Must be a number.");
+
+            // Validate password presence
+            if (string.IsNullOrWhiteSpace(pass))
+                throw new BO.BlInvalidFormatException("Password is required.");
+
+            // Attempt to find the volunteer
             var volunteer = _dal.Volunteer.ReadAll()
-                .FirstOrDefault(v => v!.ID.ToString() == id && VolunteerManager.VerifyPassword(pass, v.Password!));
+                .FirstOrDefault(v => v!.ID == volunteerId && VolunteerManager.VerifyPassword(pass, v.Password!));
+
             if (volunteer is null)
-                throw new BO.BlUnauthorizedException("Invalid ID or password");
-            return (BO.Enums.Role)volunteer.Role;
+                throw new BO.BlUnauthorizedException("Invalid ID or password.");
+
+            // Prevent duplicate login
+            lock (_loggedInVolunteers)
+            {
+                if (_loggedInVolunteers.Contains(volunteerId))
+                    throw new BO.BlUnauthorizedException("You are already logged in.");
+
+                if (volunteer.Role == Role.Manager)
+                {
+                    if (_managerId == null)
+                    {
+                        _managerId = volunteerId;
+                        return (BO.Enums.Role)Role.Manager;
+                    }
+                    else if (_managerId == volunteerId)
+                    {
+                        if (_loggedInVolunteers.Contains(volunteerId))
+                            throw new BO.BlUnauthorizedException("You are already logged in twice.");
+
+                        _loggedInVolunteers.Add(volunteerId);
+                        return (BO.Enums.Role)Role.Volunteer;
+                    }
+                    else
+                    {
+                        _loggedInVolunteers.Add(volunteerId);
+                        return (BO.Enums.Role)Role.Volunteer;
+                    }
+                }
+
+                _loggedInVolunteers.Add(volunteerId);
+                return (BO.Enums.Role)Role.Volunteer;
+            }
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException("Error accessing volunteers.", ex);
         }
+        catch (BO.BlInvalidFormatException)
+        {
+            throw; // Allow PL to display message
+        }
+        catch (BO.BlUnauthorizedException)
+        {
+            throw; // Allow PL to display message
+        }
         catch (Exception ex)
         {
-            throw new BO.BlGeneralException(ex.Message, ex);
+            throw new BO.BlGeneralException("An unexpected error occurred during login.", ex);
         }
     }
 
@@ -307,6 +361,14 @@ internal class VolunteerImplementation : IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
 
+    }
+
+    public void LogoutVolunteer(int id)
+    {
+        lock (_loggedInVolunteers)
+        {
+            _loggedInVolunteers.Remove(id);
+        }
     }
     #region Stage 5
     public void AddObserver(Action listObserver) =>
