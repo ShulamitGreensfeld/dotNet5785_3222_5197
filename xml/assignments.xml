@@ -700,8 +700,32 @@
     <CallId>1090</CallId>
     <VolunteerId>215525197</VolunteerId>
     <EntryTimeForTreatment>2027-08-24T15:30:09</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-07-01T14:20:26.8486832+03:00</EndTimeForTreatment>
+    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <ID>2087</ID>
+  </Assignment>
+  <Assignment>
+    <CallId>1087</CallId>
+    <VolunteerId>215525197</VolunteerId>
+    <EntryTimeForTreatment>2027-08-24T15:30:09</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-07-01T14:23:15.8880634+03:00</EndTimeForTreatment>
+    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <ID>2088</ID>
+  </Assignment>
+  <Assignment>
+    <CallId>1093</CallId>
+    <VolunteerId>215525197</VolunteerId>
+    <EntryTimeForTreatment>2027-08-24T15:30:09</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-07-01T14:45:56.3155594+03:00</EndTimeForTreatment>
+    <TypeOfFinishTreatment>SelfCancellation</TypeOfFinishTreatment>
+    <ID>2089</ID>
+  </Assignment>
+  <Assignment>
+    <CallId>1093</CallId>
+    <VolunteerId>215525197</VolunteerId>
+    <EntryTimeForTreatment>2027-08-24T15:30:09</EntryTimeForTreatment>
     <EndTimeForTreatment xsi:nil="true" />
     <TypeOfFinishTreatment xsi:nil="true" />
-    <ID>2087</ID>
+    <ID>2090</ID>
   </Assignment>
 </ArrayOfAssignment>

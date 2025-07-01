@@ -220,8 +220,21 @@ namespace PL
             try
             {
                 var role = s_bl.Volunteer.EnterSystem(UserId, Password);
+                int volunteerId;
+                if (!int.TryParse(UserId, out volunteerId))
+                {
+                    ErrorMessage = "Invalid ID format.";
+                    return;
+                }
 
-                int volunteerId = int.Parse(UserId);
+                var volunteer = s_bl.Volunteer.GetVolunteersList().FirstOrDefault(v => v.Id == volunteerId);
+                if (volunteer == null)
+                {
+                    ErrorMessage = "Volunteer not found.";
+                    return;
+                }
+
+                //int volunteerId = int.Parse(UserId);
 
                 if (role == BO.Enums.Role.volunteer)
                 {

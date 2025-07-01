@@ -380,7 +380,7 @@ namespace PL
             ResetDatabaseCommand = new RelayCommand(_ => ConfirmAndRun("Reset", s_bl.Admin.ResetDatabase));
 
             OpenVolunteersCommand = new RelayCommand(_ => OpenWindow<VolunteerListWindow>());
-            OpenCallsCommand = new RelayCommand(_ => OpenWindow<CallManagementWindow>());
+            OpenCallsCommand = new RelayCommand(_ => new CallManagementWindow(App.LoggedAdminId).Show());
 
             StartSimulatorCommand = new RelayCommand(_ => StartSimulator());
             StopSimulatorCommand = new RelayCommand(_ => StopSimulator());
@@ -426,12 +426,26 @@ namespace PL
             }
         }
 
+        //private void ViewCallsByStatus(object parameter)
+        //{
+        //    if (parameter is CallStatus status)
+        //        new CallManagementWindow(-1,status).Show();
+        //    else
+        //        MessageBox.Show("Invalid status selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        //}
         private void ViewCallsByStatus(object parameter)
         {
             if (parameter is CallStatus status)
-                new CallManagementWindow(-1,status).Show();
+            {
+                if (App.LoggedAdminId > 0)
+                    new CallManagementWindow(App.LoggedAdminId, status).Show();
+                else
+                    MessageBox.Show("No admin is logged in. Please log in first.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             else
+            {
                 MessageBox.Show("Invalid status selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void StartSimulator()

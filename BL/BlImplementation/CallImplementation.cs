@@ -278,6 +278,7 @@ internal class CallImplementation : BlApi.ICall
             CallManager.Observers.NotifyListUpdated(); //stage 5
             VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
             CallManager.Observers.NotifyItemUpdated(assignment.CallId);
+            VolunteerManager.Observers.NotifyListUpdated();                  
         }
         catch (BO.BlUnauthorizedException ex)
         {

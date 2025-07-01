@@ -89,29 +89,21 @@ namespace PL.Volunteer
                     s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
                     CurrentVolunteer.Password = string.Empty;
                     MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    DialogResult = true;
                     Close();
                 }
                 else // Update
                 {
+                    if (string.IsNullOrWhiteSpace(CurrentVolunteer.Password))
+                        CurrentVolunteer.Password = null;
                     s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer!.Id, CurrentVolunteer);
                     CurrentVolunteer.Password = string.Empty;
                     MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    DialogResult = true;
                     Close();
                 }
             }
             catch (System.Exception ex)
             {
-                string userMessage = ex switch
-                {
-                    ArgumentNullException => "A required field is missing. Please fill all necessary fields.",
-                    InvalidOperationException => "The operation is not allowed in the current state.",
-                    BO.BlDoesNotExistException => "The volunteer does not exist in the system.",
-                    _ => "An unexpected error occurred. Please try again."
-                };
-
-                MessageBox.Show(userMessage, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Console.WriteLine($"Error details: {ex}");
             }
         }
@@ -131,7 +123,6 @@ namespace PL.Volunteer
                 {
                     s_bl.Volunteer.DeleteVolunteer(CurrentVolunteer.Id);
                     MessageBox.Show("Volunteer deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    DialogResult = true;
                     Close();
                 }
             }
@@ -190,7 +181,7 @@ namespace PL.Volunteer
             try
             {
                 var currentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-                var callDetailsWindow = new PL.Call.CallDetailsWindow(currentCall.Id);
+                var callDetailsWindow = new PL.Call.CallDetailsWindow(currentCall.Id, CurrentVolunteer.Id);
                 callDetailsWindow.Show();
             }
             catch (System.Exception ex)

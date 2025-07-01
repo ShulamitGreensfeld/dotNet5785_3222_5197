@@ -17,6 +17,7 @@ namespace PL.Call
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+
         /// <summary>
         /// Notifies UI that a property has changed
         /// </summary>
@@ -213,6 +214,43 @@ namespace PL.Call
         {
             DialogResult = false;
             Close();
+        }
+        private int? _observedVolunteerId;
+        private Action? _volunteerObserver;
+
+        public CallDetailsWindow(int callId, int? volunteerId = null)
+        {
+            InitializeComponent();
+            IsAddMode = false;
+            Call = s_bl.Call.GetCallDetails(callId);
+            CallDistance = 0;
+            IsReadOnly = false;
+            DataContext = this;
+
+            if (volunteerId.HasValue)
+            {
+                _observedVolunteerId = volunteerId;
+                _volunteerObserver = () =>
+                {
+                    var volunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId.Value);
+                    if (volunteer.CallInProgress == null || volunteer.CallInProgress.Id != callId)
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            MessageBox.Show("למתנדב אין קריאה נוכחית יותר. החלון ייסגר.", "אין קריאה", MessageBoxButton.OK, MessageBoxImage.Information);
+                            Close();
+                        });
+                    }
+                };
+                s_bl.Volunteer.AddObserver(volunteerId.Value, _volunteerObserver);
+            }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            if (_observedVolunteerId.HasValue && _volunteerObserver != null)
+                s_bl.Volunteer.RemoveObserver(_observedVolunteerId.Value, _volunteerObserver);
         }
     }
 }

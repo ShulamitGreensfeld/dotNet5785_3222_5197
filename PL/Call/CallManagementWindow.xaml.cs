@@ -24,6 +24,7 @@ namespace PL
         public ICommand OpenCallDetailsCommand { get; }
 
         private readonly Action _refreshCallQuantities;
+        private readonly Action _refreshVolunteers;
         private readonly Dictionary<int, Action> _callObservers = new();
         private readonly int _currentUserId;
 
@@ -34,7 +35,7 @@ namespace PL
             set { _callQuantities = value; OnPropertyChanged(nameof(CallQuantities)); }
         }
 
-        public CallManagementWindow() : this(-1, null) { }
+        //public CallManagementWindow() : this(-1, null) { }
 
         public CallManagementWindow(int currentUserId, BO.Enums.CallStatus? initialStatus = null)
         {
@@ -47,6 +48,8 @@ namespace PL
 
             _refreshCallQuantities = RefreshCallQuantities;
             s_bl.Call.AddObserver(_refreshCallQuantities);
+            _refreshVolunteers = UpdateCallList;
+            s_bl.Volunteer.AddObserver(_refreshVolunteers);
 
             DataContext = this;
 
@@ -165,8 +168,8 @@ namespace PL
                 s_bl.Call.RemoveObserver(kvp.Key, kvp.Value);
             _callObservers.Clear();
             s_bl.Call.RemoveObserver(_refreshCallQuantities);
+            s_bl.Volunteer.RemoveObserver(_refreshVolunteers);
             App.IsAdminLoggedIn = false;
-
         }
 
         private void ExecuteDeleteCommand(object param)

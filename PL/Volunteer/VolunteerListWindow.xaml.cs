@@ -92,6 +92,7 @@ namespace PL.Volunteer
         {
             try
             {
+                s_bl.Volunteer.AddObserver(QueryVolunteerList);
                 if (CurrentVolunteer != null && CurrentVolunteer.Id != 0)
                     s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
                 QueryVolunteerList();
@@ -107,6 +108,7 @@ namespace PL.Volunteer
         {
             try
             {
+                s_bl.Volunteer.RemoveObserver(QueryVolunteerList);
                 if (CurrentVolunteer != null && CurrentVolunteer.Id != 0)
                     s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
             }

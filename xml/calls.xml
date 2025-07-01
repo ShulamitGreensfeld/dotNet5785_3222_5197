@@ -986,17 +986,6 @@
     <Longitude>35.2213043</Longitude>
     <OpeningTime>2027-08-24T15:30:09</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
-    <CallDescription>rcvtby</CallDescription>
-    <ID>1093</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
     <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
     <CallDescription>dtfyguhi</CallDescription>
     <ID>1090</ID>
@@ -1033,5 +1022,27 @@
     <MaxTimeForClosing>2027-08-27T00:00:00</MaxTimeForClosing>
     <CallDescription>sdfg</CallDescription>
     <ID>1094</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
+    <CallDescription>rcvtby</CallDescription>
+    <ID>1093</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
+    <CallDescription>dfghjkl;</CallDescription>
+    <ID>1096</ID>
   </Call>
 </ArrayOfCall>
