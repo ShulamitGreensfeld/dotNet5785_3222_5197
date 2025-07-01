@@ -1013,17 +1013,6 @@
     <ID>1095</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>גכעיחל</CallDescription>
-    <ID>1092</ID>
-  </Call>
-  <Call>
     <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
     <Address>mevo livna 5</Address>
     <Latitude>31.9403861</Latitude>
@@ -1055,5 +1044,16 @@
     <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
     <CallDescription>dfghjkl;</CallDescription>
     <ID>1096</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>mevo livna 5</Address>
+    <Latitude>31.9403861</Latitude>
+    <Longitude>35.2213043</Longitude>
+    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2027-08-31T00:00:00</MaxTimeForClosing>
+    <CallDescription>גכעיחל</CallDescription>
+    <ID>1092</ID>
   </Call>
 </ArrayOfCall>

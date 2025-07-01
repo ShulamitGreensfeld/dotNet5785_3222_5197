@@ -237,7 +237,6 @@ namespace PL.Call
                     {
                         Dispatcher.Invoke(() =>
                         {
-                            MessageBox.Show("למתנדב אין קריאה נוכחית יותר. החלון ייסגר.", "אין קריאה", MessageBoxButton.OK, MessageBoxImage.Information);
                             Close();
                         });
                     }

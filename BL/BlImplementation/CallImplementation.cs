@@ -1,4 +1,5 @@
 ﻿using BO;
+using DalApi;
 using DO;
 using Helpers;
 
@@ -278,7 +279,8 @@ internal class CallImplementation : BlApi.ICall
             CallManager.Observers.NotifyListUpdated(); //stage 5
             VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
             CallManager.Observers.NotifyItemUpdated(assignment.CallId);
-            VolunteerManager.Observers.NotifyListUpdated();                  
+            VolunteerManager.Observers.NotifyListUpdated();    
+            
         }
         catch (BO.BlUnauthorizedException ex)
         {
@@ -314,6 +316,7 @@ internal class CallImplementation : BlApi.ICall
             CallManager.Observers.NotifyListUpdated(); //stage 5  
             VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
             CallManager.Observers.NotifyItemUpdated(assignment.CallId);
+            VolunteerManager.Observers.NotifyListUpdated();
         }
         catch (BO.BlUnauthorizedException ex)
         {
@@ -422,7 +425,9 @@ internal class CallImplementation : BlApi.ICall
             _dal.Assignment.Create(newAssignment);
             VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
             CallManager.Observers.NotifyItemUpdated(callId);
-            CallManager.Observers.NotifyListUpdated();
+            CallManager.Observers.NotifyListUpdated(); //stage 5  
+            VolunteerManager.Observers.NotifyListUpdated();
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
