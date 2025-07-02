@@ -272,6 +272,11 @@ namespace PL
 
         private void OpenWindow<T>() where T : Window, new()
         {
+            if (IsSimulatorRunning)
+            {
+                new T().Show();
+                return;
+            }
             if (Application.Current.Windows.OfType<T>().Any())
             {
                 MessageBox.Show($"{typeof(T).Name} is already open.");

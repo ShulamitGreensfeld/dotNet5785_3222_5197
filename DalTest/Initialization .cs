@@ -517,7 +517,7 @@ namespace DalTest
                 ID = 214323222,
                 Name = "Super Admin",
                 Phone = "052-0000000",
-                Email = "shulamit5751@gmail.com",
+                Email = "rachlios2005@gmail.com",
                 Address = "mevo livna 5",
                 Latitude = 32.1,
                 Longitude = 34.8,

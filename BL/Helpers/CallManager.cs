@@ -66,8 +66,8 @@ namespace Helpers
 
                     var callStatus = CalculateCallStatus(call);
 
-                    TimeSpan? timeLeft = call.MaxTimeForClosing > DateTime.Now
-                        ? call.MaxTimeForClosing - DateTime.Now
+                    TimeSpan? timeLeft = call.MaxTimeForClosing > AdminManager.Now
+                        ? call.MaxTimeForClosing - AdminManager.Now
                         : null;
 
                     TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.closed
