@@ -4,19 +4,60 @@
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Loaded="Window_Loaded" Closed="Window_Closed"
         Title="Volunteer List" Height="640" Width="1020" MaxWidth="1200"
-        Background="#EAF6F6"
-        ResizeMode="CanMinimize">
+        Background="#0D1117"
+        ResizeMode="CanMinimize"
+        FontFamily="Segoe UI">
 
     <Window.Resources>
-        <!-- Modern Button Style -->
-        <Style TargetType="Button" x:Key="ModernButton">
-            <Setter Property="Background" Value="#1ABC9C"/>
+
+
+        <!-- GitHub-style ComboBox -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="6"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#1F6FEB"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#2A7FFF"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="#238636"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#161B22"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="Padding" Value="6,4"/>
+        </Style>
+
+        <!-- GitHub-style Button -->
+        <Style TargetType="Button" x:Key="ModernButton">
+            <Setter Property="Background" Value="#238636"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="8,4"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#238636"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -24,67 +65,39 @@
                         <Border Background="{TemplateBinding Background}" CornerRadius="6">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#16A085"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#149174"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Background" Value="#95A5A6"/>
-                                <Setter Property="Foreground" Value="#D0D7D8"/>
-                                <Setter Property="Cursor" Value="Arrow"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2EA043"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#3FB950"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#444C56"/>
+                    <Setter Property="Foreground" Value="#CCCCCC"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
-        <!-- Modern ComboBox Style -->
-        <Style TargetType="ComboBox" x:Key="ModernComboBox">
-            <Setter Property="Background" Value="#1ABC9C"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="6,2"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}" CornerRadius="12">
-                                <ToggleButton Name="ToggleButton"
-                                              Background="{TemplateBinding Background}"
-                                              Foreground="{TemplateBinding Foreground}"
-                                              BorderThickness="0"
-                                              FontWeight="{TemplateBinding FontWeight}"
-                                              Padding="{TemplateBinding Padding}"
-                                              Cursor="Hand"
-                                              IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
-                                    <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0,0,0"/>
-                                </ToggleButton>
-                            </Border>
-                            <Popup Name="Popup"
-                                   Placement="Bottom"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}"
-                                   AllowsTransparency="True"
-                                   Focusable="False">
-                                <Border Background="White" CornerRadius="12">
-                                    <ScrollViewer>
-                                        <ItemsPresenter/>
-                                    </ScrollViewer>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+
+        <!-- GitHub-style ListView -->
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="#161B22"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+        </Style>
+
+        <!-- GitHub-style TextBlock -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
         </Style>
     </Window.Resources>
 
-    <Grid Margin="0,0,99,0">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -93,15 +106,14 @@
 
         <!-- Title -->
         <TextBlock Text="Volunteer List" FontSize="28" FontWeight="Bold"
-                   Foreground="#117A8B" Margin="0,20,0,20" HorizontalAlignment="Center"/>
+                   Foreground="#238636" Margin="0,20,0,20" HorizontalAlignment="Center"/>
 
-        <!-- Filter ComboBox -->
+        <!-- Filter -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-            <TextBlock Text="📋 Sort:" FontSize="14" FontWeight="Bold" Foreground="#117A8B" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <ComboBox Width="180" Height="30"
+            <TextBlock Text="📋 Sort:" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,5,0"    Foreground="#238636" />
+            <ComboBox Width="180" Height="30" 
                       ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"
-                      SelectedItem="{Binding SelectedCallType, Mode=TwoWay}"
-                      Style="{StaticResource ModernComboBox}"/>
+                      SelectedItem="{Binding SelectedCallType, Mode=TwoWay}"/>
         </StackPanel>
 
         <!-- Volunteer List -->
@@ -109,107 +121,17 @@
                   ItemsSource="{Binding VolunteerList}"
                   SelectedItem="{Binding SelectedVolunteer, Mode=TwoWay}"
                   MouseDoubleClick="ListView_MouseDoubleClick"
-                  Margin="20,20,-82,20"
-                  Background="White"
-                  BorderBrush="#85C1B9"
-                  BorderThickness="1"
+                  Margin="0,20,0,20"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Background" Value="{Binding Latitude, Converter={StaticResource NullToBrushConverter}}"/>
-                    <Setter Property="ToolTip"
-                            Value="{Binding CoordinateError, TargetNullValue='Coordinates missing or updating...'}"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            
-            <ListView.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-0.006"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </ListView.RenderTransform>
-
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="🆔 ID" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding Id}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="👤 Full Name" Width="140">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="👤" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{Binding FullName}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="📞 Handled Calls" Width="130">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="📞" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{Binding TotalHandledCalls}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="❌ Canceled Calls" Width="130">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="❌" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{Binding TotalCanceledCalls}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="⏰ Expired Calls" Width="130">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="⏰" Margin="0,0,5,0" Foreground="Red"/>
-                                    <TextBlock Text="{Binding TotalExpiredCalls}" Foreground="Red"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="☎️ Treating Call ID" Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="☎️" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{Binding CallId}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="📋 Call Type" Width="110">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="📋" Margin="0,0,5,0"/>
-                                    <TextBlock Text="{Binding CallType}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
+                    <GridViewColumn Header="🆔 ID" Width="80" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Header="👤 Full Name" Width="140" DisplayMemberBinding="{Binding FullName}"/>
+                    <GridViewColumn Header="📞 Handled Calls" Width="130" DisplayMemberBinding="{Binding TotalHandledCalls}"/>
+                    <GridViewColumn Header="❌ Canceled Calls" Width="130" DisplayMemberBinding="{Binding TotalCanceledCalls}"/>
+                    <GridViewColumn Header="⏰ Expired Calls" Width="130" DisplayMemberBinding="{Binding TotalExpiredCalls}"/>
+                    <GridViewColumn Header="☎️ Treating Call ID" Width="120" DisplayMemberBinding="{Binding CallId}"/>
+                    <GridViewColumn Header="📋 Call Type" Width="110" DisplayMemberBinding="{Binding CallType}"/>
                     <GridViewColumn Header="✔️ Active" Width="60">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -221,7 +143,7 @@
             </ListView.View>
         </ListView>
 
-        <!-- Add Volunteer Button -->
+        <!-- Add Button -->
         <Button Content="➕ Add Volunteer" Grid.Row="2"
                 HorizontalAlignment="Center" Height="45" Width="180"
                 Margin="0,20,0,20"

@@ -4,10 +4,10 @@
         xmlns:local="clr-namespace:PL"
         Title="Call Management" Height="400" Width="900"
         WindowStartupLocation="CenterScreen"
-         Background="#F4F6F8">
+        Background="#0D1117"
+        FontFamily="Segoe UI">
 
     <Window.Resources>
-        <!-- Template for displaying each call row -->
         <DataTemplate x:Key="CallRowTemplate">
             <Grid Margin="2">
                 <Grid.ColumnDefinitions>
@@ -21,22 +21,21 @@
                     <ColumnDefinition Width="110"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Bind each call detail to respective column -->
-                <TextBlock Grid.Column="0" Text="{Binding CallId}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="1" Text="{Binding CallType}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" Text="{Binding CallStatus}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="3" Text="{Binding Opening_time, StringFormat=dd/MM/yyyy HH:mm}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="4" Text="{Binding LastVolunteerName}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="5" Text="{Binding TotalAssignments}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="{Binding CallId}" VerticalAlignment="Center" Foreground="White"/>
+                <TextBlock Grid.Column="1" Text="{Binding CallType}" VerticalAlignment="Center" Foreground="White"/>
+                <TextBlock Grid.Column="2" Text="{Binding CallStatus}" VerticalAlignment="Center" Foreground="White"/>
+                <TextBlock Grid.Column="3" Text="{Binding Opening_time, StringFormat=dd/MM/yyyy HH:mm}" VerticalAlignment="Center" Foreground="White"/>
+                <TextBlock Grid.Column="4" Text="{Binding LastVolunteerName}" VerticalAlignment="Center" Foreground="White"/>
+                <TextBlock Grid.Column="5" Text="{Binding TotalAssignments}" VerticalAlignment="Center" Foreground="White"/>
 
-                <!-- Delete call button -->
                 <Button Grid.Column="6" Content="Delete" Margin="2,0,0,0"
+                        Background="#238636" Foreground="White" BorderBrush="#238636"
                         Visibility="{Binding Path=., Converter={StaticResource DeleteButtonVisibilityConverter}}"
                         Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                         CommandParameter="{Binding}"/>
 
-                <!-- Cancel assignment button -->
                 <Button Grid.Column="7" Content="Cancel Assignment" Margin="2,0,0,0"
+                        Background="#238636" Foreground="White" BorderBrush="#238636"
                         Visibility="{Binding Path=., Converter={StaticResource CancelAssignmentVisibilityConverter}}"
                         Command="{Binding DataContext.CancelAssignmentCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                         CommandParameter="{Binding}"/>
@@ -45,28 +44,28 @@
     </Window.Resources>
 
     <DockPanel>
-        <!-- Filter and sort section -->
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10">
-            <TextBlock Text="Filter by Type:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Filter by Type:" Margin="0,0,5,0" VerticalAlignment="Center" Foreground="White"/>
             <ComboBox ItemsSource="{Binding CallTypeCollection}" SelectedItem="{Binding SelectedCallType}" Width="110" Margin="0,0,10,0"/>
 
-            <TextBlock Text="Filter by Status:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Filter by Status:" Margin="0,0,5,0" VerticalAlignment="Center" Foreground="White"/>
             <ComboBox ItemsSource="{Binding CallStatusCollection}" SelectedItem="{Binding SelectedCallStatus}" Width="110" Margin="0,0,10,0"/>
 
-            <TextBlock Text="Sort by:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Sort by:" Margin="0,0,5,0" VerticalAlignment="Center" Foreground="#2EA043"/>
             <ComboBox ItemsSource="{Binding SortFields}" SelectedItem="{Binding SelectedSortField}" Width="110" Margin="0,0,10,0"/>
 
-            <TextBlock Text="Group by:" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Group by:" Margin="0,0,5,0" VerticalAlignment="Center" Foreground="White"/>
             <ComboBox ItemsSource="{Binding GroupFields}" SelectedItem="{Binding SelectedGroupField}" Width="110"/>
 
-            <!-- Add call button -->
             <Button Content="➕ Add Call"
                     Margin="20,0,0,0"
                     Padding="10,2"
+                    Background="#238636"
+                    Foreground="White"
+                    BorderBrush="#238636"
                     Command="{Binding AddCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
         </StackPanel>
 
-        <!-- Header row of the table -->
         <Grid DockPanel.Dock="Top" Margin="10,0,10,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
@@ -77,32 +76,31 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="80"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="ID" FontWeight="Bold"/>
-            <TextBlock Grid.Column="1" Text="Call Type" FontWeight="Bold"/>
-            <TextBlock Grid.Column="2" Text="Status" FontWeight="Bold"/>
-            <TextBlock Grid.Column="3" Text="Opened At" FontWeight="Bold"/>
-            <TextBlock Grid.Column="4" Text="Last Volunteer" FontWeight="Bold"/>
-            <TextBlock Grid.Column="5" Text="Total Assignments" FontWeight="Bold"/>
-            <TextBlock Grid.Column="6" Text="Actions" FontWeight="Bold"/>
+            <TextBlock Grid.Column="0" Text="ID" FontWeight="Bold" Foreground="#2EA043"/>
+            <TextBlock Grid.Column="1" Text="Call Type" FontWeight="Bold" Foreground="#2EA043"/>
+            <TextBlock Grid.Column="2" Text="Status" FontWeight="Bold" Foreground="#2EA043"/>
+            <TextBlock Grid.Column="3" Text="Opened At" FontWeight="Bold" Foreground="#2EA043"/>
+            <TextBlock Grid.Column="4" Text="Last Volunteer" FontWeight="Bold" Foreground="#2EA043"/>
+            <TextBlock Grid.Column="5" Text="Total Assignments" FontWeight="Bold" Foreground="#2EA043"/>
+            <TextBlock Grid.Column="6" Text="Actions" FontWeight="Bold" Foreground="#2EA043"/>
         </Grid>
 
-        <!-- List of calls shown -->
         <ListView ItemsSource="{Binding CallListView}" 
                   ItemTemplate="{StaticResource CallRowTemplate}" 
                   Margin="10"
                   SelectedItem="{Binding SelectedCall, Mode=TwoWay}"
-                  MouseDoubleClick="ListView_MouseDoubleClick">
+                  MouseDoubleClick="ListView_MouseDoubleClick"
+                  Background="#161B22" Foreground="White"
+                  BorderBrush="#30363D">
             <ListView.InputBindings>
-                <!-- Instead of using MouseDoubleClick event -->
-                <MouseBinding Gesture="LeftDoubleClick"
-                              Command="{Binding OpenCallDetailsCommand}" />
+                <MouseBinding Gesture="LeftDoubleClick" Command="{Binding OpenCallDetailsCommand}" />
             </ListView.InputBindings>
 
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}" Margin="0,5,0,0"/>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}" Margin="0,5,0,0" Foreground="White"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
