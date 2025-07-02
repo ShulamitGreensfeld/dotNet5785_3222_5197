@@ -28,5 +28,8 @@
         <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
 
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <local:NullToBrushConverter x:Key="NullToBrushConverter"/>
+        <local:BoolToStartStopTextConverter x:Key="BoolToStartStopTextConverter"/>
+        <local:InverseBoolConverter x:Key="InverseBoolConverter"/>
     </Application.Resources>
 </Application>

@@ -4,6 +4,7 @@ using DO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 internal class CallImplementation : ICall
 {
@@ -11,6 +12,7 @@ internal class CallImplementation : ICall
     /// Creates a new call and assigns it a unique ID.
     /// The new call is then added to the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Call item)
     {
         int newId = XMLTools.GetAndIncreaseConfigIntVal("data-config.xml", "nextCallId");
@@ -24,6 +26,7 @@ internal class CallImplementation : ICall
     /// Reads all calls from the XML file.
     /// If a filter function is provided, only matching calls are returned.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
     {
         List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
@@ -34,6 +37,7 @@ internal class CallImplementation : ICall
     /// Deletes a call by its ID.
     /// Throws an exception if the call does not exist.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
@@ -48,6 +52,7 @@ internal class CallImplementation : ICall
     /// <summary>
     /// Deletes all calls from the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLSerializer(new List<Call>(), Config.s_calls_xml);
@@ -57,6 +62,7 @@ internal class CallImplementation : ICall
     /// Reads a single call by its ID.
     /// Returns null if the call does not exist.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(int id)
     {
         List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
@@ -67,6 +73,7 @@ internal class CallImplementation : ICall
     /// Updates an existing call.
     /// Throws an exception if the call does not exist.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Call item)
     {
         List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
@@ -84,6 +91,7 @@ internal class CallImplementation : ICall
     /// Returns null if no matching call is found.
     /// Throws an exception if the filter function is null.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(Func<Call, bool> filter)
     {
         if (filter == null)

@@ -65,21 +65,21 @@
         /// </summary>
         /// <param name="volunteerId">The ID of the volunteer completing the call.</param>
         /// <param name="assignmentId">The ID of the assignment associated with the call.</param>
-        void MarkCallCompletion(int volunteerId, int assignmentId);
+        void MarkCallCompletion(int volunteerId, int assignmentId, bool simulator=false);
 
         /// <summary>
         /// Marks a call as cancelled by a specific volunteer and assignment.
         /// </summary>
         /// <param name="volunteerId">The ID of the volunteer cancelling the call.</param>
         /// <param name="assignmentId">The ID of the assignment associated with the call.</param>
-        void MarkCallCancellation(int volunteerId, int assignmentId);
+        void MarkCallCancellation(int volunteerId, int assignmentId, bool simulator=false);
 
         /// <summary>
         /// Selects a call for treatment by a specific volunteer.
         /// </summary>
         /// <param name="volunteerId">The ID of the volunteer selecting the call.</param>
         /// <param name="callId">The ID of the call being selected for treatment.</param>
-        void SelectCallForTreatment(int volunteerId, int callId);
+        void SelectCallForTreatment(int volunteerId, int callId, bool simulator=false);
 
         Task<IEnumerable<BO.OpenCallInList>> GetOpenCallsForVolunteerAsync(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null);
     }

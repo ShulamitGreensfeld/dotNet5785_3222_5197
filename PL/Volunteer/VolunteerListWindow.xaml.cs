@@ -1,6 +1,6 @@
 ﻿//using BlApi;
 //using System;
-//using System.Collections.Generic;
+//using System.Collections.ObjectModel;
 //using System.ComponentModel;
 //using System.Linq;
 //using System.Windows;
@@ -15,12 +15,10 @@
 
 //        private readonly Action _refreshVolunteers;
 
-//        // Event for notifying the UI of property changes
 //        public event PropertyChangedEventHandler? PropertyChanged;
 //        private void OnPropertyChanged(string propertyName) =>
 //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-//        // Currently logged-in volunteer (used for observer)
 //        private BO.Volunteer? _currentVolunteer;
 //        public BO.Volunteer? CurrentVolunteer
 //        {
@@ -32,7 +30,6 @@
 //            }
 //        }
 
-//        // Filter for the call type dropdown
 //        private BO.Enums.CallType _selectedCallType = BO.Enums.CallType.none;
 //        public BO.Enums.CallType SelectedCallType
 //        {
@@ -48,7 +45,6 @@
 //            }
 //        }
 
-//        // Selected volunteer in the list
 //        private BO.VolunteerInList? _selectedVolunteer;
 //        public BO.VolunteerInList? SelectedVolunteer
 //        {
@@ -60,45 +56,32 @@
 //            }
 //        }
 
-//        // List of volunteers displayed in the view
-//        public IEnumerable<BO.VolunteerInList> VolunteerList
+//        // ObservableCollection for automatic UI updates
+//        public ObservableCollection<BO.VolunteerInList> VolunteerList
 //        {
-//            get => (IEnumerable<BO.VolunteerInList>)GetValue(VolunteerListProperty);
+//            get => (ObservableCollection<BO.VolunteerInList>)GetValue(VolunteerListProperty);
 //            set => SetValue(VolunteerListProperty, value);
 //        }
 
-//        // DependencyProperty backing VolunteerList
 //        public static readonly DependencyProperty VolunteerListProperty =
 //            DependencyProperty.Register(
 //                nameof(VolunteerList),
-//                typeof(IEnumerable<BO.VolunteerInList>),
+//                typeof(ObservableCollection<BO.VolunteerInList>),
 //                typeof(VolunteerListWindow),
 //                new PropertyMetadata(null));
 
-//        // Constructor initializes the window
 //        public VolunteerListWindow()
 //        {
-//            try
-//            {
-//                InitializeComponent();
-//                _refreshVolunteers = QueryVolunteerList;
-//                s_bl.Volunteer.AddObserver(_refreshVolunteers);
-//                DataContext = this;
-//            }
-//            catch (Exception ex)
-//            {
-//                MessageBox.Show("Error loading volunteer window: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-//            }
+//            InitializeComponent();
+//            _refreshVolunteers = QueryVolunteerList;
+//            s_bl.Volunteer.AddObserver(_refreshVolunteers);
+//            DataContext = this;
 //        }
 
-//        // Runs when the window loads; sets observer and queries list
 //        private void Window_Loaded(object sender, RoutedEventArgs e)
 //        {
 //            try
 //            {
-//                s_bl.Volunteer.AddObserver(QueryVolunteerList);
-//                if (CurrentVolunteer != null && CurrentVolunteer.Id != 0)
-//                    s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, VolunteerObserver);
 //                QueryVolunteerList();
 //            }
 //            catch (Exception ex)
@@ -107,14 +90,11 @@
 //            }
 //        }
 
-//        // Runs when the window closes; removes observer
 //        private void Window_Closed(object sender, EventArgs e)
 //        {
 //            try
 //            {
-//                s_bl.Volunteer.RemoveObserver(QueryVolunteerList);
-//                if (CurrentVolunteer != null && CurrentVolunteer.Id != 0)
-//                    s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, VolunteerObserver);
+//                s_bl.Volunteer.RemoveObserver(_refreshVolunteers);
 //            }
 //            catch (Exception ex)
 //            {
@@ -122,27 +102,17 @@
 //            }
 //        }
 
-//        // Refreshes CurrentVolunteer by fetching it again from BL
-//        private void VolunteerObserver()
-//        {
-//            if (CurrentVolunteer?.Id != 0)
-//            {
-//                int id = CurrentVolunteer.Id;
-//                CurrentVolunteer = null;
-//                CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-//            }
-//        }
-
-//        // Queries the volunteer list from BL and applies optional filtering
 //        private void QueryVolunteerList()
 //        {
 //            try
 //            {
-//                VolunteerList = SelectedCallType == BO.Enums.CallType.none
+//                var list = SelectedCallType == BO.Enums.CallType.none
 //                    ? s_bl.Volunteer.GetVolunteersList()
 //                    : s_bl.Volunteer.GetVolunteersFilterList(SelectedCallType);
 
-//                if (VolunteerList == null || !VolunteerList.Any())
+//                VolunteerList = new ObservableCollection<BO.VolunteerInList>(list);
+
+//                if (!VolunteerList.Any())
 //                {
 //                    MessageBox.Show("No volunteers found.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 //                }
@@ -153,7 +123,6 @@
 //            }
 //        }
 
-//        // Opens the selected volunteer in a window when double-clicked
 //        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 //        {
 //            if (SelectedVolunteer == null || SelectedVolunteer.Id == 0)
@@ -164,37 +133,49 @@
 
 //            foreach (Window w in Application.Current.Windows)
 //            {
-//                if (w is PL.Volunteer.VolunteerWindow volWin && volWin.CurrentVolunteer?.Id == SelectedVolunteer.Id)
+//                if (w is VolunteerWindow volWin && volWin.CurrentVolunteer?.Id == SelectedVolunteer.Id)
 //                {
 //                    w.Activate();
 //                    MessageBox.Show("The volunteer is already open in another window.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 //                    return;
 //                }
 //            }
-//            var win = new PL.Volunteer.VolunteerWindow(SelectedVolunteer.Id);
-//            win.Show();
+
+//            //var window = new VolunteerWindow(SelectedVolunteer.Id);
+//            //bool? result = window.ShowDialog();
+//            //if (result == true)
+//            //{
+//            //    QueryVolunteerList();
+//            //}
+//            var window = new VolunteerWindow(SelectedVolunteer.Id);
+//            window.Show();
+//            window.Closed += (s, e) => QueryVolunteerList();
 //        }
 
-//        // Opens the add volunteer window
 //        private void AddButton_Click(object sender, RoutedEventArgs e)
 //        {
-//            var window = new VolunteerWindow();
-//            bool? result = window.ShowDialog();
-//            if (result == true)
-//            {
-//                QueryVolunteerList();
-//            }
+//            //var window = new VolunteerWindow();
+//            //bool? result = window.ShowDialog();
+//            //if (result == true)
+//            //{
+//            //    QueryVolunteerList(); 
+//            //}
+//            var window = new VolunteerWindow(SelectedVolunteer.Id);
+//            window.Show();
+//            window.Closed += (s, e) => QueryVolunteerList();
 //        }
 //    }
 //}
-using BlApi;
-using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
+using BlApi;
+using BO;
+using System.Windows.Threading;
 
 namespace PL.Volunteer
 {
@@ -202,9 +183,11 @@ namespace PL.Volunteer
     {
         static readonly IBl s_bl = BlApi.Factory.Get();
 
+        private volatile DispatcherOperation? _observerOperation = null;
         private readonly Action _refreshVolunteers;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -229,7 +212,7 @@ namespace PL.Volunteer
                 {
                     _selectedCallType = value;
                     OnPropertyChanged(nameof(SelectedCallType));
-                    QueryVolunteerList();
+                    VolunteerListObserver();
                 }
             }
         }
@@ -245,7 +228,6 @@ namespace PL.Volunteer
             }
         }
 
-        // ObservableCollection for automatic UI updates
         public ObservableCollection<BO.VolunteerInList> VolunteerList
         {
             get => (ObservableCollection<BO.VolunteerInList>)GetValue(VolunteerListProperty);
@@ -262,7 +244,7 @@ namespace PL.Volunteer
         public VolunteerListWindow()
         {
             InitializeComponent();
-            _refreshVolunteers = QueryVolunteerList;
+            _refreshVolunteers = VolunteerListObserver;
             s_bl.Volunteer.AddObserver(_refreshVolunteers);
             DataContext = this;
         }
@@ -271,23 +253,32 @@ namespace PL.Volunteer
         {
             try
             {
-                QueryVolunteerList();
+                VolunteerListObserver();
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show("Error loading volunteer data: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void Window_Closed(object sender, System.EventArgs e)
         {
             try
             {
                 s_bl.Volunteer.RemoveObserver(_refreshVolunteers);
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show("Error closing volunteer window: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // מתודת השקפה עם DispatcherOperation
+        private void VolunteerListObserver()
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+            {
+                _observerOperation = Dispatcher.BeginInvoke((Action)(() => QueryVolunteerList()));
             }
         }
 
@@ -300,17 +291,13 @@ namespace PL.Volunteer
                     : s_bl.Volunteer.GetVolunteersFilterList(SelectedCallType);
 
                 VolunteerList = new ObservableCollection<BO.VolunteerInList>(list);
-
-                if (!VolunteerList.Any())
-                {
-                    MessageBox.Show("No volunteers found.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 MessageBox.Show("Error loading volunteer list: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -330,28 +317,16 @@ namespace PL.Volunteer
                 }
             }
 
-            //var window = new VolunteerWindow(SelectedVolunteer.Id);
-            //bool? result = window.ShowDialog();
-            //if (result == true)
-            //{
-            //    QueryVolunteerList();
-            //}
             var window = new VolunteerWindow(SelectedVolunteer.Id);
             window.Show();
-            window.Closed += (s, e) => QueryVolunteerList();
+            window.Closed += (s, e2) => VolunteerListObserver();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            //var window = new VolunteerWindow();
-            //bool? result = window.ShowDialog();
-            //if (result == true)
-            //{
-            //    QueryVolunteerList(); 
-            //}
-            var window = new VolunteerWindow(SelectedVolunteer.Id);
+            var window = new VolunteerWindow();
             window.Show();
-            window.Closed += (s, e) => QueryVolunteerList();
+            window.Closed += (s, e2) => VolunteerListObserver();
         }
     }
 }

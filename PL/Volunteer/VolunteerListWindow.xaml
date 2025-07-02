@@ -114,6 +114,15 @@
                   BorderBrush="#85C1B9"
                   BorderThickness="1"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Background" Value="{Binding Latitude, Converter={StaticResource NullToBrushConverter}}"/>
+                    <Setter Property="ToolTip"
+                            Value="{Binding CoordinateError, TargetNullValue='Coordinates missing or updating...'}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            
             <ListView.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>

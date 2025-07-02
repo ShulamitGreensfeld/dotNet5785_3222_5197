@@ -105,80 +105,6 @@ internal static class Tools
     }
 
     /// <summary>
-    /// Retrieves the coordinates (latitude and longitude) for a given address using a geocoding API.
-    /// </summary>
-    /// <param name="address">The address for which to retrieve coordinates.</param>
-    /// <returns>A tuple containing the latitude and longitude of the address.</returns>
-    public static (double, double) GetCoordinatesFromAddress(string address)
-    {
-        string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
-        using var client = new HttpClient();
-        string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
-
-        var response = client.GetAsync(url).GetAwaiter().GetResult();
-        if (!response.IsSuccessStatusCode)
-            throw new Exception("Invalid address or API error.");
-
-        var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-        using var doc = JsonDocument.Parse(json);
-
-        if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
-            throw new Exception("Address not found.");
-
-        var root = doc.RootElement[0];
-
-        // Convert values to double
-        double latitude = double.Parse(root.GetProperty("lat").GetString());
-        double longitude = double.Parse(root.GetProperty("lon").GetString());
-
-        Console.WriteLine($"[GetCoordinatesFromAddress] Address: {address} | Latitude: {latitude} | Longitude: {longitude}");
-
-
-        return (latitude, longitude);
-    }
-
-    /// <summary>
-    /// Sends an email using an SMTP client.
-    /// </summary>
-    /// <param name="toEmail">The recipient's email address.</param>
-    /// <param name="subject">The subject of the email.</param>
-    /// <param name="body">The body content of the email.</param>
-    public static void SendEmail(string toEmail, string subject, string body)
-    {
-        var fromAddress = new MailAddress("mailforcsharp1234@gmail.com", "NoReplyVolunteerOrganization");
-        var toAddress = new MailAddress(toEmail);
-
-        var smtpClient = new SmtpClient("smtp.gmail.com")
-        {
-            Port = 587,
-            Credentials = new NetworkCredential("mailforcsharp1234@gmail.com", "mjhm ignt phfr whuc"),
-            EnableSsl = true,
-        };
-
-        using (var message = new MailMessage(fromAddress, toAddress)
-        {
-            Subject = subject,
-            Body = body
-        })
-        {
-            smtpClient.Send(message);
-        }
-    }
-
-    /// <summary>
-    /// Asynchronously calculates the distance between two geographical points based on the selected distance type.
-    /// </summary>
-    /// <param name="latitudeV">The latitude of the first point.</param>
-    /// <param name="longitudeV">The longitude of the first point.</param>
-    /// <param name="latitudeC">The latitude of the second point.</param>
-    /// <param name="longitudeC">The longitude of the second point.</param>
-    /// <returns>The calculated distance in kilometers.</returns>
-    //public static async Task<double> CalculateDistanceAsync(double latitudeV, double longitudeV, double latitudeC, double longitudeC)
-    //{
-    //    return await CalculateDistanceAsync(_selectedDistanceType, latitudeV, longitudeV, latitudeC, longitudeC);
-    //}
-
-    /// <summary>
     /// Asynchronously calculates the distance between two geographical points based on the specified distance type.
     /// </summary>
     /// <param name="type">The type of distance calculation (aerial, walking, or driving).</param>
@@ -267,5 +193,88 @@ internal static class Tools
             Console.Error.WriteLine($"Unexpected error: {ex.Message}");
             return double.MaxValue;
         }
+    }
+
+    //public static async Task<(double? Latitude, double? Longitude, string? Error)> GetCoordinatesFromAddressAsync(string address)
+    //{
+    //    string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
+    //    using var client = new HttpClient();
+    //    string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
+
+    //    try
+    //    {
+    //        var response = await client.GetAsync(url);
+    //        if (!response.IsSuccessStatusCode)
+    //            return (null, null, "Invalid address or API error.");
+
+    //        var json = await response.Content.ReadAsStringAsync();
+    //        using var doc = JsonDocument.Parse(json);
+
+    //        if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
+    //            return (null, null, "Address not found.");
+
+    //        var root = doc.RootElement[0];
+
+    //        double latitude = double.Parse(root.GetProperty("lat").GetString());
+    //        double longitude = double.Parse(root.GetProperty("lon").GetString());
+
+    //        return (latitude, longitude, null);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return (null, null, ex.Message);
+    //    }
+    //}
+    public static async Task<(double? Latitude, double? Longitude, string? Error)> GetCoordinatesFromAddressAsync(string address)
+    {
+        string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
+        using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(7) }; 
+        string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
+
+        try
+        {
+            var response = await client.GetAsync(url);
+            if (!response.IsSuccessStatusCode)
+                return (null, null, "Invalid address or API error.");
+
+            var json = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(json);
+
+            if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
+                return (null, null, "Address not found.");
+
+            var root = doc.RootElement[0];
+
+            double latitude = double.Parse(root.GetProperty("lat").GetString());
+            double longitude = double.Parse(root.GetProperty("lon").GetString());
+
+            return (latitude, longitude, null);
+        }
+        catch (TaskCanceledException)
+        {
+            return (null, null, "Timeout while contacting location service.");
+        }
+        catch (Exception ex)
+        {
+            return (null, null, ex.Message);
+        }
+    }
+    public static async Task SendEmailAsync(string toEmail, string subject, string body)
+    {
+        var fromAddress = new MailAddress("mailforcsharp1234@gmail.com", "NoReplyVolunteerOrganization");
+        var toAddress = new MailAddress(toEmail);
+
+        using var smtpClient = new SmtpClient("smtp.gmail.com")
+        {
+            Port = 587,
+            Credentials = new NetworkCredential("mailforcsharp1234@gmail.com", "mjhm ignt phfr whuc"),
+            EnableSsl = true,
+        };
+
+        using var message = new MailMessage(fromAddress, toAddress)
+        {
+            Subject = subject,
+            Body = body
+        };
     }
 }

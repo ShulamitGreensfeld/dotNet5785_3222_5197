@@ -1,652 +1,641 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>8 HaGefen St, Kfar Saba</Address>
-    <Latitude>32.0773</Latitude>
-    <Longitude>34.7797</Longitude>
-    <OpeningTime>2025-06-22T04:46:09</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>120 Dizengoff St, Tel Aviv</Address>
+    <Latitude>32.0736</Latitude>
+    <Longitude>34.7704</Longitude>
+    <OpeningTime>2025-07-01T13:30:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T15:48:09</MaxTimeForClosing>
-    <CallDescription>Donate raw meat or fish to ensure our meals are rich in protein.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:21:53</MaxTimeForClosing>
+    <CallDescription>Help us package meals for soldiers in the field—your support makes it happen!</CallDescription>
     <ID>1000</ID>
   </Call>
   <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>25 HaBashan St, Ma'alot-Tarshiha</Address>
-    <Latitude>31.7083</Latitude>
-    <Longitude>34.7789</Longitude>
-    <OpeningTime>2025-06-22T03:18:09</OpeningTime>
+    <Address>15 Herzl St, Haifa</Address>
+    <Latitude>32.0739</Latitude>
+    <Longitude>34.8221</Longitude>
+    <OpeningTime>2025-07-01T15:58:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T15:32:09</MaxTimeForClosing>
-    <CallDescription>Help us stock up on essential kitchen supplies like salt, pepper, and spices.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:09:53</MaxTimeForClosing>
+    <CallDescription>Use your cooking skills to make fresh meals for soldiers far from home.</CallDescription>
     <ID>1001</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>8 HaGefen St, Kfar Saba</Address>
-    <Latitude>32.0773</Latitude>
-    <Longitude>34.7797</Longitude>
-    <OpeningTime>2025-06-22T06:17:09</OpeningTime>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>30 Jaffa St, Jerusalem</Address>
+    <Latitude>32.8194</Latitude>
+    <Longitude>34.989</Longitude>
+    <OpeningTime>2025-07-01T18:07:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T12:14:09</MaxTimeForClosing>
-    <CallDescription>Donate raw meat or fish to ensure our meals are rich in protein.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T03:02:53</MaxTimeForClosing>
+    <CallDescription>Volunteer to deliver meal packages to military bases—they’re counting on us!</CallDescription>
     <ID>1002</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>50 HaYarkon St, Tel Aviv</Address>
-    <Latitude>32.0546</Latitude>
-    <Longitude>34.8433</Longitude>
-    <OpeningTime>2025-06-21T23:25:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>22 Rothschild Blvd, Tel Aviv</Address>
+    <Latitude>32.0702</Latitude>
+    <Longitude>34.7915</Longitude>
+    <OpeningTime>2025-07-01T18:01:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T06:48:09</MaxTimeForClosing>
-    <CallDescription>Work with a cooking team to prepare large quantities of meals.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T20:38:53</MaxTimeForClosing>
+    <CallDescription>Join us for a fun community cooking night to prepare meals for soldiers.</CallDescription>
     <ID>1003</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>26 HaRimon St, Givatayim</Address>
-    <Latitude>32.0895</Latitude>
-    <Longitude>34.8154</Longitude>
-    <OpeningTime>2025-06-22T03:51:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>10 Derech HaShalom, Ramat Gan</Address>
+    <Latitude>31.7702</Latitude>
+    <Longitude>35.2137</Longitude>
+    <OpeningTime>2025-07-01T15:52:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T06:49:09</MaxTimeForClosing>
-    <CallDescription>Supply grains, legumes, or other bulk items for nutritious meals.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T17:38:53</MaxTimeForClosing>
+    <CallDescription>Support our efforts by donating fresh vegetables for meal prep.</CallDescription>
     <ID>1004</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>34 HaNasi St, Herzliya</Address>
-    <Latitude>32.9023</Latitude>
-    <Longitude>34.9216</Longitude>
-    <OpeningTime>2025-06-22T01:33:09</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>1 HaNassi Blvd, Haifa</Address>
+    <Latitude>32.0782</Latitude>
+    <Longitude>34.7839</Longitude>
+    <OpeningTime>2025-07-01T13:49:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T15:47:09</MaxTimeForClosing>
-    <CallDescription>Add a special touch by labeling meal packages with care.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T15:39:53</MaxTimeForClosing>
+    <CallDescription>Join the team to organize and pack food for delivery.</CallDescription>
     <ID>1005</ID>
   </Call>
   <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>15 HaAtzmaut St, Ashkelon</Address>
-    <Latitude>32.0655</Latitude>
-    <Longitude>34.77</Longitude>
-    <OpeningTime>2025-06-22T03:16:09</OpeningTime>
+    <Address>45 HaAtzmaut Blvd, Ashdod</Address>
+    <Latitude>32.3212</Latitude>
+    <Longitude>34.8573</Longitude>
+    <OpeningTime>2025-07-01T14:37:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T07:44:09</MaxTimeForClosing>
-    <CallDescription>Help distribute meal packages directly to the soldiers who need them most.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:50:53</MaxTimeForClosing>
+    <CallDescription>Bake cookies, cakes, or treats to lift a soldier’s spirits.</CallDescription>
     <ID>1006</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>15 HaAtzmaut St, Ashkelon</Address>
-    <Latitude>32.0655</Latitude>
-    <Longitude>34.77</Longitude>
-    <OpeningTime>2025-06-22T04:30:09</OpeningTime>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>88 Allenby St, Tel Aviv</Address>
+    <Latitude>32.0951</Latitude>
+    <Longitude>34.8874</Longitude>
+    <OpeningTime>2025-07-01T13:00:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T12:38:09</MaxTimeForClosing>
-    <CallDescription>Help distribute meal packages directly to the soldiers who need them most.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:05:53</MaxTimeForClosing>
+    <CallDescription>Use your vehicle to transport food to soldiers in training areas.</CallDescription>
     <ID>1007</ID>
   </Call>
   <Call>
     <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>26 HaRimon St, Givatayim</Address>
-    <Latitude>32.0895</Latitude>
-    <Longitude>34.8154</Longitude>
-    <OpeningTime>2025-06-21T23:24:09</OpeningTime>
+    <Address>12 Ben Gurion Blvd, Bat Yam</Address>
+    <Latitude>32.1575</Latitude>
+    <Longitude>34.7909</Longitude>
+    <OpeningTime>2025-07-01T16:58:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:14:09</MaxTimeForClosing>
-    <CallDescription>Supply grains, legumes, or other bulk items for nutritious meals.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T21:15:53</MaxTimeForClosing>
+    <CallDescription>Spend an evening cooking together while making a difference.</CallDescription>
     <ID>1008</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>26 HaRimon St, Givatayim</Address>
-    <Latitude>32.0895</Latitude>
-    <Longitude>34.8154</Longitude>
-    <OpeningTime>2025-06-22T01:42:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>20 King George St, Jerusalem</Address>
+    <Latitude>29.5596</Latitude>
+    <Longitude>34.9494</Longitude>
+    <OpeningTime>2025-07-01T15:01:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:21:09</MaxTimeForClosing>
-    <CallDescription>Supply grains, legumes, or other bulk items for nutritious meals.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T20:19:53</MaxTimeForClosing>
+    <CallDescription>Contribute pasta, rice, or staples that are essential for cooking.</CallDescription>
     <ID>1009</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>17 HaTe'ena St, Ra'anana</Address>
-    <Latitude>32.0873</Latitude>
-    <Longitude>34.795</Longitude>
-    <OpeningTime>2025-06-22T06:10:09</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>132 Begin Road, Tel Aviv</Address>
+    <Latitude>32.1749</Latitude>
+    <Longitude>34.7631</Longitude>
+    <OpeningTime>2025-07-01T13:31:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T16:41:09</MaxTimeForClosing>
-    <CallDescription>Deliver care packages filled with love and nourishment.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:09:53</MaxTimeForClosing>
+    <CallDescription>Be part of wrapping sandwiches and snacks for those protecting us.</CallDescription>
     <ID>1010</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>15 Herzl St, Haifa</Address>
-    <Latitude>32.0739</Latitude>
-    <Longitude>34.8221</Longitude>
-    <OpeningTime>2025-06-22T02:42:09</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>8 Keren Hayesod St, Jerusalem</Address>
+    <Latitude>32.0926</Latitude>
+    <Longitude>34.8036</Longitude>
+    <OpeningTime>2025-07-01T17:57:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:37:09</MaxTimeForClosing>
-    <CallDescription>Use your cooking skills to make fresh meals for soldiers far from home.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T21:28:53</MaxTimeForClosing>
+    <CallDescription>Join us in preparing soups, stews, or casseroles—comfort food for heroes.</CallDescription>
     <ID>1011</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>15 Herzl St, Haifa</Address>
-    <Latitude>32.0739</Latitude>
-    <Longitude>34.8221</Longitude>
-    <OpeningTime>2025-06-22T05:32:09</OpeningTime>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>99 Ben Yehuda St, Tel Aviv</Address>
+    <Latitude>32.0814</Latitude>
+    <Longitude>34.7862</Longitude>
+    <OpeningTime>2025-07-01T19:32:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T07:37:09</MaxTimeForClosing>
-    <CallDescription>Use your cooking skills to make fresh meals for soldiers far from home.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:42:53</MaxTimeForClosing>
+    <CallDescription>Help us carry freshly prepared meals to emergency locations.</CallDescription>
     <ID>1012</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>25 HaBashan St, Ma'alot-Tarshiha</Address>
-    <Latitude>31.7083</Latitude>
-    <Longitude>34.7789</Longitude>
-    <OpeningTime>2025-06-22T04:18:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>25 Weizmann St, Kfar Saba</Address>
+    <Latitude>32.1311</Latitude>
+    <Longitude>34.7927</Longitude>
+    <OpeningTime>2025-07-01T14:46:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T16:15:09</MaxTimeForClosing>
-    <CallDescription>Help us stock up on essential kitchen supplies like salt, pepper, and spices.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T18:44:53</MaxTimeForClosing>
+    <CallDescription>Help prepare meals alongside neighbors and friends for a great cause.</CallDescription>
     <ID>1013</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>15 Herzl St, Haifa</Address>
-    <Latitude>32.0739</Latitude>
-    <Longitude>34.8221</Longitude>
-    <OpeningTime>2025-06-22T03:36:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>14 Golani Brigade St, Afula</Address>
+    <Latitude>31.7665</Latitude>
+    <Longitude>34.6292</Longitude>
+    <OpeningTime>2025-07-01T18:02:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T17:33:09</MaxTimeForClosing>
-    <CallDescription>Use your cooking skills to make fresh meals for soldiers far from home.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T23:37:53</MaxTimeForClosing>
+    <CallDescription>Donate sauces, spices, or oils to add flavor to meals for soldiers.</CallDescription>
     <ID>1014</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>50 HaYarkon St, Tel Aviv</Address>
-    <Latitude>32.0546</Latitude>
-    <Longitude>34.8433</Longitude>
-    <OpeningTime>2025-06-22T00:18:09</OpeningTime>
+    <Address>33 Yehuda Halevi St, Tel Aviv</Address>
+    <Latitude>32.0509</Latitude>
+    <Longitude>34.7657</Longitude>
+    <OpeningTime>2025-07-01T17:40:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T16:11:09</MaxTimeForClosing>
-    <CallDescription>Work with a cooking team to prepare large quantities of meals.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T21:29:53</MaxTimeForClosing>
+    <CallDescription>Package hot meals into containers and bring a smile to someone’s day.</CallDescription>
     <ID>1015</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>22 HaTmarim Blvd, Eilat</Address>
-    <Latitude>32.1736</Latitude>
-    <Longitude>34.8792</Longitude>
-    <OpeningTime>2025-06-22T03:00:09</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>77 HaNassi Blvd, Haifa</Address>
+    <Latitude>32.0354</Latitude>
+    <Longitude>34.7894</Longitude>
+    <OpeningTime>2025-07-01T15:32:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T14:54:09</MaxTimeForClosing>
-    <CallDescription>Chop vegetables and prep ingredients to kick-start our kitchen efforts.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T23:25:53</MaxTimeForClosing>
+    <CallDescription>Help us cook using donated ingredients to create something special.</CallDescription>
     <ID>1016</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>12 Menachem Begin Blvd, Rishon LeZion</Address>
-    <Latitude>31.673</Latitude>
-    <Longitude>34.6489</Longitude>
-    <OpeningTime>2025-06-22T03:47:09</OpeningTime>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>19 Arlozorov St, Tel Aviv</Address>
+    <Latitude>31.9737</Latitude>
+    <Longitude>34.836</Longitude>
+    <OpeningTime>2025-07-01T15:27:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T10:12:09</MaxTimeForClosing>
-    <CallDescription>Donate canned goods or non-perishable food items.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:18:53</MaxTimeForClosing>
+    <CallDescription>Make a difference by delivering food to remote outposts.</CallDescription>
     <ID>1017</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>31 HaTavor St, Rosh HaAyin</Address>
-    <Latitude>32.1678</Latitude>
-    <Longitude>34.8361</Longitude>
-    <OpeningTime>2025-06-22T04:38:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>96 HaHashmonaim St, Tel Aviv</Address>
+    <Latitude>32.0656</Latitude>
+    <Longitude>34.804</Longitude>
+    <OpeningTime>2025-07-01T14:23:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T13:50:09</MaxTimeForClosing>
-    <CallDescription>Prepare boxes of pre-cooked meals ready for delivery.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T20:54:53</MaxTimeForClosing>
+    <CallDescription>Be part of a community effort to support those who protect us.</CallDescription>
     <ID>1018</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>45 HaAtzmaut Blvd, Ashdod</Address>
-    <Latitude>32.3212</Latitude>
-    <Longitude>34.8573</Longitude>
-    <OpeningTime>2025-06-22T01:58:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>12 Menachem Begin Blvd, Rishon LeZion</Address>
+    <Latitude>31.673</Latitude>
+    <Longitude>34.6489</Longitude>
+    <OpeningTime>2025-07-01T14:56:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T16:41:09</MaxTimeForClosing>
-    <CallDescription>Bake cookies, cakes, or treats to lift a soldier’s spirits.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T19:14:53</MaxTimeForClosing>
+    <CallDescription>Donate canned goods or non-perishable food items.</CallDescription>
     <ID>1019</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>14 Golani Brigade St, Afula</Address>
-    <Latitude>31.7665</Latitude>
-    <Longitude>34.6292</Longitude>
-    <OpeningTime>2025-06-22T02:58:09</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>5 Bialik St, Ramat Gan</Address>
+    <Latitude>31.7717</Latitude>
+    <Longitude>34.6415</Longitude>
+    <OpeningTime>2025-07-01T19:42:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T07:37:09</MaxTimeForClosing>
-    <CallDescription>Donate sauces, spices, or oils to add flavor to meals for soldiers.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T23:55:53</MaxTimeForClosing>
+    <CallDescription>Help prepare food items and pack them for easy transport.</CallDescription>
     <ID>1020</ID>
   </Call>
   <Call>
     <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>15 HaAtzmaut St, Ashkelon</Address>
-    <Latitude>32.0655</Latitude>
-    <Longitude>34.77</Longitude>
-    <OpeningTime>2025-06-22T05:39:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T11:32:09</MaxTimeForClosing>
-    <CallDescription>Help distribute meal packages directly to the soldiers who need them most.</CallDescription>
-    <ID>1021</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>25 Weizmann St, Kfar Saba</Address>
-    <Latitude>32.1311</Latitude>
-    <Longitude>34.7927</Longitude>
-    <OpeningTime>2025-06-22T05:58:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T11:12:09</MaxTimeForClosing>
-    <CallDescription>Help prepare meals alongside neighbors and friends for a great cause.</CallDescription>
-    <ID>1022</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>4 HaNarkis St, Modi'in</Address>
-    <Latitude>31.8231</Latitude>
-    <Longitude>34.7721</Longitude>
-    <OpeningTime>2025-06-22T02:20:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T07:54:09</MaxTimeForClosing>
-    <CallDescription>Participate in a special event to cook holiday meals for soldiers.</CallDescription>
-    <ID>1023</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
     <Address>50 HaYarkon St, Tel Aviv</Address>
     <Latitude>32.0546</Latitude>
     <Longitude>34.8433</Longitude>
-    <OpeningTime>2025-06-22T01:44:09</OpeningTime>
+    <OpeningTime>2025-07-01T13:52:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:31:09</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-07-02T00:13:53</MaxTimeForClosing>
     <CallDescription>Work with a cooking team to prepare large quantities of meals.</CallDescription>
+    <ID>1021</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>7 Hillel St, Jerusalem</Address>
+    <Latitude>31.8419</Latitude>
+    <Longitude>34.7589</Longitude>
+    <OpeningTime>2025-07-01T15:56:53</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-07-01T23:32:53</MaxTimeForClosing>
+    <CallDescription>Drive and deliver meals, ensuring everything stays fresh and intact.</CallDescription>
+    <ID>1022</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>60 Nordau Blvd, Netanya</Address>
+    <Latitude>31.7134</Latitude>
+    <Longitude>34.8352</Longitude>
+    <OpeningTime>2025-07-01T15:36:53</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-07-02T00:29:53</MaxTimeForClosing>
+    <CallDescription>Share your favorite recipes while cooking together for a meaningful goal.</CallDescription>
+    <ID>1023</ID>
+  </Call>
+  <Call>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>3 Rambam St, Be'er Sheva</Address>
+    <Latitude>32.0779</Latitude>
+    <Longitude>34.8195</Longitude>
+    <OpeningTime>2025-07-01T17:10:53</OpeningTime>
+    <RiskRange xsi:nil="true" />
+    <MaxTimeForClosing>2025-07-01T22:11:53</MaxTimeForClosing>
+    <CallDescription>Share baking ingredients like sugar or flour to create homemade treats.</CallDescription>
     <ID>1024</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>23 HaNarkis St, Kiryat Ata</Address>
-    <Latitude>31.6765</Latitude>
-    <Longitude>34.7533</Longitude>
-    <OpeningTime>2025-06-21T23:55:09</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>18 HaPalmach St, Rehovot</Address>
+    <Latitude>32.0944</Latitude>
+    <Longitude>34.7629</Longitude>
+    <OpeningTime>2025-07-01T17:52:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T12:35:09</MaxTimeForClosing>
-    <CallDescription>Bring your energy and cook side by side with other caring individuals.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:19:53</MaxTimeForClosing>
+    <CallDescription>Work alongside others to efficiently pack food for our soldiers.</CallDescription>
     <ID>1025</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>1 HaNassi Blvd, Haifa</Address>
-    <Latitude>32.0782</Latitude>
-    <Longitude>34.7839</Longitude>
-    <OpeningTime>2025-06-22T02:47:09</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>22 HaTmarim Blvd, Eilat</Address>
+    <Latitude>32.1736</Latitude>
+    <Longitude>34.8792</Longitude>
+    <OpeningTime>2025-07-01T15:43:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T12:25:09</MaxTimeForClosing>
-    <CallDescription>Join the team to organize and pack food for delivery.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:22:53</MaxTimeForClosing>
+    <CallDescription>Chop vegetables and prep ingredients to kick-start our kitchen efforts.</CallDescription>
     <ID>1026</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>4 HaNarkis St, Modi'in</Address>
-    <Latitude>31.8231</Latitude>
-    <Longitude>34.7721</Longitude>
-    <OpeningTime>2025-06-22T03:29:09</OpeningTime>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>9 HaGalil St, Tiberias</Address>
+    <Latitude>31.6534</Latitude>
+    <Longitude>34.8299</Longitude>
+    <OpeningTime>2025-07-01T17:21:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T10:04:09</MaxTimeForClosing>
-    <CallDescription>Participate in a special event to cook holiday meals for soldiers.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T01:34:53</MaxTimeForClosing>
+    <CallDescription>Transport bulk food supplies for distribution to multiple locations.</CallDescription>
     <ID>1027</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>77 HaNassi Blvd, Haifa</Address>
-    <Latitude>32.0354</Latitude>
-    <Longitude>34.7894</Longitude>
-    <OpeningTime>2025-06-22T02:33:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>11 HaShalom St, Petah Tikva</Address>
+    <Latitude>32.9885</Latitude>
+    <Longitude>34.8837</Longitude>
+    <OpeningTime>2025-07-01T19:46:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T17:38:09</MaxTimeForClosing>
-    <CallDescription>Help us cook using donated ingredients to create something special.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:54:53</MaxTimeForClosing>
+    <CallDescription>Enjoy a team-building evening filled with cooking and laughter.</CallDescription>
     <ID>1028</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>19 Arlozorov St, Tel Aviv</Address>
-    <Latitude>31.9737</Latitude>
-    <Longitude>34.836</Longitude>
-    <OpeningTime>2025-06-22T02:45:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>27 HaEmek St, Karmiel</Address>
+    <Latitude>32.6047</Latitude>
+    <Longitude>34.7956</Longitude>
+    <OpeningTime>2025-07-01T15:26:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:05:09</MaxTimeForClosing>
-    <CallDescription>Make a difference by delivering food to remote outposts.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:55:53</MaxTimeForClosing>
+    <CallDescription>Offer fresh fruits that can be turned into desserts or healthy snacks.</CallDescription>
     <ID>1029</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
     <Address>34 HaNasi St, Herzliya</Address>
     <Latitude>32.9023</Latitude>
     <Longitude>34.9216</Longitude>
-    <OpeningTime>2025-06-22T06:09:09</OpeningTime>
+    <OpeningTime>2025-07-01T14:18:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T18:20:09</MaxTimeForClosing>
+    <MaxTimeForClosing>2025-07-01T21:29:53</MaxTimeForClosing>
     <CallDescription>Add a special touch by labeling meal packages with care.</CallDescription>
     <ID>1030</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>23 HaNarkis St, Kiryat Ata</Address>
-    <Latitude>31.6765</Latitude>
-    <Longitude>34.7533</Longitude>
-    <OpeningTime>2025-06-22T00:19:09</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>6 HaAliya St, Rishon LeZion</Address>
+    <Latitude>31.6713</Latitude>
+    <Longitude>34.772</Longitude>
+    <OpeningTime>2025-07-01T13:42:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T17:50:09</MaxTimeForClosing>
-    <CallDescription>Bring your energy and cook side by side with other caring individuals.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T19:57:53</MaxTimeForClosing>
+    <CallDescription>Add flavor to the day by helping season and cook delicious meals.</CallDescription>
     <ID>1031</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>2 HaKalanit St, Nesher</Address>
-    <Latitude>31.7708</Latitude>
-    <Longitude>34.9046</Longitude>
-    <OpeningTime>2025-06-22T00:03:09</OpeningTime>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>15 HaAtzmaut St, Ashkelon</Address>
+    <Latitude>32.0655</Latitude>
+    <Longitude>34.77</Longitude>
+    <OpeningTime>2025-07-01T15:09:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T13:14:09</MaxTimeForClosing>
-    <CallDescription>Create balanced, nutritious meals that give soldiers the energy they need.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T18:09:53</MaxTimeForClosing>
+    <CallDescription>Help distribute meal packages directly to the soldiers who need them most.</CallDescription>
     <ID>1032</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>88 Allenby St, Tel Aviv</Address>
-    <Latitude>32.0951</Latitude>
-    <Longitude>34.8874</Longitude>
-    <OpeningTime>2025-06-21T23:31:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>21 HaDekel St, Holon</Address>
+    <Latitude>32.8124</Latitude>
+    <Longitude>34.8364</Longitude>
+    <OpeningTime>2025-07-01T19:22:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T15:01:09</MaxTimeForClosing>
-    <CallDescription>Use your vehicle to transport food to soldiers in training areas.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T02:19:53</MaxTimeForClosing>
+    <CallDescription>Help us prepare large meals in a lively and welcoming environment.</CallDescription>
     <ID>1033</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>12 Menachem Begin Blvd, Rishon LeZion</Address>
-    <Latitude>31.673</Latitude>
-    <Longitude>34.6489</Longitude>
-    <OpeningTime>2025-06-22T03:38:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>8 HaGefen St, Kfar Saba</Address>
+    <Latitude>32.0773</Latitude>
+    <Longitude>34.7797</Longitude>
+    <OpeningTime>2025-07-01T15:23:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T15:54:09</MaxTimeForClosing>
-    <CallDescription>Donate canned goods or non-perishable food items.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T02:39:53</MaxTimeForClosing>
+    <CallDescription>Donate raw meat or fish to ensure our meals are rich in protein.</CallDescription>
     <ID>1034</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>45 HaAtzmaut Blvd, Ashdod</Address>
-    <Latitude>32.3212</Latitude>
-    <Longitude>34.8573</Longitude>
-    <OpeningTime>2025-06-22T00:09:09</OpeningTime>
+    <Address>13 HaShikma St, Lod</Address>
+    <Latitude>32.7775</Latitude>
+    <Longitude>34.8741</Longitude>
+    <OpeningTime>2025-07-01T13:34:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:03:09</MaxTimeForClosing>
-    <CallDescription>Bake cookies, cakes, or treats to lift a soldier’s spirits.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:57:53</MaxTimeForClosing>
+    <CallDescription>Seal and secure food containers to ensure everything stays fresh.</CallDescription>
     <ID>1035</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>60 Nordau Blvd, Netanya</Address>
-    <Latitude>31.7134</Latitude>
-    <Longitude>34.8352</Longitude>
-    <OpeningTime>2025-06-22T02:52:09</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>29 HaZayit St, Nahariya</Address>
+    <Latitude>31.8054</Latitude>
+    <Longitude>34.8454</Longitude>
+    <OpeningTime>2025-07-01T18:42:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T18:06:09</MaxTimeForClosing>
-    <CallDescription>Share your favorite recipes while cooking together for a meaningful goal.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T06:28:53</MaxTimeForClosing>
+    <CallDescription>Bake bread or pastries that will warm someone’s heart.</CallDescription>
     <ID>1036</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>34 HaNasi St, Herzliya</Address>
-    <Latitude>32.9023</Latitude>
-    <Longitude>34.9216</Longitude>
-    <OpeningTime>2025-06-22T00:41:09</OpeningTime>
+    <Address>17 HaTe'ena St, Ra'anana</Address>
+    <Latitude>32.0873</Latitude>
+    <Longitude>34.795</Longitude>
+    <OpeningTime>2025-07-01T17:45:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T08:19:09</MaxTimeForClosing>
-    <CallDescription>Add a special touch by labeling meal packages with care.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T19:24:53</MaxTimeForClosing>
+    <CallDescription>Deliver care packages filled with love and nourishment.</CallDescription>
     <ID>1037</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>77 HaNassi Blvd, Haifa</Address>
-    <Latitude>32.0354</Latitude>
-    <Longitude>34.7894</Longitude>
-    <OpeningTime>2025-06-22T02:56:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>4 HaNarkis St, Modi'in</Address>
+    <Latitude>31.8231</Latitude>
+    <Longitude>34.7721</Longitude>
+    <OpeningTime>2025-07-01T14:57:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:45:09</MaxTimeForClosing>
-    <CallDescription>Help us cook using donated ingredients to create something special.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:39:53</MaxTimeForClosing>
+    <CallDescription>Participate in a special event to cook holiday meals for soldiers.</CallDescription>
     <ID>1038</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>10 Derech HaShalom, Ramat Gan</Address>
-    <Latitude>31.7702</Latitude>
-    <Longitude>35.2137</Longitude>
-    <OpeningTime>2025-06-22T05:40:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>26 HaRimon St, Givatayim</Address>
+    <Latitude>32.0895</Latitude>
+    <Longitude>34.8154</Longitude>
+    <OpeningTime>2025-07-01T17:10:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:30:09</MaxTimeForClosing>
-    <CallDescription>Support our efforts by donating fresh vegetables for meal prep.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T21:40:53</MaxTimeForClosing>
+    <CallDescription>Supply grains, legumes, or other bulk items for nutritious meals.</CallDescription>
     <ID>1039</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>29 HaZayit St, Nahariya</Address>
-    <Latitude>31.8054</Latitude>
-    <Longitude>34.8454</Longitude>
-    <OpeningTime>2025-06-22T01:40:09</OpeningTime>
+    <Address>31 HaTavor St, Rosh HaAyin</Address>
+    <Latitude>32.1678</Latitude>
+    <Longitude>34.8361</Longitude>
+    <OpeningTime>2025-07-01T18:48:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T10:22:09</MaxTimeForClosing>
-    <CallDescription>Bake bread or pastries that will warm someone’s heart.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T01:38:53</MaxTimeForClosing>
+    <CallDescription>Prepare boxes of pre-cooked meals ready for delivery.</CallDescription>
     <ID>1040</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>19 HaCarmel St, Safed</Address>
-    <Latitude>32.063</Latitude>
-    <Longitude>34.8302</Longitude>
-    <OpeningTime>2025-06-22T05:35:09</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>2 HaKalanit St, Nesher</Address>
+    <Latitude>31.7708</Latitude>
+    <Longitude>34.9046</Longitude>
+    <OpeningTime>2025-07-01T17:13:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T10:19:09</MaxTimeForClosing>
-    <CallDescription>Bring your passion for cooking and help us make hearty, filling dishes.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:42:53</MaxTimeForClosing>
+    <CallDescription>Create balanced, nutritious meals that give soldiers the energy they need.</CallDescription>
     <ID>1041</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>5 Bialik St, Ramat Gan</Address>
-    <Latitude>31.7717</Latitude>
-    <Longitude>34.6415</Longitude>
-    <OpeningTime>2025-06-22T03:30:09</OpeningTime>
+    <Address>14 HaLotos St, Yavne</Address>
+    <Latitude>31.8761</Latitude>
+    <Longitude>34.7964</Longitude>
+    <OpeningTime>2025-07-01T16:00:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T06:56:09</MaxTimeForClosing>
-    <CallDescription>Help prepare food items and pack them for easy transport.</CallDescription>
+    <MaxTimeForClosing>2025-07-02T00:44:53</MaxTimeForClosing>
+    <CallDescription>Join our team of volunteer drivers and bring the food where it’s needed.</CallDescription>
     <ID>1042</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>19 HaCarmel St, Safed</Address>
-    <Latitude>32.063</Latitude>
-    <Longitude>34.8302</Longitude>
-    <OpeningTime>2025-06-22T03:32:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>23 HaNarkis St, Kiryat Ata</Address>
+    <Latitude>31.6765</Latitude>
+    <Longitude>34.7533</Longitude>
+    <OpeningTime>2025-07-01T13:42:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T08:21:09</MaxTimeForClosing>
-    <CallDescription>Bring your passion for cooking and help us make hearty, filling dishes.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T23:45:53</MaxTimeForClosing>
+    <CallDescription>Bring your energy and cook side by side with other caring individuals.</CallDescription>
     <ID>1043</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>17 HaTe'ena St, Ra'anana</Address>
-    <Latitude>32.0873</Latitude>
-    <Longitude>34.795</Longitude>
-    <OpeningTime>2025-06-22T04:50:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>37 HaSharon St, Hadera</Address>
+    <Latitude>32.1089</Latitude>
+    <Longitude>34.7831</Longitude>
+    <OpeningTime>2025-07-01T16:57:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:02:09</MaxTimeForClosing>
-    <CallDescription>Deliver care packages filled with love and nourishment.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T23:06:53</MaxTimeForClosing>
+    <CallDescription>Provide dairy products like cheese, butter, or milk to enhance our cooking.</CallDescription>
     <ID>1044</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>4 HaNarkis St, Modi'in</Address>
-    <Latitude>31.8231</Latitude>
-    <Longitude>34.7721</Longitude>
-    <OpeningTime>2025-06-22T05:43:09</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>10 HaGolan St, Kiryat Shmona</Address>
+    <Latitude>32.0162</Latitude>
+    <Longitude>34.7724</Longitude>
+    <OpeningTime>2025-07-01T19:23:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T14:12:09</MaxTimeForClosing>
-    <CallDescription>Participate in a special event to cook holiday meals for soldiers.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:51:53</MaxTimeForClosing>
+    <CallDescription>Assist in packing large trays of delicious food for group delivery.</CallDescription>
     <ID>1045</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>22 HaTmarim Blvd, Eilat</Address>
-    <Latitude>32.1736</Latitude>
-    <Longitude>34.8792</Longitude>
-    <OpeningTime>2025-06-22T05:31:09</OpeningTime>
+    <TypeOfCall>ToCarryFood</TypeOfCall>
+    <Address>19 HaCarmel St, Safed</Address>
+    <Latitude>32.063</Latitude>
+    <Longitude>34.8302</Longitude>
+    <OpeningTime>2025-07-01T16:51:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T12:04:09</MaxTimeForClosing>
-    <CallDescription>Chop vegetables and prep ingredients to kick-start our kitchen efforts.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:50:53</MaxTimeForClosing>
+    <CallDescription>Bring your passion for cooking and help us make hearty, filling dishes.</CallDescription>
     <ID>1046</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>19 Arlozorov St, Tel Aviv</Address>
-    <Latitude>31.9737</Latitude>
-    <Longitude>34.836</Longitude>
-    <OpeningTime>2025-06-22T05:37:09</OpeningTime>
+    <TypeOfCall>ToPackageFood</TypeOfCall>
+    <Address>25 HaBashan St, Ma'alot-Tarshiha</Address>
+    <Latitude>31.7083</Latitude>
+    <Longitude>34.7789</Longitude>
+    <OpeningTime>2025-07-01T18:27:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T10:04:09</MaxTimeForClosing>
-    <CallDescription>Make a difference by delivering food to remote outposts.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T23:26:53</MaxTimeForClosing>
+    <CallDescription>Help us stock up on essential kitchen supplies like salt, pepper, and spices.</CallDescription>
     <ID>1047</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>15 HaAtzmaut St, Ashkelon</Address>
-    <Latitude>32.0655</Latitude>
-    <Longitude>34.77</Longitude>
-    <OpeningTime>2025-06-22T01:55:09</OpeningTime>
+    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
+    <Address>12 HaHermon St, Migdal HaEmek</Address>
+    <Latitude>31.7267</Latitude>
+    <Longitude>34.7819</Longitude>
+    <OpeningTime>2025-07-01T19:36:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T09:42:09</MaxTimeForClosing>
-    <CallDescription>Help distribute meal packages directly to the soldiers who need them most.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T22:02:53</MaxTimeForClosing>
+    <CallDescription>Join a social cooking night and put your culinary skills to good use.</CallDescription>
     <ID>1048</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>27 HaEmek St, Karmiel</Address>
-    <Latitude>32.6047</Latitude>
-    <Longitude>34.7956</Longitude>
-    <OpeningTime>2025-06-21T23:38:09</OpeningTime>
+    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
+    <Address>40 Herzl St, Tel Aviv</Address>
+    <Latitude>32.2907</Latitude>
+    <Longitude>34.8065</Longitude>
+    <OpeningTime>2025-07-01T13:53:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-22T12:15:09</MaxTimeForClosing>
-    <CallDescription>Offer fresh fruits that can be turned into desserts or healthy snacks.</CallDescription>
+    <MaxTimeForClosing>2025-07-01T23:44:53</MaxTimeForClosing>
+    <CallDescription>Donate fresh herbs or seasonings to give meals a special homemade touch.</CallDescription>
     <ID>1049</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2025-06-22T13:26:07.7011409+03:00</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>feחהיל</CallDescription>
-    <ID>1050</ID>
-  </Call>
-  <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>15 Herzl St, Haifa</Address>
-    <Latitude>32.792761</Latitude>
-    <Longitude>34.995336</Longitude>
-    <OpeningTime>2025-06-22T15:03:02.2714474+03:00</OpeningTime>
+    <Address>dfgbhnj</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2026-03-16T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>לעםי</CallDescription>
+    <MaxTimeForClosing>2026-03-18T00:00:00</MaxTimeForClosing>
+    <CallDescription>dertyu</CallDescription>
     <ID>1051</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
     <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2025-06-22T16:58:51.023537+03:00</OpeningTime>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2026-03-16T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>בהלךף</CallDescription>
+    <MaxTimeForClosing>2026-03-27T00:00:00</MaxTimeForClosing>
+    <CallDescription>sderfgtyhuj</CallDescription>
     <ID>1052</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Arzei ha-Bira 49, Jerusalem</Address>
-    <Latitude>32.430007</Latitude>
-    <Longitude>34.883242</Longitude>
-    <OpeningTime>2025-06-22T17:28:13.6097312+03:00</OpeningTime>
+    <Address>defrgthjmk</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2026-03-16T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>עויףפךלףחחמחך</CallDescription>
+    <MaxTimeForClosing>2026-03-25T00:00:00</MaxTimeForClosing>
+    <CallDescription>serty</CallDescription>
     <ID>1053</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2025-06-23T20:47:54.0969394+03:00</OpeningTime>
+    <Address>sdfghnj</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2026-03-16T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-26T00:00:00</MaxTimeForClosing>
-    <CallDescription>'קראט</CallDescription>
+    <MaxTimeForClosing>2026-03-26T00:00:00</MaxTimeForClosing>
+    <CallDescription>wserty</CallDescription>
     <ID>1054</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2025-06-23T20:48:43.8463804+03:00</OpeningTime>
+    <Address>sfergt</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2026-03-16T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>wertyhuj</CallDescription>
+    <MaxTimeForClosing>2026-04-03T00:00:00</MaxTimeForClosing>
+    <CallDescription>ד/'קראטו</CallDescription>
     <ID>1055</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>mevo livna 4</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2025-06-24T17:46:47.4810546+03:00</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>יחל</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2045-06-04T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>קראע</CallDescription>
+    <MaxTimeForClosing>2045-06-24T00:00:00</MaxTimeForClosing>
+    <CallDescription>עיחל</CallDescription>
     <ID>1056</ID>
   </Call>
   <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2025-06-24T17:47:36.1377684+03:00</OpeningTime>
+    <TypeOfCall>ToPrepareFood</TypeOfCall>
+    <Address>ניח</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2045-06-04T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-30T00:00:00</MaxTimeForClosing>
-    <CallDescription>vtybunim</CallDescription>
+    <MaxTimeForClosing>2045-06-24T00:00:00</MaxTimeForClosing>
+    <CallDescription>יח</CallDescription>
     <ID>1057</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 1</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2025-06-24T17:49:44.4350194+03:00</OpeningTime>
+    <Address>mevo livna 5</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2045-06-04T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2025-06-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>sdfgb</CallDescription>
+    <MaxTimeForClosing>2045-06-22T00:00:00</MaxTimeForClosing>
+    <CallDescription>'קראטולן</CallDescription>
     <ID>1058</ID>
   </Call>
   <Call>
@@ -654,406 +643,43 @@
     <Address>mevo livna 5</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <OpeningTime>2045-06-04T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>fi</CallDescription>
+    <MaxTimeForClosing>2045-06-21T00:00:00</MaxTimeForClosing>
+    <CallDescription>קגראטון</CallDescription>
     <ID>1059</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 3</Address>
+    <Address>mevo livna 5</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <OpeningTime>2045-06-04T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-30T00:00:00</MaxTimeForClosing>
-    <CallDescription>sd</CallDescription>
+    <MaxTimeForClosing>2045-07-05T00:00:00</MaxTimeForClosing>
+    <CallDescription>dertyuio</CallDescription>
     <ID>1060</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 4</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>bbbbbbbbb</CallDescription>
-    <ID>1062</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
     <Address>mevo livna 5</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <OpeningTime>2045-06-04T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-02T00:00:00</MaxTimeForClosing>
-    <CallDescription>asd</CallDescription>
-    <ID>1063</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-05T00:00:00</MaxTimeForClosing>
-    <CallDescription>sertgyj</CallDescription>
-    <ID>1064</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-08T00:00:00</MaxTimeForClosing>
-    <CallDescription>גקרעאי</CallDescription>
-    <ID>1065</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-25T00:00:00</MaxTimeForClosing>
-    <CallDescription>bhjk</CallDescription>
-    <ID>1066</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>rftg</CallDescription>
+    <MaxTimeForClosing>2045-06-23T00:00:00</MaxTimeForClosing>
+    <CallDescription>ד/קראט</CallDescription>
     <ID>1061</ID>
   </Call>
   <Call>
     <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Mevo Livne 5, Beit El</Address>
-    <Latitude>48.55889</Latitude>
-    <Longitude>1.615377</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-01T00:00:00</MaxTimeForClosing>
-    <CallDescription>erfgt</CallDescription>
-    <ID>1067</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Mevo Livne 5, Beit El</Address>
-    <Latitude>48.55889</Latitude>
-    <Longitude>1.615377</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-07T00:00:00</MaxTimeForClosing>
-    <CallDescription>ftgybhunjkml</CallDescription>
-    <ID>1068</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Mevo Livne 5, Beit El</Address>
-    <Latitude>48.55889</Latitude>
-    <Longitude>1.615377</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-04T00:00:00</MaxTimeForClosing>
-    <CallDescription>dergt</CallDescription>
-    <ID>1069</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>Derekh Ramal'ah, Ramallah</Address>
-    <Latitude>32.072952</Latitude>
-    <Longitude>34.917167</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-06T00:00:00</MaxTimeForClosing>
-    <CallDescription>vgtbhyjn</CallDescription>
-    <ID>1070</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>Derekh Ramal'ah, Ramallah</Address>
-    <Latitude>32.072952</Latitude>
-    <Longitude>34.917167</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-08-08T00:00:00</MaxTimeForClosing>
-    <CallDescription>כהעניחמצל</CallDescription>
-    <ID>1071</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCarryFood</TypeOfCall>
-    <Address>Derekh Ramal'ah, Ramallah</Address>
-    <Latitude>32.072952</Latitude>
-    <Longitude>34.917167</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>rctyubi</CallDescription>
-    <ID>1072</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
     <Address>mevo livna 5</Address>
     <Latitude>31.9403861</Latitude>
     <Longitude>35.2213043</Longitude>
-    <OpeningTime>2026-07-23T13:23:09</OpeningTime>
+    <OpeningTime>2045-06-04T17:24:53</OpeningTime>
     <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2026-07-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>קרעיח</CallDescription>
-    <ID>1073</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T14:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
-    <CallDescription>efrgthyjyhtg</CallDescription>
-    <ID>1075</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-09-03T00:00:00</MaxTimeForClosing>
-    <CallDescription>tgyhu</CallDescription>
-    <ID>1077</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T14:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-27T00:00:00</MaxTimeForClosing>
-    <CallDescription>tvybuji</CallDescription>
-    <ID>1076</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>חלך</CallDescription>
-    <ID>1078</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Mevo Livne 5, Beit El</Address>
-    <Latitude>48.55889</Latitude>
-    <Longitude>1.615377</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-09-01T00:00:00</MaxTimeForClosing>
-    <CallDescription>קראטיוחל</CallDescription>
-    <ID>1080</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Mevo Livne 5, Beit El</Address>
-    <Latitude>48.55889</Latitude>
-    <Longitude>1.615377</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-09-01T00:00:00</MaxTimeForClosing>
-    <CallDescription>קראטיוחל</CallDescription>
-    <ID>1081</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Derekh Ramal'ah, Ramallah</Address>
-    <Latitude>32.072952</Latitude>
-    <Longitude>34.917167</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>hijokpl</CallDescription>
-    <ID>1082</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Mevo Livne 5, Beit El</Address>
-    <Latitude>48.55889</Latitude>
-    <Longitude>1.615377</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>derfghj</CallDescription>
-    <ID>1083</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>Mevo Livne 5, Beit El</Address>
-    <Latitude>48.55889</Latitude>
-    <Longitude>1.615377</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-30T00:00:00</MaxTimeForClosing>
-    <CallDescription>aaaaaaaaaaaaaaa</CallDescription>
-    <ID>1084</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
-    <CallDescription>sdf</CallDescription>
-    <ID>1085</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>יחם'</CallDescription>
-    <ID>1086</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-09-02T00:00:00</MaxTimeForClosing>
-    <CallDescription>crtvyb</CallDescription>
-    <ID>1087</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:26:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-09-03T00:00:00</MaxTimeForClosing>
-    <CallDescription>bbbbbbbbbbbbbbbb</CallDescription>
-    <ID>1088</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>עכג</CallDescription>
-    <ID>1089</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>ghjkl</CallDescription>
-    <ID>1091</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-26T00:00:00</MaxTimeForClosing>
-    <CallDescription>rcvtby</CallDescription>
-    <ID>1093</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>dtfyguhi</CallDescription>
-    <ID>1090</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPrepareFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>sdertyju</CallDescription>
-    <ID>1095</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToDonateRawMaterials</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-27T00:00:00</MaxTimeForClosing>
-    <CallDescription>sdfg</CallDescription>
-    <ID>1094</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>sdertyju</CallDescription>
-    <ID>1095</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToPackageFood</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-28T00:00:00</MaxTimeForClosing>
-    <CallDescription>dfghjkl;</CallDescription>
-    <ID>1096</ID>
-  </Call>
-  <Call>
-    <TypeOfCall>ToCommunityCookingNights</TypeOfCall>
-    <Address>mevo livna 5</Address>
-    <Latitude>31.9403861</Latitude>
-    <Longitude>35.2213043</Longitude>
-    <OpeningTime>2027-08-24T15:30:09</OpeningTime>
-    <RiskRange xsi:nil="true" />
-    <MaxTimeForClosing>2027-08-31T00:00:00</MaxTimeForClosing>
-    <CallDescription>גכעיחל</CallDescription>
-    <ID>1092</ID>
+    <MaxTimeForClosing>2045-06-16T00:00:00</MaxTimeForClosing>
+    <CallDescription>tfyguhi</CallDescription>
+    <ID>1062</ID>
   </Call>
 </ArrayOfCall>

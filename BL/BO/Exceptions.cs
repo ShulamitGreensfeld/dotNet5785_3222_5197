@@ -94,3 +94,9 @@ public class BlInvalidInputException : Exception
         public BlNotFoundException(string message) : base(message) { }
         public BlNotFoundException(string message, Exception inner) : base(message, inner) { }
     }
+
+[Serializable]
+public class BLTemporaryNotAvailableException : Exception
+{
+    public BLTemporaryNotAvailableException(string? message) : base(message) { }
+}

@@ -2,6 +2,8 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 internal class VolunteerImplementation : IVolunteer
 {
@@ -9,9 +11,9 @@ internal class VolunteerImplementation : IVolunteer
     /// Creates a new volunteer if it doesn't already exist.
     /// Throws an exception if a volunteer with the same ID already exists.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
     {
-        //for entities with normal id (not auto id)
         if (Read(item.ID) is not null)
             throw new DalAlreadyExistsException($"Volunteer with ID={item.ID} already exists");
         DataSource.Volunteers.Add(item);
@@ -21,6 +23,7 @@ internal class VolunteerImplementation : IVolunteer
     /// Deletes a volunteer by their ID.
     /// Throws an exception if no volunteer with the given ID exists.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         Volunteer? newVolunteer = Read(id);
@@ -33,6 +36,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Deletes all volunteers.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         DataSource.Volunteers.Clear();
@@ -42,35 +46,31 @@ internal class VolunteerImplementation : IVolunteer
     /// Reads a volunteer by their ID.
     /// Returns the volunteer if found, or null if no volunteer with that ID exists.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(int id)
     {
-        //Volunteer? newvolunteer = DataSource.Volunteers.Find(volunteer => volunteer!.ID == id); //stage1
-        //return newvolunteer; //stage1
-        Volunteer? newvolunteer = DataSource.Volunteers.FirstOrDefault(volunteer => volunteer!.ID == id); //stage 2
-        return newvolunteer; //stage2
+        Volunteer? newvolunteer = DataSource.Volunteers.FirstOrDefault(volunteer => volunteer!.ID == id);
+        return newvolunteer;
     }
-
-    //public List<Volunteer> ReadAll() //stage1
-    //{
-    //    return new List<Volunteer>(DataSource.Volunteers!);
-    //}
 
     /// <summary>
     /// Reads all volunteers.
     /// Optionally filters the list of volunteers based on the provided filter function.
     /// </summary>
-    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
-    => filter != null
-        ? from item in DataSource.Volunteers
-          where filter(item)
-          select item
-        : from item in DataSource.Volunteers
-          select item;
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
+        => filter != null
+            ? from item in DataSource.Volunteers
+              where filter(item)
+              select item
+            : from item in DataSource.Volunteers
+              select item;
 
     /// <summary>
     /// Updates an existing volunteer's details.
     /// Throws an exception if no volunteer with the given ID exists.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Volunteer item)
     {
         Volunteer? newVolunteer = Read(item.ID);
@@ -87,6 +87,7 @@ internal class VolunteerImplementation : IVolunteer
     /// Reads a volunteer based on a custom filter function.
     /// Throws an exception if the filter function is null.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
         if (filter == null)

@@ -4,6 +4,7 @@ using DO;
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Implementation of the IVolunteer interface, managing volunteer records stored in an XML file.
@@ -13,6 +14,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Converts an XElement representing a volunteer to a Volunteer object.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     static Volunteer getVolunteer(XElement v)
     {
         return new DO.Volunteer()
@@ -35,6 +37,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Creates a new volunteer record in the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
     {
         XElement volunteerElement = CreateVolunteerElement(item);
@@ -46,6 +49,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Converts a Volunteer object into an XElement for storage in the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     private XElement CreateVolunteerElement(Volunteer item)
     {
         return new XElement("Volunteer",
@@ -67,6 +71,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Deletes a volunteer by their ID from the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
@@ -83,6 +88,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Deletes all volunteers from the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
@@ -93,6 +99,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Reads a volunteer by their ID from the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(int id)
     {
         XElement? volunteerElem =
@@ -103,6 +110,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Reads a single volunteer that matches the given filter.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
     {
         return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v)).FirstOrDefault(filter);
@@ -111,6 +119,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Reads all volunteers, optionally filtering the results based on a given condition.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
@@ -127,7 +136,7 @@ internal class VolunteerImplementation : IVolunteer
                 Address = (string)v.Element("Address")!,
                 Latitude = double.TryParse((string?)v.Element("Latitude"), out double lat) ? lat : 0.0,
                 Longitude = double.TryParse((string?)v.Element("Longitude"), out double lon) ? lon : 0.0,
-                MaxDistanceForCall = (double)v.Element("LargestDistance")!,
+                MaxDistanceForCall = double.TryParse((string?)v.Element("LargestDistance"), out double maxDist) ? maxDist : 0.0,
                 DistanceType = (DistanceType)Enum.Parse(typeof(DistanceType), (string)v.Element("DistanceType")!)
             })
             .ToList();
@@ -138,6 +147,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Updates an existing volunteer in the XML file with new information.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Volunteer item)
     {
         XElement volunteersRootElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);

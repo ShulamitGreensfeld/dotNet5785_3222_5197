@@ -8,7 +8,7 @@
         /// <param name="name">The name of the volunteer entering the system.</param>
         /// <param name="pass">The password for the volunteer.</param>
         /// <returns>The role of the volunteer after authentication.</returns>
-        BO.Enums.Role EnterSystem(string name, string pass);
+        BO.Enums.Role EnterSystem(string id, string pass);
 
         /// <summary>
         /// Retrieves a list of volunteers with optional filtering by active status or sorting by a field.

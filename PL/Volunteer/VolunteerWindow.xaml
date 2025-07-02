@@ -130,11 +130,20 @@ IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKe
             <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding CurrentVolunteer.FullAddress, Mode=TwoWay}"/>
 
             <Label Grid.Row="6" Grid.Column="0" Content="Latitude:"/>
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding CurrentVolunteer.Latitude, Mode=TwoWay}"/>
+            <TextBox Grid.Row="6" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.Latitude, Mode=TwoWay}">
+                <TextBox.Background>
+                    <Binding Path="CurrentVolunteer.Latitude" Converter="{StaticResource NullToBrushConverter}"/>
+                </TextBox.Background>
+            </TextBox>
 
             <Label Grid.Row="7" Grid.Column="0" Content="Longitude:"/>
-            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding CurrentVolunteer.Longitude, Mode=TwoWay}"/>
-
+            <TextBox Grid.Row="7" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.Longitude, Mode=TwoWay}">
+                <TextBox.Background>
+                    <Binding Path="CurrentVolunteer.Longitude" Converter="{StaticResource NullToBrushConverter}"/>
+                </TextBox.Background>
+            </TextBox>
             <Label Grid.Row="8" Grid.Column="0" Content="Role:"/>
             <ComboBox Grid.Row="8" Grid.Column="1" 
 ItemsSource="{Binding Source={StaticResource RoleCollectionKey}}" 

@@ -22,10 +22,6 @@ WindowStartupLocation="CenterScreen">
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Call ID -->
-        <Label Grid.Row="0" Grid.Column="0" Content="Call ID:"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Call.Id}" IsReadOnly="True"/>
-
         <!-- Call Type -->
         <Label Grid.Row="1" Grid.Column="0" Content="Call Type:"/>
         <ComboBox Grid.Row="1" Grid.Column="1"
@@ -63,14 +59,6 @@ IsReadOnly="True"/>
 SelectedDate="{Binding Call.Max_finish_time, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 IsEnabled="{Binding IsMaxFinishTimeEditable}"/>
 
-        <!-- Distance from Volunteer -->
-        <Label Grid.Row="7" Grid.Column="0" Content="Distance from Volunteer:"/>
-        <TextBox Grid.Row="7" Grid.Column="1"
-Text="{Binding CallDistance, StringFormat={}{0:F2} }"
-IsReadOnly="True"/>
-
-        <!-- Assignment List (View/Update Mode Only) -->
-        <Label Grid.Row="8" Grid.Column="0" Content="Assignments:" VerticalAlignment="Top"/>
         <ListView Grid.Row="8" Grid.Column="1" ItemsSource="{Binding Call.AssignmentsList}" Height="100"
 Visibility="{Binding IsAddMode, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
             <ListView.View>

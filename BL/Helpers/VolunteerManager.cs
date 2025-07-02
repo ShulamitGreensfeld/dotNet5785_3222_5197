@@ -1,4 +1,5 @@
 ﻿using BlApi;
+using BlImplementation;
 using BO;
 using DalApi;
 using DO;
@@ -8,7 +9,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-//using static BO.Enums;
 
 namespace Helpers;
 
@@ -23,18 +23,30 @@ internal static class VolunteerManager
     {
         try
         {
-            var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.ID);
+            IEnumerable<DO.Assignment> currentVolunteerAssignments;
+            DO.Assignment? currentAssignment;
+
+            lock (AdminManager.BlMutex)
+            {
+                currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.ID);
+                currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.ID && a.EndTimeForTreatment == null).FirstOrDefault();
+            }
+
             var totalHandled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
             var totalCanceled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation || a!.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation);
             var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.OutOfRangeCancellation);
-            var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTimeForTreatment == null)?.CallId;
-            var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.ID && a.EndTimeForTreatment == null).FirstOrDefault();
+
             BO.CallInProgress? callInProgress = null;
             BO.Enums.DistanceTypes volunteerDistanceType = (BO.Enums.DistanceTypes)doVolunteer.DistanceType;
 
             if (currentAssignment is not null)
             {
-                var callDetails = s_dal.Call.Read(currentAssignment.CallId);
+                DO.Call? callDetails;
+                lock (AdminManager.BlMutex)
+                {
+                    callDetails = s_dal.Call.Read(currentAssignment.CallId);
+                }
+
                 if (callDetails is not null)
                 {
                     callInProgress = new BO.CallInProgress
@@ -47,11 +59,17 @@ internal static class VolunteerManager
                         Opening_time = callDetails.OpeningTime,
                         Max_finish_time = (DateTime)callDetails.MaxTimeForClosing!,
                         Start_time = currentAssignment.EntryTimeForTreatment,
-                        CallDistance = await Tools.CalculateDistanceAsync(volunteerDistanceType, doVolunteer.Latitude ?? 0, doVolunteer.Longitude ?? 0, callDetails.Latitude, callDetails.Longitude),
+                        CallDistance = await Tools.CalculateDistanceAsync(
+                            volunteerDistanceType,
+                            doVolunteer.Latitude ?? 0,
+                            doVolunteer.Longitude ?? 0,
+                            callDetails.Latitude,
+                            callDetails.Longitude),
                         CallStatus = CallManager.CalculateCallStatus(callDetails)
                     };
                 }
             }
+
             return new BO.Volunteer
             {
                 Id = doVolunteer.ID,
@@ -69,11 +87,10 @@ internal static class VolunteerManager
                 TotalHandledCalls = totalHandled,
                 TotalCanceledCalls = totalCanceled,
                 TotalExpiredCalls = totalExpired,
-
-
+                CallInProgress = callInProgress
             };
         }
-        catch (DO.DalDoesNotExistException ex)
+        catch (DO.DalDoesNotExistException)
         {
             return null!;
         }
@@ -82,29 +99,42 @@ internal static class VolunteerManager
     public static DO.Volunteer ConvertBoVolunteerToDoVolunteer(BO.Volunteer boVolunteer)
     {
         return new DO.Volunteer(
-    boVolunteer.Id,
-    boVolunteer.FullName,
-    boVolunteer.CellphoneNumber,
-    boVolunteer.Email,
-    (DO.Role)boVolunteer.Role,
-    boVolunteer.IsActive,
-    (DO.DistanceType)boVolunteer.DistanceType,
-    boVolunteer.MaxDistance,
-    boVolunteer.Password,
-    boVolunteer.FullAddress,
-    boVolunteer.Latitude,
-    boVolunteer.Longitude
-    );
+            boVolunteer.Id,
+            boVolunteer.FullName,
+            boVolunteer.CellphoneNumber,
+            boVolunteer.Email,
+            (DO.Role)boVolunteer.Role,
+            boVolunteer.IsActive,
+            (DO.DistanceType)boVolunteer.DistanceType,
+            boVolunteer.MaxDistance,
+            boVolunteer.Password,
+            boVolunteer.FullAddress,
+            boVolunteer.Latitude,
+            boVolunteer.Longitude
+        );
     }
 
     public static BO.VolunteerInList ConvertDoVolunteerToBoVolunteerInList(DO.Volunteer doVolunteer)
     {
-        var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.ID);
+        IEnumerable<DO.Assignment> currentVolunteerAssignments;
+        lock (AdminManager.BlMutex)
+        {
+            currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.ID);
+        }
 
         var totalHandled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated);
         var totalCanceled = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation || a!.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation);
         var totalExpired = currentVolunteerAssignments.Count(a => a?.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.OutOfRangeCancellation);
         var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTimeForTreatment == null)?.CallId;
+
+        BO.Enums.CallType callType = BO.Enums.CallType.none;
+        if (assignedCallId is not null)
+        {
+            lock (AdminManager.BlMutex)
+            {
+                callType = (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.TypeOfCall ?? DO.TypeOfCall.ToPackageFood);
+            }
+        }
 
         return new BO.VolunteerInList
         {
@@ -115,13 +145,12 @@ internal static class VolunteerManager
             TotalCanceledCalls = totalCanceled,
             TotalExpiredCalls = totalExpired,
             CallId = assignedCallId,
-            CallType = assignedCallId is not null
-                ? (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.TypeOfCall ?? DO.TypeOfCall.ToPackageFood)
-                : BO.Enums.CallType.none
+            CallType = callType
         };
     }
+
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
-          => volunteers.Select(v => ConvertDoVolunteerToBoVolunteerInList(v)).ToList();
+        => volunteers.Select(v => ConvertDoVolunteerToBoVolunteerInList(v)).ToList();
 
     internal static bool VerifyPassword(string enteredPassword, string storedPassword)
     {
@@ -140,7 +169,7 @@ internal static class VolunteerManager
     {
         var random = new Random();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
-        return new string(Enumerable.Repeat(chars, 12) 
+        return new string(Enumerable.Repeat(chars, 12)
                                .Select(s => s[random.Next(s.Length)])
                                .ToArray());
     }
@@ -179,15 +208,15 @@ internal static class VolunteerManager
 
         if (volunteer.Password != null)
         {
-            if(volunteer.Password!.Length > 12 ||
+            if (volunteer.Password!.Length > 12 ||
              !Regex.IsMatch(volunteer.Password, "[A-Z]") ||
              !Regex.IsMatch(volunteer.Password, "[a-z]") ||
              !Regex.IsMatch(volunteer.Password, "[0-9]") ||
              !Regex.IsMatch(volunteer.Password, "[!@#$%^&=*]"))
-                 throw new BO.BlInvalidFormatException("Invalid password!");
+                throw new BO.BlInvalidFormatException("Invalid password you must contain 12 characters -at list: one capital letter one letter one number and one speical character!");
         }
 
-        if (volunteer.Role != (BO.Enums.Role.volunteer) && volunteer.Role != (BO.Enums.Role.manager))
+        if (volunteer.Role != BO.Enums.Role.volunteer && volunteer.Role != BO.Enums.Role.manager)
             throw new BO.BlInvalidFormatException("Invalid role!");
 
         if (volunteer.MaxDistance < 0)
@@ -205,21 +234,101 @@ internal static class VolunteerManager
         if (volunteer.TotalExpiredCalls < 0)
             throw new BO.BlInvalidFormatException("Invalid sum of expired calls!");
     }
+
     internal static bool IsPasswordStrong(string password)
     {
-        if (password.Length < 8)
-            return false;
-        if (!password.Any(char.IsUpper))
-            return false;
-        if (!password.Any(char.IsLower))
-            return false;
-        if (!password.Any(char.IsDigit))
-            return false;
-        if (!password.Any(c => "@#$%^&*".Contains(c)))
-            return false;
+        if (password.Length < 8) return false;
+        if (!password.Any(char.IsUpper)) return false;
+        if (!password.Any(char.IsLower)) return false;
+        if (!password.Any(char.IsDigit)) return false;
+        if (!password.Any(c => "@#$%^&*".Contains(c))) return false;
         return true;
     }
+
+    internal static void SimulateVolunteerAssignmentsAndCallHandling()
+    {
+        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        if (!Thread.CurrentThread.Name?.StartsWith("Simulator") == true)
+            AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+
+        Thread.CurrentThread.Name = $"Simulator{Thread.CurrentThread.ManagedThreadId}";
+
+        List<int> updatedVolunteerIds = new();
+        List<int> updatedCallIds = new();
+
+        List<DO.Volunteer> activeVolunteers;
+        lock (AdminManager.BlMutex)
+            activeVolunteers = s_dal.Volunteer.ReadAll(v => v.IsActive).ToList();
+
+        foreach (var volunteer in activeVolunteers)
+        {
+            DO.Assignment? currentAssignment;
+            lock (AdminManager.BlMutex)
+            {
+                currentAssignment = s_dal.Assignment
+                    .ReadAll(a => a.VolunteerId == volunteer.ID && a.EndTimeForTreatment == null)
+                    .FirstOrDefault();
+            }
+
+            if (currentAssignment == null)
+            {
+                List<BO.OpenCallInList> openCalls;
+                IEnumerable<BO.OpenCallInList> openCallsEnumerable;
+                lock (AdminManager.BlMutex)
+                    openCallsEnumerable = new CallImplementation().GetOpenCallsForVolunteerAsync(volunteer.ID).GetAwaiter().GetResult();
+                openCalls = openCallsEnumerable.ToList();
+
+                if (!openCalls.Any() || Random.Shared.NextDouble() > 0.2) continue;
+
+                var selectedCall = openCalls[Random.Shared.Next(openCalls.Count)];
+                try
+                {
+                    new CallImplementation().SelectCallForTreatment(volunteer.ID, selectedCall.Id,true);
+                    updatedVolunteerIds.Add(volunteer.ID);
+                    updatedCallIds.Add(selectedCall.Id);
+                }
+                catch { continue; }
+            }
+            else
+            {
+                DO.Call? call;
+                lock (AdminManager.BlMutex)
+                    call = s_dal.Call.Read(currentAssignment.CallId);
+
+                if (call is null) continue;
+
+                double distance = Tools.CalculateDistance(volunteer.Latitude!, volunteer.Longitude!, call.Latitude, call.Longitude);
+                TimeSpan baseTime = TimeSpan.FromMinutes(distance * 2);
+                TimeSpan extra = TimeSpan.FromMinutes(Random.Shared.Next(1, 5));
+                TimeSpan totalNeeded = baseTime + extra;
+                TimeSpan actual = AdminManager.Now - currentAssignment.EntryTimeForTreatment;
+
+                if (actual >= totalNeeded)
+                {
+                    try
+                    {
+                        new CallImplementation().MarkCallCompletion(volunteer.ID, currentAssignment.ID,true);
+                        updatedVolunteerIds.Add(volunteer.ID);
+                        updatedCallIds.Add(call.ID);
+                    }
+                    catch { continue; }
+                }
+                else if (Random.Shared.NextDouble() < 0.1)
+                {
+                    try
+                    {
+                        new CallImplementation().MarkCallCancellation(volunteer.ID, currentAssignment.ID,true);
+                        updatedVolunteerIds.Add(volunteer.ID);
+                        updatedCallIds.Add(call.ID);
+                    }
+                    catch { continue; }
+                }
+            }
+        }
+
+        foreach (var id in updatedVolunteerIds.Distinct())
+            VolunteerManager.Observers.NotifyItemUpdated(id);
+        foreach (var id in updatedCallIds.Distinct())
+            CallManager.Observers.NotifyItemUpdated(id);
+    }
 }
-
-
-
