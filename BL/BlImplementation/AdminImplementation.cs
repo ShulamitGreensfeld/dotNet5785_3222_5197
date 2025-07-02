@@ -78,6 +78,8 @@ internal class AdminImplementation : IAdmin
         AdminManager.InitializeDB();
         _dal.ResetDB();
         DalTest.Initialization.Do();
+        VolunteerManager.InvokeCallsListUpdated();
+        CallManager.Observers.NotifyListUpdated();
     }
 
     #region Stage 5 – Event Observers

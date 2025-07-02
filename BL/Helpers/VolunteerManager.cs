@@ -280,6 +280,7 @@ internal static class VolunteerManager
                         var selectedCall = callsWithCoordinates[s_rand.Next(callsWithCoordinates.Count)];
                         lock (AdminManager.BlMutex)
                             s_bl.Call.SelectCallForTreatment(doVolunteer.ID, selectedCall.Id, true);
+                        CallsListUpdated?.Invoke();
                     }
                 }
             }
@@ -316,13 +317,23 @@ internal static class VolunteerManager
                 {
                     lock (AdminManager.BlMutex)
                         s_bl.Call.MarkCallCompletion(volunteerId, currentAssignment.ID, true);
+                    CallsListUpdated?.Invoke();
                 }
                 else if (s_rand.Next(100) < 10)
                 {
                     lock (AdminManager.BlMutex)
                         s_bl.Call.MarkCallCancellation(volunteerId, currentAssignment.ID, true);
+                    CallsListUpdated?.Invoke();
+
                 }
             }
         }
+    }
+    /// <summary>
+    /// Safely invokes the CallsListUpdated event.
+    /// </summary>
+    public static void InvokeCallsListUpdated()
+    {
+        CallsListUpdated?.Invoke();
     }
 }
