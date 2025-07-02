@@ -6,64 +6,64 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Main Management Screen" Height="800" Width="1000"
-        Background="#EAF6F6"
+        Background="#0D1117"
         ResizeMode="CanMinimize"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI">
 
     <Window.Resources>
         <local:BoolToStartStopTextConverter x:Key="BoolToStartStopTextConverter"/>
         <local:InverseBoolConverter x:Key="InverseBoolConverter"/>
+
         <Style x:Key="ModernButton_Square" TargetType="Button">
-            <Setter Property="Background" Value="#1ABC9C"/>
+            <Setter Property="Background" Value="#238636"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Width" Value="80"/>
-            <Setter Property="Height" Value="40"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="BorderBrush" Value="#238636"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="6" ShadowDepth="2" Color="#888"/>
-                </Setter.Value>
-            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0"/>
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border"
-                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                            To="#16D2B2" Duration="0:0:0.25"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="border"
-                                                            Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                            To="#1ABC9C" Duration="0:0:0.25"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </Trigger.ExitActions>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#139C89"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#6EE7B7"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#161B22"/>
+            <Setter Property="BorderBrush" Value="#30363D"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        
     </Window.Resources>
 
     <Grid Margin="20">
@@ -72,92 +72,147 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <!-- תצוגת השעון המלא -->
+        <Border Name="HourglassOverlay"
+ Background="#80000000"
+ Visibility="Collapsed"
+ HorizontalAlignment="Stretch"
+ VerticalAlignment="Stretch"
+ Panel.ZIndex="9999">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="⏳" FontSize="90" HorizontalAlignment="Center"/>
+                <TextBlock Text="Initializing..." FontSize="30" Foreground="White" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+        <!-- clock -->
         <Label Content="{Binding CurrentTime, StringFormat=HH:mm:ss dd/MM/yyyy}"
-       FontSize="22"
-       FontWeight="Bold"
-       Foreground="#117A8B"
-       HorizontalAlignment="Center"
-       Margin="0,10,0,20"/>
+               FontSize="22"
+               FontWeight="Bold"
+               Foreground="White"
+               HorizontalAlignment="Center"
+               Margin="0,10,0,20"/>
 
-        <!-- Simulator Section -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,20" Grid.Row="0">
-            <TextBlock Text="Simulator Interval (minutes): " FontWeight="Bold" FontSize="15" Margin="0,0,10,0"/>
-            <TextBox Width="80" Margin="0,0,10,0"
-                     Text="{Binding Interval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+        <!-- simulator -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,30,0,20" Grid.Row="0">
+            <TextBlock Text="Simulator Interval (minutes):" FontWeight="Bold" FontSize="15"/>
+            <TextBox Width="80" Text="{Binding Interval, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"/>
             <Button Style="{StaticResource ModernButton_Square}"
                     Content="{Binding IsSimulatorRunning, Converter={StaticResource BoolToStartStopTextConverter}}"
                     Command="{Binding StartStopSimulatorCommand}"/>
         </StackPanel>
-        
-        <!-- Clock Header Bar -->
+
+  
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20">
             <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Minute"
                     Command="{Binding PromoteMinuteCommand}"
-                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"
-                    Margin="5"/>
+                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}" Margin="5"/>
             <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Hour"
                     Command="{Binding PromoteHourCommand}"
-                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"
-                    Margin="5"/>
+                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}" Margin="5"/>
             <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Day"
                     Command="{Binding PromoteDayCommand}"
-                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"
-                    Margin="5"/>
+                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}" Margin="5"/>
             <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Month"
                     Command="{Binding PromoteMonthCommand}"
-                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"
-                    Margin="5"/>
+                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}" Margin="5"/>
             <Button Style="{StaticResource ModernButton_Square}" Content="⏩ Year"
                     Command="{Binding PromoteYearCommand}"
-                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"
-                    Margin="5"/>
+                    IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}" Margin="5"/>
         </StackPanel>
 
-        <!-- Risk Range Update Section -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 0 0 20" VerticalAlignment="Center">
-            <TextBox Width="200" Text="{Binding RiskRange, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
-            <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Update Risk Range" Width="200" Command="{Binding UpdateRiskRangeCommand}"/>
-        </StackPanel>
-
-        <!-- Grid פנימי עם עמודות: כפתורים + סטטיסטיקה -->
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="3" Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Center"
+                        Width="320"
+                        Margin="0,0,20,0"
+                        Orientation="Vertical">
 
-            <!-- צד ימין: כפתורי ניהול -->
-            <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="320">
-                <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Height="50" Margin="0 5" Width="250" Command="{Binding InitializeDatabaseCommand}"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="🔄 Reset Database" Height="50" Margin="0 5" Width="250" Command="{Binding ResetDatabaseCommand}"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="🤝 Handle Volunteers" Height="50" Margin="0 5" Width="250" Command="{Binding OpenVolunteersCommand}"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="📞 Handle Calls" Height="50" Margin="0 5" Width="250" Command="{Binding OpenCallsCommand}"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="▶ Start Simulator" Height="50" Margin="0 5" Width="250" Command="{Binding StartSimulatorCommand}"/>
-                <Button Style="{StaticResource ModernButton_Square}" Content="⏹ Stop Simulator" Height="50" Margin="0 5" Width="250" Command="{Binding StopSimulatorCommand}"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5">
-                    <TextBox Width="100" Text="{Binding SimulatorSpeed, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0"/>
-                    <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Set Speed" Width="100" Command="{Binding SetSpeedCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Width="250" Height="45" Margin="0 5"
+                        Command="{Binding InitializeDatabaseCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="🔄 Reset Database" Width="250" Height="45" Margin="0 5"
+                        Command="{Binding ResetDatabaseCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="🤝 Handle Volunteers" Width="250" Height="45" Margin="0 5"
+                        Command="{Binding OpenVolunteersCommand}"/>
+                <Button Style="{StaticResource ModernButton_Square}" Content="📞 Handle Calls" Width="250" Height="45" Margin="0 5"
+                        Command="{Binding OpenCallsCommand}"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,15,0,5" HorizontalAlignment="Center">
+                    <TextBox Width="100" Text="{Binding RiskRange, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Update Risk Range" Width="170"
+                            Command="{Binding UpdateRiskRangeCommand}" Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
+                    <TextBox Width="100" Text="{Binding SimulatorSpeed, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
+                    <Button Style="{StaticResource ModernButton_Square}" Content="⚙ Set Speed" Width="110"
+                            Command="{Binding SetSpeedCommand}"/>
                 </StackPanel>
             </StackPanel>
 
-            <!-- צד שמאל: סטטיסטיקת קריאות -->
-            <StackPanel Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Margin="40 20">
-                <TextBlock Text="Call Quantities by Status" FontSize="18" FontWeight="Bold" Margin="0 0 0 10" TextAlignment="Center"/>
-                <ListView ItemsSource="{Binding CallQuantities}" SelectionMode="Single" Margin="0 0 0 20">
+            <StackPanel Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="400" Margin="40 0">
+                <TextBlock Text="Call Quantities by Status"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           Margin="0 0 0 10"
+                           TextAlignment="Center"/>
+
+                <ListView ItemsSource="{Binding CallQuantities}"
+                          Background="#161B22"
+                          BorderBrush="#30363D"
+                          Foreground="White"
+                          SelectionMode="Single"
+                          Margin="0 0 0 20">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Background" Value="#161B22"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="10"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <Border x:Name="Border"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="4">
+                                            <ContentPresenter Margin="0"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="#21262D"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Margin="5">
                                 <TextBlock Text="{Binding Status}" FontWeight="Bold" Width="200"/>
                                 <TextBlock Text="{Binding Quantity}" Width="50" TextAlignment="Right"/>
-                                <Button Content="View" Command="{Binding DataContext.ViewCallsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding Status}" Style="{StaticResource ModernButton_Square}" Width="80" Margin="10 0"/>
+                                <Button Content="View"
+                                        Command="{Binding DataContext.ViewCallsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding Status}"
+                                        Style="{StaticResource ModernButton_Square}"
+                                        Width="80" Margin="10 0"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </StackPanel>
         </Grid>
+
     </Grid>
 </Window>
