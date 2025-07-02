@@ -233,7 +233,7 @@ internal static class Tools
 
         try
         {
-            var response = await client.GetAsync(url);
+            var response = await client.GetAsync(url).ConfigureAwait(false);
             if (!response.IsSuccessStatusCode)
                 return (null, null, "Invalid address or API error.");
 

@@ -208,7 +208,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading; // ← חדש
+using System.Windows.Threading;
 using static BO.Enums;
 
 namespace PL
@@ -233,7 +233,6 @@ namespace PL
         public ObservableCollection<OpenCallInList> OpenCalls { get; set; } = new();
         public ListCollectionView OpenCallsView { get; set; }
 
-        // ---- כאן מתחילה התמיכה בעדכון תצוגה דרך DispatcherOperation (שלב 7) ----
         private volatile DispatcherOperation? _observerOperation = null;
         private readonly Action _callListObserver;
 
@@ -300,7 +299,6 @@ namespace PL
             OpenCallsView = (ListCollectionView)CollectionViewSource.GetDefaultView(OpenCalls);
             DataContext = this;
 
-            // --- הוספת Observer הרשום למשקיף של רשימת הקריאות ---
             _callListObserver = CallListObserver;
             s_bl.Call.AddObserver(_callListObserver);
 
@@ -416,7 +414,7 @@ namespace PL
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /// <summary>
-        /// הסרת המשקיף בעת סגירת המסך (חשוב!)
+        /// הסרת המשקיף בעת סגירת המסך!
         /// </summary>
         protected override void OnClosed(EventArgs e)
         {

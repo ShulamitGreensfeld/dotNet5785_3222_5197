@@ -141,7 +141,7 @@ namespace PL
     public class BoolToStartStopTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            => (value is bool b && b) ? "עצור סימולטור" : "הפעל סימולטור";
+            => (value is bool b && b) ? "stop simulator" : "start simulator";
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
@@ -153,6 +153,4 @@ namespace PL
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => value is bool b ? !b : DependencyProperty.UnsetValue;
     }
-
-
 }

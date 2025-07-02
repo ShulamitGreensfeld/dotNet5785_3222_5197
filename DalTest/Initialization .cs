@@ -1,5 +1,6 @@
 ﻿using DalApi;
 using DO;
+using Microsoft.VisualBasic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -55,6 +56,11 @@ namespace DalTest
         /// </summary>
         private static void createCall()
         {
+            DateTime systemTime = s_dal!.Config.Clock;
+            DateTime callOpeningTime;
+            DateTime? callMaxFinishTime;
+            Random rand = new Random();
+            CallType[] callsTypes = Enum.GetValues(typeof(CallType)).Cast<CallType>().ToArray();
             string[] CallDescriptions =
             {
                 "Help us package meals for soldiers in the field—your support makes it happen!",
@@ -231,29 +237,23 @@ namespace DalTest
             TypeOfCall.ToDonateRawMaterials
         };
 
-            //DateTime start = s_dalConfig!.Clock.AddHours(-7); //stage 1
-            //int range = (int)(s_dalConfig.Clock - start).TotalMinutes; //stage 1
-            DateTime start = s_dal!.Config.Clock.AddHours(-7); //stage 2
-            int range = (int)(s_dal.Config.Clock - start).TotalMinutes; //stage 2
-
-            for (int i = 0; i < 50; i++)
+            int i = 0;
+            foreach (DO.TypeOfCall c_type in TypeOfCalls)
             {
-                int index = i % CallDescriptions.Length; // פיזור שווה
-                DateTime openingTime = start.AddMinutes(-s_rand.Next(range));
-                DateTime maxFinish = openingTime.AddMinutes(s_rand.Next(30, 720));
-
-                Call newCall = new Call(
-                    TypeOfCall: (TypeOfCall)(i % Enum.GetValues(typeof(TypeOfCall)).Length),
-                    Address: CallAddresses[index],
-                    Longitude: CallLongitudes[index],
-                    Latitude: CallLatitudes[index],
-                    OpeningTime: openingTime,
-                    MaxTimeForClosing: maxFinish,
-                    CallDescription: CallDescriptions[index]
-                );
-
-                if (s_dal?.Call.Read(newCall.ID) == null)
-                    s_dal?.Call.Create(newCall);
+                int randomNegativeSeconds = rand.Next(1, 1000);
+                callOpeningTime = systemTime.AddMinutes(-randomNegativeSeconds);
+                int randomPositiveNumber = rand.Next(1, 100000);
+                callMaxFinishTime = (rand.NextDouble() > 0.5) ? callOpeningTime.AddMinutes(randomPositiveNumber) : null;
+                s_dal!.Call.Create(new DO.Call(
+                    TypeOfCall: c_type,
+                    Address: CallAddresses[i],
+                    Longitude: CallLongitudes[i],
+                    Latitude: CallLatitudes[i],
+                    OpeningTime: callOpeningTime,
+                    MaxTimeForClosing: callMaxFinishTime,
+                    CallDescription: CallDescriptions[i]
+                ));
+                i++;
             }
         }
 
@@ -264,7 +264,8 @@ namespace DalTest
         /// </summary>
         private static void createVolunteer()
         {
-            int[] VolunteerIds = { 
+            Random rand = new Random();
+            int[] VolunteerIds = {
                 215639212, 215525197, 328118245, 214821423, 326365574,
                 328128061, 327770442, 327548194, 215086950, 215215690,
                 215252370, 328177191, 328183934, 327786612, 328306550,
@@ -298,12 +299,6 @@ namespace DalTest
               "19 Arlozorov St, Tel Aviv",
               "96 HaHashmonaim St, Tel Aviv",
               "12 Menachem Begin Blvd, Rishon LeZion"
-           };
-
-            string[] VolunteerPhoneNumbers = {
-             "052-1234567", "052-2345678", "052-3456789", "052-4567890", "052-5678901", "052-6789012", "052-7890123",
-             "052-8901234", "052-9012345", "052-0123456", "052-1239876", "052-2349876", "052-3459876", "052-4569876",
-             "052-5679876", "052-6789876", "052-7899876", "052-8909876", "052-9019876", "052-0129876"
            };
             double[] Latitudes = {
               32.0736, 32.0739, 32.8194, 32.0702, 31.7702, 32.0782, 32.3212, 32.0951, 32.1575, 29.5596,
@@ -373,22 +368,22 @@ namespace DalTest
 
 
 
-            for (int i = 0; i < VolunteerNames.Length; i++)
+            int i = 0;
+            foreach (string name in VolunteerNames)
             {
                 Volunteer newVolunteer = new Volunteer
                 {
                     ID = VolunteerIds[i],
-                    Name = VolunteerNames[i],
-                    Phone = VolunteerPhoneNumbers[i],
-                    Email = $"{VolunteerNames[i].Replace(" ", "").ToLower()}@example.com",
+                    Name = name,
+                    Phone = $"0{rand.Next(100000000, 999999999)}",
+                    Email = name.Replace(" ", "").ToLower() + "@gmail.com",
                     Address = VolunteerAddresses[i],
                     Latitude = Latitudes[i],
-                    Longitude = Longitudes[i],
-                    Password = HashPasswordSHA256(GeneratePassword(12)),
+                    Longitude = Longitudes[i++],
                     Role = Role.Volunteer,
-                    IsActive = i % 4 != 0,
-                    DistanceType = (DistanceType)s_rand.Next(Enum.GetValues(typeof(DistanceType)).Length),
-                    MaxDistanceForCall = s_rand.Next(1, 100)
+                    IsActive = true,
+                    DistanceType = (DistanceType)rand.Next(Enum.GetValues(typeof(DistanceType)).Length),
+                    MaxDistanceForCall = rand.Next(0, 100000)
                 };
 
                 //if (s_dalVolunteer!.Read(newVolunteer.ID) == null){s_dalVolunteer.Create(newVolunteer);}//stage 1
@@ -396,91 +391,122 @@ namespace DalTest
 
             }
         }
-        public static string GenerateRandomPhoneNumber()
-        {
-            string prefix = s_rand.Next(50, 59).ToString();
-            string rest = s_rand.Next(1000000, 9999999).ToString(); 
-            return $"{prefix}-{rest}"; 
-        }
 
         /// <summary>
         /// Creates assignments by matching volunteers with calls.
         /// </summary>
         private static void createAssignments()
         {
-            var volunteers = s_dal!.Volunteer.ReadAll().ToList();
+            Random rand = new Random();
             var calls = s_dal!.Call.ReadAll().ToList();
+            var volunteers = s_dal!.Volunteer.ReadAll().ToList();
+            var callsWithAssignment = calls.Skip((int)(calls.Count * 0.2)).ToList();
 
-            // שמור מתנדבים שכבר יש להם הקצאה פעילה
-            var volunteersWithActiveAssignment = new HashSet<int>();
-
-            foreach (var call in calls)
+            foreach (Call? call in callsWithAssignment)
             {
-                if (call.MaxTimeForClosing == null || !volunteers.Any())
-                    continue;
-
-                int numAssignments = s_rand.Next(1, 4);
-
-                for (int i = 0; i < numAssignments; i++)
+                Volunteer randomVolunteer;
+                if (volunteers.Count > 0)
                 {
-                    Volunteer randomVolunteer = volunteers[s_rand.Next(volunteers.Count)];
+                    randomVolunteer = volunteers[rand.Next(volunteers.Count)]!;
+                    if (randomVolunteer == null || randomVolunteer.ID == 0)
+                        throw new Exception("Selected volunteer is invalid or has ID 0.");
+                }
+                else
+                {
+                    throw new Exception("No volunteers available.");
+                }
+                TimeSpan duration;
+                if (call!.MaxTimeForClosing.HasValue)
+                    duration = call.MaxTimeForClosing.Value - call.OpeningTime;
+                else
+                    duration = TimeSpan.Zero;
 
-                    // לא ליצור כפילויות של מתנדב-קריאה
-                    if (s_dal.Assignment.ReadAll().Any(a => a.CallId == call.ID && a.VolunteerId == randomVolunteer.ID))
-                        continue;
+                double randomMinutes = rand.NextDouble() * duration.TotalMinutes;
+                DateTime randomStartTime = call.OpeningTime.AddMinutes(randomMinutes);
 
-                    DateTime minTime = call.OpeningTime;
-                    DateTime maxTime = (DateTime)call.MaxTimeForClosing;
-                    if (minTime >= maxTime) continue;
+                DateTime? randomEndTime;
 
-                    DateTime entryTime = minTime.AddMinutes(s_rand.Next((int)(maxTime - minTime).TotalMinutes));
-
-                    // נחליט אקראית אם ההקצאה פעילה או סגורה
-                    bool isActive = s_rand.NextDouble() < 0.4;
-
-                    // אם רוצים ליצור הקצאה פעילה, נוודא שלמתנדב אין כבר אחת כזו
-                    if (isActive)
+                if (!call.MaxTimeForClosing.HasValue)
+                {
+                    if (rand.NextDouble() < 0.5)
                     {
-                        if (volunteersWithActiveAssignment.Contains(randomVolunteer.ID))
-                            continue; // דלג, למתנדב כבר יש הקצאה פעילה
-
-                        var assignment = new Assignment
+                        double maxMinutes = (s_dal.Config.Clock - randomStartTime).TotalMinutes;
+                        if (maxMinutes > 0)
                         {
-                            CallId = call.ID,
-                            VolunteerId = randomVolunteer.ID,
-                            EntryTimeForTreatment = entryTime,
-                            EndTimeForTreatment = null,
-                            TypeOfFinishTreatment = null
-                        };
-                        s_dal.Assignment.Create(assignment);
-                        volunteersWithActiveAssignment.Add(randomVolunteer.ID);
+                            double endMinutes = rand.NextDouble() * maxMinutes;
+                            randomEndTime = randomStartTime.AddMinutes(endMinutes);
+                        }
+                        else
+                        {
+                            randomEndTime = randomStartTime;
+                        }
                     }
                     else
                     {
-                        // הקצאה סגורה (אפשר כמה שרוצים)
-                        DateTime endTime = entryTime.AddMinutes(s_rand.Next(30, 180));
-                        var finishTypes = Enum.GetValues(typeof(TypeOfFinishTreatment));
-                        var finishType = (TypeOfFinishTreatment)finishTypes.GetValue(s_rand.Next(finishTypes.Length))!;
-                        var assignment = new Assignment
-                        {
-                            CallId = call.ID,
-                            VolunteerId = randomVolunteer.ID,
-                            EntryTimeForTreatment = entryTime,
-                            EndTimeForTreatment = endTime,
-                            TypeOfFinishTreatment = finishType
-                        };
-                        s_dal.Assignment.Create(assignment);
+                        randomEndTime = null;
                     }
                 }
+                else if (call.MaxTimeForClosing.Value < s_dal.Config.Clock)
+                {
+                    randomEndTime = s_dal.Config.Clock;
+                }
+                else
+                {
+                    if (rand.NextDouble() < 0.5)
+                    {
+                        DateTime maxAllowed = call.MaxTimeForClosing.Value < s_dal.Config.Clock
+                            ? call.MaxTimeForClosing.Value
+                            : s_dal.Config.Clock;
+
+                        double maxMinutes = (maxAllowed - randomStartTime).TotalMinutes;
+                        if (maxMinutes > 0)
+                        {
+                            double endMinutes = rand.NextDouble() * maxMinutes;
+                            randomEndTime = randomStartTime.AddMinutes(endMinutes);
+                        }
+                        else
+                        {
+                            randomEndTime = randomStartTime;
+                        }
+                    }
+                    else
+                    {
+                        randomEndTime = null;
+                    }
+                }
+
+                TypeOfFinishTreatment? endType = null;
+                if (randomEndTime == null)
+                    endType = null;
+                else if (call.MaxTimeForClosing.HasValue && call.MaxTimeForClosing < s_dal.Config.Clock)
+                {
+                    endType = TypeOfFinishTreatment.OutOfRangeCancellation;
+                }
+                else
+                {
+                    double randomPercentage = rand.NextDouble();
+                    if (randomPercentage < 0.33)
+                        endType = TypeOfFinishTreatment.Treated;
+                    else if (randomPercentage < 0.66)
+                        endType = TypeOfFinishTreatment.SelfCancellation;
+                    else
+                        endType = TypeOfFinishTreatment.ManagerCancellation;
+                }
+                s_dal!.Assignment.Create(new Assignment
+                {
+                    CallId = call.ID,
+                    VolunteerId = randomVolunteer.ID,
+                    EntryTimeForTreatment = randomStartTime,
+                    EndTimeForTreatment = randomEndTime,
+                    TypeOfFinishTreatment = endType
+                });
             }
         }
         private static void createSuperAdmin()
         {
-            // בדוק אם כבר קיים (למקרה של ריצה חוזרת)
             if (s_dal!.Volunteer.Read(214323222) != null)
                 return;
 
-            // הצפנת סיסמה ב-SHA256
             string password = "Qq1!qwertyui";
             using var sha256 = System.Security.Cryptography.SHA256.Create();
             byte[] hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));

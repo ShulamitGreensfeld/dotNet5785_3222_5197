@@ -273,7 +273,6 @@ namespace PL.Volunteer
             }
         }
 
-        // מתודת השקפה עם DispatcherOperation
         private void VolunteerListObserver()
         {
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)

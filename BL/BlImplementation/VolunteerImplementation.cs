@@ -48,7 +48,7 @@ internal class VolunteerImplementation : IVolunteer
                         Verbal_description = callDetails.CallDescription,
                         FullAddress = callDetails.Address,
                         Opening_time = callDetails.OpeningTime,
-                        Max_finish_time = callDetails.MaxTimeForClosing ?? throw new InvalidOperationException("MaxTimeForClosing cannot be null"),
+                        Max_finish_time = callDetails.MaxTimeForClosing ?? DateTime.MaxValue,
                         Start_time = currentAssignment.EntryTimeForTreatment,
                         CallDistance = Tools.CalculateDistanceAsync(
                             volunteerDistanceType,
@@ -138,15 +138,15 @@ internal class VolunteerImplementation : IVolunteer
     public void AddVolunteer(BO.Volunteer boVolunteer)
     {
         AdminManager.ThrowOnSimulatorIsRunning(); // stage 7
+        VolunteerManager.ValidateVolunteer(boVolunteer);
+
         try
         {
             lock (AdminManager.BlMutex)
             {
                 if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
-                    throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exists");
+                    throw new BO.BlAlreadyExistException($"Volunteer with ID={boVolunteer.Id} already exists");
             }
-
-            VolunteerManager.ValidateVolunteer(boVolunteer);
 
             if (string.IsNullOrEmpty(boVolunteer.Password))
             {
@@ -154,9 +154,23 @@ internal class VolunteerImplementation : IVolunteer
             }
             boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
 
-            // שמירה ראשונית עם קואורדינטות null
-            boVolunteer.Latitude = null;
-            boVolunteer.Longitude = null;
+            double? lat = null, lon = null;
+            string? error = null;
+
+            if (!string.IsNullOrWhiteSpace(boVolunteer.FullAddress))
+            {
+                var result = Task.Run(() => Tools.GetCoordinatesFromAddressAsync(boVolunteer.FullAddress)).Result;
+                lat = result.Latitude;
+                lon = result.Longitude;
+                error = result.Error;
+
+                if (lat == null || lon == null || lat == 0 || lon == 0)
+                    throw new BO.BlInvalidFormatException(
+                        $"The address is invalid or could not be located on the map. {error}");
+            }
+
+            boVolunteer.Latitude = lat;
+            boVolunteer.Longitude = lon;
 
             DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             lock (AdminManager.BlMutex)
@@ -165,10 +179,6 @@ internal class VolunteerImplementation : IVolunteer
             }
             VolunteerManager.Observers.NotifyListUpdated(); //stage 5
 
-            if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
-            {
-                _ = UpdateVolunteerCoordinatesAsync(boVolunteer.Id, boVolunteer.FullAddress);
-            }
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -267,7 +277,6 @@ internal class VolunteerImplementation : IVolunteer
             _ = UpdateVolunteerCoordinatesAsync(boVolunteer.Id, boVolunteer.FullAddress);
         }
 
-        // Notifications רק מחוץ ל-lock
         VolunteerManager.Observers.NotifyItemUpdated(updatedVolunteer.ID);  //stage 5
         VolunteerManager.Observers.NotifyListUpdated(); //stage 5
     }
@@ -331,7 +340,6 @@ internal class VolunteerImplementation : IVolunteer
             if (string.IsNullOrWhiteSpace(pass))
                 throw new BO.BlInvalidFormatException("Password is required.");
 
-            // Attempt to find the volunteer - צריך להחזיר DO ואז להמיר ל-BO
             DO.Volunteer doVolunteer;
             lock (AdminManager.BlMutex)
             {
@@ -370,7 +378,6 @@ internal class VolunteerImplementation : IVolunteer
                         return BO.Enums.Role.volunteer;
                     }
                 }
-
                 _loggedInVolunteers.Add(volunteerId);
                 return BO.Enums.Role.volunteer;
             }

@@ -300,6 +300,13 @@ namespace PL.Call
             set { _call = value; OnPropertyChanged(nameof(Call)); }
         }
 
+        private bool _canVolunteerSelectCall;
+        public bool CanVolunteerSelectCall
+        {
+            get => _canVolunteerSelectCall;
+            set { _canVolunteerSelectCall = value; OnPropertyChanged(nameof(CanVolunteerSelectCall)); }
+        }
+
         public IEnumerable<BO.Enums.CallType> CallTypes =>
             Enum.GetValues(typeof(BO.Enums.CallType)) as BO.Enums.CallType[];
 
@@ -368,7 +375,6 @@ namespace PL.Call
             Action observer = CallObserver; 
             s_bl.Call.AddObserver(callId, observer);
 
-            // מסירים את המשקיף בסגירת החלון
             this.Closed += (s, e) => s_bl.Call.RemoveObserver(callId, observer);
         }
 

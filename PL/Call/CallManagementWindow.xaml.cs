@@ -270,7 +270,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading; // חשוב
+using System.Windows.Threading;
 
 namespace PL
 {
@@ -295,7 +295,6 @@ namespace PL
             set { _callQuantities = value; OnPropertyChanged(nameof(CallQuantities)); }
         }
 
-        // --- עדכון סימולטור: שדות DispatcherOperation ---
         private volatile DispatcherOperation? _observerCallListOp = null;
         private volatile DispatcherOperation? _observerQuantitiesOp = null;
 
@@ -372,7 +371,6 @@ namespace PL
 
         public CallInList? SelectedCall { get; set; }
 
-        // --- מתודת השקפה עם DispatcherOperation עבור קריאות (רשימה) ---
         private void CallListObserver()
         {
             if (_observerCallListOp is null || _observerCallListOp.Status == DispatcherOperationStatus.Completed)
@@ -381,7 +379,6 @@ namespace PL
             }
         }
 
-        // --- מתודת השקפה עם DispatcherOperation עבור כמויות (גרף) ---
         private void CallQuantitiesObserver()
         {
             if (_observerQuantitiesOp is null || _observerQuantitiesOp.Status == DispatcherOperationStatus.Completed)

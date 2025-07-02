@@ -250,7 +250,6 @@ namespace PL.Volunteer
         public static readonly DependencyProperty ButtonTextProperty =
             DependencyProperty.Register(nameof(ButtonText), typeof(string), typeof(VolunteerWindow), new PropertyMetadata("Add"));
 
-        // === סימולטור - הגדרת DispatcherOperation פרטי ===
         private volatile DispatcherOperation? _observerOperation = null;
 
         public VolunteerWindow(int id = 0)

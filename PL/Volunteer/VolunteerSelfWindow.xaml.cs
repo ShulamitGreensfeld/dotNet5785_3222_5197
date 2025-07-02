@@ -271,25 +271,28 @@ namespace PL.Volunteer
         /// </summary>
         private void VolunteerObserver()
         {
-            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
-            {
-                _observerOperation = Dispatcher.BeginInvoke((Action)RefreshVolunteer);
-            }
+            Dispatcher.Invoke(RefreshVolunteer);
         }
+
 
         /// <summary>
         /// Refreshes the volunteer's data from the BL.
         /// </summary>
+        //private void RefreshVolunteer()
+        //{
+        //    if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+        //    {
+        //        _observerOperation = Dispatcher.BeginInvoke(new Action(() =>
+        //        {
+        //            Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
+        //            Volunteer.Password = string.Empty;
+        //        }));
+        //    }
+        //}
         private void RefreshVolunteer()
         {
-            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
-            {
-                _observerOperation = Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
-                    Volunteer.Password = string.Empty;
-                }));
-            }
+            Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
+            Volunteer.Password = string.Empty;
         }
 
         /// <summary>
@@ -392,8 +395,8 @@ namespace PL.Volunteer
                 );
 
                 bool? result = selectCallWindow.ShowDialog();
-                if (result == true)
-                    VolunteerObserver();
+                if (result == true) ;
+                    //VolunteerObserver();
             }
             catch
             {

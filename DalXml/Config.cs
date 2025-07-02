@@ -1,5 +1,5 @@
 ﻿using System.Xml.Linq;
-using System.Runtime.CompilerServices; // נדרש עבור MethodImpl
+using System.Runtime.CompilerServices;
 
 namespace Dal;
 

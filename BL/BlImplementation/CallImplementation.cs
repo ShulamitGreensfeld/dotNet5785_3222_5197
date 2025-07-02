@@ -85,7 +85,6 @@ internal class CallImplementation : BlApi.ICall
     {
         AdminManager.ThrowOnSimulatorIsRunning(); // stage 7
 
-        // חישוב קואורדינטות סינכרוני שלא תוקע את ה-UI!
         var (lat, lon, error) = Task.Run(() => Tools.GetCoordinatesFromAddressAsync(boCall.FullAddress)).Result;
 
         if (lat == null || lon == null || lat == 0 || lon == 0)

@@ -15,6 +15,7 @@ namespace Helpers;
 internal static class VolunteerManager
 {
     private readonly static IDal s_dal = DalApi.Factory.Get;
+    private readonly static IBl s_bl = BlApi.Factory.Get();
     internal static ObserverManager Observers = new(); //stage 5 
     public static event Action? CallsListUpdated;
     private static readonly ConcurrentDictionary<int, Action<DO.Call>> callObservers = new();
@@ -57,14 +58,14 @@ internal static class VolunteerManager
                         Verbal_description = callDetails.CallDescription,
                         FullAddress = callDetails.Address,
                         Opening_time = callDetails.OpeningTime,
-                        Max_finish_time = (DateTime)callDetails.MaxTimeForClosing!,
+                        Max_finish_time = callDetails.MaxTimeForClosing ?? DateTime.Now,
                         Start_time = currentAssignment.EntryTimeForTreatment,
                         CallDistance = await Tools.CalculateDistanceAsync(
-                            volunteerDistanceType,
-                            doVolunteer.Latitude ?? 0,
-                            doVolunteer.Longitude ?? 0,
-                            callDetails.Latitude,
-                            callDetails.Longitude),
+            volunteerDistanceType,
+            doVolunteer.Latitude ?? 0,
+            doVolunteer.Longitude ?? 0,
+            callDetails.Latitude,
+            callDetails.Longitude),
                         CallStatus = CallManager.CalculateCallStatus(callDetails)
                     };
                 }
@@ -245,49 +246,42 @@ internal static class VolunteerManager
         return true;
     }
 
-    internal static void SimulateVolunteerAssignmentsAndCallHandling()
+    private static readonly Random s_rand = new();
+    private static int s_simulatorCounter = 0;
+
+    internal static void SimulateAssigningCallsToVolunteers()
     {
-        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        if (!Thread.CurrentThread.Name?.StartsWith("Simulator") == true)
-            AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";
 
-        Thread.CurrentThread.Name = $"Simulator{Thread.CurrentThread.ManagedThreadId}";
-
-        List<int> updatedVolunteerIds = new();
-        List<int> updatedCallIds = new();
-
-        List<DO.Volunteer> activeVolunteers;
+        List<DO.Volunteer?> doVolunteerList;
         lock (AdminManager.BlMutex)
-            activeVolunteers = s_dal.Volunteer.ReadAll(v => v.IsActive).ToList();
+            doVolunteerList = s_dal.Volunteer.ReadAll(v => v?.IsActive == true).ToList();
 
-        foreach (var volunteer in activeVolunteers)
+        foreach (var doVolunteer in doVolunteerList)
         {
+            if (doVolunteer == null) continue;
+            int volunteerId = doVolunteer.ID;
             DO.Assignment? currentAssignment;
             lock (AdminManager.BlMutex)
-            {
-                currentAssignment = s_dal.Assignment
-                    .ReadAll(a => a.VolunteerId == volunteer.ID && a.EndTimeForTreatment == null)
-                    .FirstOrDefault();
-            }
+                currentAssignment = s_dal.Assignment.ReadAll(a => a?.VolunteerId == volunteerId && a.EndTimeForTreatment == null && a?.EntryTimeForTreatment != null).LastOrDefault();
 
             if (currentAssignment == null)
             {
-                List<BO.OpenCallInList> openCalls;
-                IEnumerable<BO.OpenCallInList> openCallsEnumerable;
-                lock (AdminManager.BlMutex)
-                    openCallsEnumerable = new CallImplementation().GetOpenCallsForVolunteerAsync(volunteer.ID).GetAwaiter().GetResult();
-                openCalls = openCallsEnumerable.ToList();
-
-                if (!openCalls.Any() || Random.Shared.NextDouble() > 0.2) continue;
-
-                var selectedCall = openCalls[Random.Shared.Next(openCalls.Count)];
-                try
+                if (s_rand.Next(100) < 20)
                 {
-                    new CallImplementation().SelectCallForTreatment(volunteer.ID, selectedCall.Id,true);
-                    updatedVolunteerIds.Add(volunteer.ID);
-                    updatedCallIds.Add(selectedCall.Id);
+                    IEnumerable<BO.OpenCallInList> openCalls;
+                    // If you have only async version, use: openCalls = await s_bl.Call.GetOpenCallsForVolunteerAsync(volunteerId).Result;
+                    lock (AdminManager.BlMutex)
+                        openCalls = s_bl.Call.GetOpenCallsForVolunteerAsync(volunteerId).GetAwaiter().GetResult();
+
+                    var callsWithCoordinates = openCalls.Where(c => c?.CallDistance != null).ToList();
+                    if (callsWithCoordinates.Count > 0)
+                    {
+                        var selectedCall = callsWithCoordinates[s_rand.Next(callsWithCoordinates.Count)];
+                        lock (AdminManager.BlMutex)
+                            s_bl.Call.SelectCallForTreatment(doVolunteer.ID, selectedCall.Id, true);
+                    }
                 }
-                catch { continue; }
             }
             else
             {
@@ -295,40 +289,40 @@ internal static class VolunteerManager
                 lock (AdminManager.BlMutex)
                     call = s_dal.Call.Read(currentAssignment.CallId);
 
-                if (call is null) continue;
+                if (call == null) continue;
 
-                double distance = Tools.CalculateDistance(volunteer.Latitude!, volunteer.Longitude!, call.Latitude, call.Longitude);
-                TimeSpan baseTime = TimeSpan.FromMinutes(distance * 2);
-                TimeSpan extra = TimeSpan.FromMinutes(Random.Shared.Next(1, 5));
-                TimeSpan totalNeeded = baseTime + extra;
-                TimeSpan actual = AdminManager.Now - currentAssignment.EntryTimeForTreatment;
+                double? distance = Tools.CalculateDistance(
+                    doVolunteer.Latitude ?? 0,
+                    doVolunteer.Longitude ?? 0,
+                    call.Latitude,
+                    call.Longitude
+                );
+                if (distance == null) continue;
 
-                if (actual >= totalNeeded)
+                TimeSpan timePassed;
+                lock (AdminManager.BlMutex)
+                    timePassed = s_bl.Admin.GetClock() - currentAssignment.EntryTimeForTreatment;
+
+                double rawMinutes = distance.Value * 1.5 + s_rand.Next(2, 6);
+
+                if (rawMinutes <= 0 || rawMinutes > 1_000_000)
                 {
-                    try
-                    {
-                        new CallImplementation().MarkCallCompletion(volunteer.ID, currentAssignment.ID,true);
-                        updatedVolunteerIds.Add(volunteer.ID);
-                        updatedCallIds.Add(call.ID);
-                    }
-                    catch { continue; }
+                    rawMinutes = 10;
                 }
-                else if (Random.Shared.NextDouble() < 0.1)
+
+                TimeSpan minRequiredTime = TimeSpan.FromMinutes(rawMinutes);
+
+                if (timePassed >= minRequiredTime)
                 {
-                    try
-                    {
-                        new CallImplementation().MarkCallCancellation(volunteer.ID, currentAssignment.ID,true);
-                        updatedVolunteerIds.Add(volunteer.ID);
-                        updatedCallIds.Add(call.ID);
-                    }
-                    catch { continue; }
+                    lock (AdminManager.BlMutex)
+                        s_bl.Call.MarkCallCompletion(volunteerId, currentAssignment.ID, true);
+                }
+                else if (s_rand.Next(100) < 10)
+                {
+                    lock (AdminManager.BlMutex)
+                        s_bl.Call.MarkCallCancellation(volunteerId, currentAssignment.ID, true);
                 }
             }
         }
-
-        foreach (var id in updatedVolunteerIds.Distinct())
-            VolunteerManager.Observers.NotifyItemUpdated(id);
-        foreach (var id in updatedCallIds.Distinct())
-            CallManager.Observers.NotifyItemUpdated(id);
     }
 }
