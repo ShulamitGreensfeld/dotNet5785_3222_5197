@@ -211,8 +211,9 @@
 using BlApi;
 using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace PL.Volunteer
@@ -278,17 +279,6 @@ namespace PL.Volunteer
         /// <summary>
         /// Refreshes the volunteer's data from the BL.
         /// </summary>
-        //private void RefreshVolunteer()
-        //{
-        //    if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
-        //    {
-        //        _observerOperation = Dispatcher.BeginInvoke(new Action(() =>
-        //        {
-        //            Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
-        //            Volunteer.Password = string.Empty;
-        //        }));
-        //    }
-        //}
         private void RefreshVolunteer()
         {
             Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
@@ -314,8 +304,9 @@ namespace PL.Volunteer
                     Volunteer.Password = null;
 
                 s_bl.Volunteer.UpdateVolunteerDetails(Volunteer.Id, Volunteer);
+                Volunteer = s_bl.Volunteer.GetVolunteerDetails(Volunteer.Id);
+                Volunteer.Password = string.Empty;
                 MessageBox.Show("Volunteer details updated successfully.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
-                Close();
             }
             catch
             {
@@ -330,6 +321,7 @@ namespace PL.Volunteer
             try
             {
                 s_bl.Call.MarkCallCompletion(Volunteer.Id, Volunteer.CallInProgress.Id);
+                Volunteer.Password = string.Empty;
                 MessageBox.Show("Call successfully marked as completed.", "Call Completion", MessageBoxButton.OK, MessageBoxImage.Information);
                 VolunteerObserver();
             }
@@ -346,7 +338,9 @@ namespace PL.Volunteer
             try
             {
                 s_bl.Call.MarkCallCancellation(Volunteer.Id, Volunteer.CallInProgress.Id);
+                Volunteer.Password = string.Empty;
                 MessageBox.Show("Call successfully marked as cancelled.", "Cancel Call", MessageBoxButton.OK, MessageBoxImage.Information);
+                Volunteer.Password = string.Empty;
                 VolunteerObserver();
             }
             catch
@@ -360,7 +354,9 @@ namespace PL.Volunteer
             int id = Volunteer.Id;
             if (_openHistoryWindows.Contains(id))
             {
+                Volunteer.Password = string.Empty;
                 MessageBox.Show("Call history window is already open.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                Volunteer.Password = string.Empty;
                 return;
             }
 
@@ -376,12 +372,14 @@ namespace PL.Volunteer
             if (Volunteer == null || Volunteer.Id == 0)
             {
                 MessageBox.Show("Volunteer details are missing.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Volunteer.Password = string.Empty;
                 return;
             }
 
             if (!Volunteer.MaxDistance.HasValue)
             {
                 MessageBox.Show("Please set maximum distance before selecting a call.", "Distance Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Volunteer.Password = string.Empty;
                 return;
             }
 

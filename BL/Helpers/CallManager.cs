@@ -66,13 +66,15 @@ namespace Helpers
 
                     var callStatus = CalculateCallStatus(call);
 
-                    TimeSpan? timeLeft = call.MaxTimeForClosing > AdminManager.Now
-                        ? call.MaxTimeForClosing - AdminManager.Now
-                        : null;
-
-                    TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.closed
-                        ? (call.MaxTimeForClosing - call.OpeningTime)
-                        : null;
+                    TimeSpan? timeLeft = null;
+                    TimeSpan? totalTime = null;
+                    if (callStatus == BO.Enums.CallStatus.opened || callStatus == BO.Enums.CallStatus.opened_at_risk)
+                    {
+                        timeLeft = call.MaxTimeForClosing > AdminManager.Now
+                            ? call.MaxTimeForClosing - AdminManager.Now
+                            : TimeSpan.Zero;
+                        totalTime = call.MaxTimeForClosing - call.OpeningTime;
+                    }
 
                     return new BO.CallInList
                     {

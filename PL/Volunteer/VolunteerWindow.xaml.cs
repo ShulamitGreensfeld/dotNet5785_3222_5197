@@ -297,7 +297,6 @@ namespace PL.Volunteer
                     s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer!.Id, CurrentVolunteer);
                     CurrentVolunteer.Password = string.Empty;
                     MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Close();
                 }
             }
             catch (System.Exception ex)

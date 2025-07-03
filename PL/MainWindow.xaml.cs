@@ -97,14 +97,13 @@ namespace PL
             PromoteDayCommand = new RelayCommand(_ => s_bl.Admin.PromoteClock(TimeUnit.Day), _ => !IsSimulatorRunning);
             PromoteMonthCommand = new RelayCommand(_ => s_bl.Admin.PromoteClock(TimeUnit.Month), _ => !IsSimulatorRunning);
             PromoteYearCommand = new RelayCommand(_ => s_bl.Admin.PromoteClock(TimeUnit.Year), _ => !IsSimulatorRunning);
-            UpdateRiskRangeCommand = new RelayCommand(_ => s_bl.Admin.SetRiskTimeRange(TimeSpan.FromDays(RiskRange * 365)), _ => !IsSimulatorRunning);
+            UpdateRiskRangeCommand = new RelayCommand(_ => s_bl.Admin.SetRiskTimeRange(TimeSpan.FromMinutes(RiskRange)), _ => !IsSimulatorRunning);
             InitializeDatabaseCommand = new RelayCommand(_ => ConfirmAndRun("Initialize", s_bl.Admin.InitializeDatabase), _ => !IsSimulatorRunning);
             ResetDatabaseCommand = new RelayCommand(_ => ConfirmAndRun("Reset", s_bl.Admin.ResetDatabase), _ => !IsSimulatorRunning);
             OpenVolunteersCommand = new RelayCommand(_ => OpenWindow<VolunteerListWindow>());
             OpenCallsCommand = new RelayCommand(_ => new CallManagementWindow(App.LoggedAdminId).Show());
 
-            RiskRange = (int)s_bl.Admin.GetRiskTimeRange().TotalDays / 365;
-            Interval = 1;
+            RiskRange = (int)s_bl.Admin.GetRiskTimeRange().TotalMinutes;
             CurrentTime = s_bl.Admin.GetClock();
 
             s_bl.Admin.AddClockObserver(clockObserver);
@@ -139,7 +138,7 @@ namespace PL
         }
 
         private void configObserver() =>
-            RiskRange = (int)s_bl.Admin.GetRiskTimeRange().TotalDays / 365;
+            RiskRange = (int)s_bl.Admin.GetRiskTimeRange().TotalMinutes;
 
         private void LoadCallQuantities()
         {

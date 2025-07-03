@@ -88,7 +88,10 @@
             <TextBlock Grid.Column="5" Text="Total Assignments" FontWeight="Bold" Foreground="#2EA043"/>
             <TextBlock Grid.Column="6" Text="Time Left" FontWeight="Bold" Foreground="#2EA043"/>
             <!-- Time Left -->
-            <TextBlock Grid.Column="7" Text="Actions" FontWeight="Bold" Foreground="#2EA043"/>
+            <TextBlock Grid.Column="7"
+           Text="{Binding TimeLeft, StringFormat={}{0:hh\\:mm\\:ss}, TargetNullValue='--:--:--'}"
+           VerticalAlignment="Center"
+           Foreground="White"/>
         </Grid>
 
         <ListView ItemsSource="{Binding CallListView}" 

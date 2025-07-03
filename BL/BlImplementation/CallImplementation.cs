@@ -296,7 +296,7 @@ internal class CallImplementation : BlApi.ICall
 
             updatedAssignment = assignment with
             {
-                EndTimeForTreatment = DateTime.Now,
+                EndTimeForTreatment = AdminManager.Now,
                 TypeOfFinishTreatment = DO.TypeOfFinishTreatment.SelfCancellation
             };
 
@@ -421,9 +421,9 @@ internal class CallImplementation : BlApi.ICall
         lock (AdminManager.BlMutex)
         {
             var call = GetCallDetails(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist.");
-            if (call.CallStatus == BO.Enums.CallStatus.is_treated || !(call.CallStatus == BO.Enums.CallStatus.opened))
-                throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it.");
-            if (call.Max_finish_time < DateTime.Now)
+            if (call.CallStatus == BO.Enums.CallStatus.is_treated ||
+                (call.CallStatus != BO.Enums.CallStatus.opened && call.CallStatus != BO.Enums.CallStatus.opened_at_risk))
+                throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it."); if (call.Max_finish_time < AdminManager.Now)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");
             existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
             if (existingAssignments.Any(a => a?.EndTimeForTreatment == null))

@@ -240,10 +240,11 @@ namespace DalTest
             int i = 0;
             foreach (DO.TypeOfCall c_type in TypeOfCalls)
             {
-                int randomNegativeSeconds = rand.Next(1, 1000);
-                callOpeningTime = systemTime.AddMinutes(-randomNegativeSeconds);
-                int randomPositiveNumber = rand.Next(1, 100000);
-                callMaxFinishTime = (rand.NextDouble() > 0.5) ? callOpeningTime.AddMinutes(randomPositiveNumber) : null;
+                callOpeningTime = systemTime.AddMinutes(-rand.Next(1, 1000));
+
+                int durationMinutes = rand.Next(30, 180);
+                callMaxFinishTime = callOpeningTime.AddMinutes(durationMinutes);
+
                 s_dal!.Call.Create(new DO.Call(
                     TypeOfCall: c_type,
                     Address: CallAddresses[i],

@@ -58,7 +58,7 @@ internal static class VolunteerManager
                         Verbal_description = callDetails.CallDescription,
                         FullAddress = callDetails.Address,
                         Opening_time = callDetails.OpeningTime,
-                        Max_finish_time = callDetails.MaxTimeForClosing ?? DateTime.Now,
+                        Max_finish_time = callDetails.MaxTimeForClosing ?? AdminManager.Now,
                         Start_time = currentAssignment.EntryTimeForTreatment,
                         CallDistance = await Tools.CalculateDistanceAsync(
             volunteerDistanceType,

@@ -99,6 +99,9 @@ namespace PL
                         callTypeFilter: SelectedCallType == CallType.none ? null : SelectedCallType,
                         sortField: SelectedSortField
                     );
+                    MessageBox.Show($"מספר קריאות סגורות: {ClosedCalls.Count()}");
+
+                    ClosedCalls = ClosedCalls;
                 }));
             }
         }
