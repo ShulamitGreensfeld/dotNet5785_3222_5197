@@ -81,6 +81,7 @@ namespace PL
 
         private void CallHistoryObserver()
         {
+            Dispatcher.Invoke(LoadClosedCalls);
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
             {
                 _observerOperation = Dispatcher.BeginInvoke((Action)(() => LoadClosedCalls()));
@@ -90,20 +91,12 @@ namespace PL
         // Load closed calls from BL based on filters
         private void LoadClosedCalls()
         {
-            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
-            {
-                _observerOperation = Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    ClosedCalls = s_bl.Call.GetClosedCallsHandledByVolunteer(
-                        volunteerId: VolunteerId,
-                        callTypeFilter: SelectedCallType == CallType.none ? null : SelectedCallType,
-                        sortField: SelectedSortField
-                    );
-                    MessageBox.Show($"מספר קריאות סגורות: {ClosedCalls.Count()}");
-
-                    ClosedCalls = ClosedCalls;
-                }));
-            }
+            ClosedCalls = s_bl.Call.GetClosedCallsHandledByVolunteer(
+                volunteerId: VolunteerId,
+                callTypeFilter: SelectedCallType == CallType.none ? null : SelectedCallType,
+                sortField: SelectedSortField
+            );
+            ClosedCalls = ClosedCalls;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

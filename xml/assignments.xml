@@ -320,4 +320,12 @@
     <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
     <ID>2039</ID>
   </Assignment>
+  <Assignment>
+    <CallId>1050</CallId>
+    <VolunteerId>214323222</VolunteerId>
+    <EntryTimeForTreatment>2025-07-03T18:42:13</EntryTimeForTreatment>
+    <EndTimeForTreatment>2025-07-03T18:42:13</EndTimeForTreatment>
+    <TypeOfFinishTreatment>Treated</TypeOfFinishTreatment>
+    <ID>2040</ID>
+  </Assignment>
 </ArrayOfAssignment>
