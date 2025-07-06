@@ -38,7 +38,7 @@ namespace DalTest
             //s_dalVolunteer.DeleteAll(); //stage 1
             //s_dalAssignment.DeleteAll(); //stage 1
             s_dal.ResetDB();//stage 2
-              createSuperAdmin();
+            createSuperAdmin_volunteer();
 
             Console.WriteLine("Initializing Volunteers list ...");
             Console.WriteLine("Initializing Calls list ...");
@@ -547,15 +547,18 @@ namespace DalTest
             }
         }
 
-        private static void createSuperAdmin()
+        private static void createSuperAdmin_volunteer()
         {
-            if (s_dal!.Volunteer.Read(214323222) != null)
+            if (s_dal!.Volunteer.Read(214323222) != null && s_dal!.Volunteer.Read(332180850) == null)
                 return;
 
             string password = "Qq1!qwertyui";
+            string volunteerPassword = "@Xcvbnmhjg2o";
             using var sha256 = System.Security.Cryptography.SHA256.Create();
             byte[] hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            byte[] Hash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(volunteerPassword));
             string hashString = BitConverter.ToString(hash).Replace("-", "").ToLower();
+            string HashString = BitConverter.ToString(Hash).Replace("-", "").ToLower();
 
             Volunteer superAdmin = new Volunteer
             {
@@ -572,7 +575,23 @@ namespace DalTest
                 DistanceType = DistanceType.DrivingDistance,
                 MaxDistanceForCall = 500000
             };
-            s_dal.Volunteer.Create(superAdmin);
+                Volunteer volunteer = new Volunteer
+                {
+                    ID = 332180850,
+                    Name = "Haleli (Test Volunteer)",
+                    Phone = "050-1234567",
+                    Email = "shulamit5751@gmail.com",
+                    Address = "120 Dizengoff St, Tel Aviv",
+                    Latitude = 32.08,
+                    Longitude = 34.78,
+                    Password = HashString,
+                    Role = Role.Volunteer,
+                    IsActive = true,
+                    DistanceType = DistanceType.DrivingDistance,
+                    MaxDistanceForCall = 10000
+                };
+                s_dal.Volunteer.Create(volunteer);
+                s_dal.Volunteer.Create(superAdmin);
         }
     }
-}
+    }
