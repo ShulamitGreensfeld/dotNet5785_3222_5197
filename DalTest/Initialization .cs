@@ -412,7 +412,7 @@ namespace DalTest
                 return;
 
             //int count = calls.Count;
-            int openedCount = (int)(count * 0.4);
+            int openedCount = (int)(count * 0.1);
             int inProgressCount = (int)(count * 0.2);
             int treatedCount = (int)(count * rand.Next(5, 16) / 100.0);
             int selfCancelCount = (int)(count * rand.Next(5, 16) / 100.0);

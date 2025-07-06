@@ -100,8 +100,6 @@ namespace PL
             UpdateRiskRangeCommand = new RelayCommand(_ => s_bl.Admin.SetRiskTimeRange(TimeSpan.FromMinutes(RiskRange)), _ => !IsSimulatorRunning);
             InitializeDatabaseCommand = new RelayCommand(_ => ConfirmAndRun("Initialize", s_bl.Admin.InitializeDatabase), _ => !IsSimulatorRunning);
             ResetDatabaseCommand = new RelayCommand(_ => ConfirmAndRun("Reset", s_bl.Admin.ResetDatabase), _ => !IsSimulatorRunning);
-            //OpenVolunteersCommand = new RelayCommand(_ => OpenWindow<VolunteerListWindow>());
-            //OpenCallsCommand = new RelayCommand(_ => new CallManagementWindow(App.LoggedAdminId).Show());
             OpenCallsCommand = new RelayCommand(_ =>
             {
                 if (IsSimulatorRunning)

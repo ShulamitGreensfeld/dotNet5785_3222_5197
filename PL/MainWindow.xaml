@@ -134,9 +134,11 @@
                         Orientation="Vertical">
 
                 <Button Style="{StaticResource ModernButton_Square}" Content="🛠 Initialize Database" Width="250" Height="45" Margin="0 5"
-                        Command="{Binding InitializeDatabaseCommand}"/>
+        Command="{Binding InitializeDatabaseCommand}"
+        IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"/>
                 <Button Style="{StaticResource ModernButton_Square}" Content="🔄 Reset Database" Width="250" Height="45" Margin="0 5"
-                        Command="{Binding ResetDatabaseCommand}"/>
+        Command="{Binding ResetDatabaseCommand}"
+        IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBoolConverter}}"/>
                 <Button Style="{StaticResource ModernButton_Square}" Content="🤝 Handle Volunteers" Width="250" Height="45" Margin="0 5"
                         Command="{Binding OpenVolunteersCommand}"/>
                 <Button Style="{StaticResource ModernButton_Square}" Content="📞 Handle Calls" Width="250" Height="45" Margin="0 5"
