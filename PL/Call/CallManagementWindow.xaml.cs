@@ -19,6 +19,7 @@ namespace PL
     {
         private static readonly IBl s_bl = Factory.Get();
         private readonly Action _clockObserver;
+        private static CallManagementWindow? _instance;
 
         public ICommand DeleteCommand { get; }
         public ICommand CancelAssignmentCommand { get; }
@@ -134,7 +135,6 @@ namespace PL
 
         private void ClockObserver()
         {
-            // עדכון הרשימה ב-Dispatcher כדי לרענן את ה-TimeLeft
             Dispatcher.Invoke(() => UpdateCallList());
         }
 
@@ -192,6 +192,7 @@ namespace PL
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            _instance = null;
             foreach (var kvp in _callObservers)
                 s_bl.Call.RemoveObserver(kvp.Key, kvp.Value);
             _callObservers.Clear();
@@ -284,5 +285,18 @@ namespace PL
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public static void ShowSingleton(int currentUserId)
+        {
+            if (_instance == null || !_instance.IsLoaded)
+            {
+                _instance = new CallManagementWindow(currentUserId);
+                _instance.Show();
+            }
+            else
+            {
+                _instance.Activate();
+            }
+        }
     }
 }

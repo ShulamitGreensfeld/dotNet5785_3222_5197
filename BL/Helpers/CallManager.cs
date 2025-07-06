@@ -21,6 +21,41 @@ namespace Helpers
             }
         }
 
+        //public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
+        //{
+        //    lock (AdminManager.BlMutex)
+        //    {
+        //        var assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.ID).ToList();
+        //        var lastAssignment = assignments.LastOrDefault(a => a?.CallId == call.ID);
+
+        //        if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
+        //        {
+        //            if (lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation ||
+        //                lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation)
+        //                return BO.Enums.CallStatus.opened;
+
+        //            if (lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.OutOfRangeCancellation)
+        //                return BO.Enums.CallStatus.expired;
+
+        //            return BO.Enums.CallStatus.closed;
+        //        }
+
+        //        if (call.MaxTimeForClosing < AdminManager.Now)
+        //            return BO.Enums.CallStatus.expired;
+
+        //        if (lastAssignment is not null)
+        //        {
+        //            if ((AdminManager.Now - lastAssignment.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+        //                return BO.Enums.CallStatus.treated_at_risk;
+        //            return BO.Enums.CallStatus.is_treated;
+        //        }
+
+        //        if ((AdminManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
+        //            return BO.Enums.CallStatus.opened_at_risk;
+
+        //        return BO.Enums.CallStatus.opened;
+        //    }
+        //}
         public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
         {
             lock (AdminManager.BlMutex)
@@ -30,25 +65,36 @@ namespace Helpers
 
                 if (lastAssignment is not null && lastAssignment.EndTimeForTreatment.HasValue)
                 {
-                    if (lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation || lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation)
+                    if (lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.SelfCancellation ||
+                        lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.ManagerCancellation)
                         return BO.Enums.CallStatus.opened;
+
+                    if (lastAssignment.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.OutOfRangeCancellation)
+                        return BO.Enums.CallStatus.expired;
+
                     return BO.Enums.CallStatus.closed;
                 }
 
+                // אם הקריאה פגה תוקף
                 if (call.MaxTimeForClosing < AdminManager.Now)
                     return BO.Enums.CallStatus.expired;
 
+                // אם יש משימה פעילה
                 if (lastAssignment is not null)
                 {
-                    if ((AdminManager.Now - lastAssignment.EntryTimeForTreatment) > s_dal.Config.RiskRange)
+                    var timeLeft = call.MaxTimeForClosing - AdminManager.Now;
+                    if (timeLeft <= s_dal.Config.RiskRange)
                         return BO.Enums.CallStatus.treated_at_risk;
                     return BO.Enums.CallStatus.is_treated;
                 }
 
-                if ((AdminManager.Now - call.OpeningTime).TotalHours > s_dal.Config.RiskRange.TotalHours)
-                    return BO.Enums.CallStatus.opened_at_risk;
-
-                return BO.Enums.CallStatus.opened;
+                // קריאה פתוחה
+                {
+                    var timeLeft = call.MaxTimeForClosing - AdminManager.Now;
+                    if (timeLeft <= s_dal.Config.RiskRange)
+                        return BO.Enums.CallStatus.opened_at_risk;
+                    return BO.Enums.CallStatus.opened;
+                }
             }
         }
 
@@ -68,7 +114,8 @@ namespace Helpers
 
                     TimeSpan? timeLeft = null;
                     TimeSpan? totalTime = null;
-                    if (callStatus == BO.Enums.CallStatus.opened || callStatus == BO.Enums.CallStatus.opened_at_risk)
+                    if (callStatus == BO.Enums.CallStatus.opened || callStatus == BO.Enums.CallStatus.opened_at_risk ||
+                    callStatus == BO.Enums.CallStatus.treated_at_risk || callStatus == BO.Enums.CallStatus.is_treated)
                     {
                         timeLeft = call.MaxTimeForClosing > AdminManager.Now
                             ? call.MaxTimeForClosing - AdminManager.Now
@@ -91,54 +138,82 @@ namespace Helpers
                 }).ToList();
             }
         }
-
         public static void PeriodicVolunteersUpdates(DateTime oldClock, DateTime newClock)
         {
             Console.WriteLine("Starting PeriodicVolunteersUpdates...");
 
-            // Retrieve all assignments as a concrete List to avoid delayed LINQ evaluation inside a critical section
             List<DO.Assignment> assignments;
             lock (AdminManager.BlMutex)
             {
                 assignments = s_dal.Assignment.ReadAll().ToList();
             }
 
-            Console.WriteLine($"Found {assignments.Count} assignments.");
-            var processedAssignments = new HashSet<int>();
-            var updatedAssignmentsIds = new List<int>();
+            // עדכון משימות של קריאות שפג להן התוקף
+            var expiredAssignments = assignments
+                .Where(a => a.EndTimeForTreatment == null && a.TypeOfFinishTreatment == null)
+                .ToList();
 
-            // Iterate over all assignments and update status as needed
-            foreach (var assignment in assignments)
+            foreach (var assignment in expiredAssignments)
             {
-                // If the assignment ended before or at the new clock time and has not been processed yet
-                if (assignment.EndTimeForTreatment <= newClock && !processedAssignments.Contains(assignment.ID))
+                DO.Call? call = null;
+                lock (AdminManager.BlMutex)
                 {
-                    // Update the assignment's finish type inside a lock (DAL access)
-                    var updatedAssignment = assignment with { TypeOfFinishTreatment = DO.TypeOfFinishTreatment.Treated };
+                    call = s_dal.Call.Read(assignment.CallId);
+                }
+                if (call != null && call.MaxTimeForClosing <= newClock)
+                {
+                    var updatedAssignment = assignment with
+                    {
+                        EndTimeForTreatment = call.MaxTimeForClosing,
+                        TypeOfFinishTreatment = DO.TypeOfFinishTreatment.OutOfRangeCancellation
+                    };
                     lock (AdminManager.BlMutex)
                     {
                         s_dal.Assignment.Update(updatedAssignment);
                     }
-                    // Collect the ID for notification outside the lock
-                    updatedAssignmentsIds.Add(updatedAssignment.ID);
+                    // עדכון המשימה
+                    Observers.NotifyItemUpdated(updatedAssignment.ID);
+                    // עדכון הקריאה
+                    Helpers.CallManager.Observers.NotifyItemUpdated(updatedAssignment.CallId);
+                    // עדכון המתנדב
+                    Helpers.VolunteerManager.Observers.NotifyItemUpdated(updatedAssignment.VolunteerId);
+                }
+            }
+            Observers.NotifyListUpdated();
+            Helpers.VolunteerManager.Observers.NotifyListUpdated();
+            Helpers.CallManager.Observers.NotifyListUpdated();
+
+            var processedAssignments = new HashSet<int>();
+            var updatedAssignmentsIds = new List<int>();
+
+            foreach (var assignment in assignments)
+            {
+                if (assignment.EndTimeForTreatment <= newClock && !processedAssignments.Contains(assignment.ID))
+                {
+                    if (assignment.TypeOfFinishTreatment != DO.TypeOfFinishTreatment.OutOfRangeCancellation)
+                    {
+                        var updatedAssignment = assignment with { TypeOfFinishTreatment = DO.TypeOfFinishTreatment.Treated };
+                        lock (AdminManager.BlMutex)
+                        {
+                            s_dal.Assignment.Update(updatedAssignment);
+                        }
+                        updatedAssignmentsIds.Add(updatedAssignment.ID);
+                    }
                     processedAssignments.Add(assignment.ID);
                 }
-                // If the assignment ends within the next 2 hours, only mark as processed (no update required)
                 else if (assignment.EndTimeForTreatment <= newClock.AddHours(2) && !processedAssignments.Contains(assignment.ID))
                 {
                     processedAssignments.Add(assignment.ID);
                 }
             }
 
-            // Notify observers about each updated assignment outside the lock
             foreach (var id in updatedAssignmentsIds)
                 Observers.NotifyItemUpdated(id);
 
-            // Notify that the assignment list has been updated (also outside the lock)
             Observers.NotifyListUpdated();
+            Helpers.VolunteerManager.Observers.NotifyListUpdated();
             Console.WriteLine("Finished Periodic the Updates successfully.");
         }
-
         internal static async Task SendEmailWhenCallOpenedAsync(BO.Call call)
         {
             IEnumerable<DO.Volunteer> volunteers;

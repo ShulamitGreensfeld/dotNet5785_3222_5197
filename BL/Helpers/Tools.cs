@@ -259,22 +259,82 @@ internal static class Tools
             return (null, null, ex.Message);
         }
     }
+    //public static async Task SendEmailAsync(string toEmail, string subject, string body)
+    //{
+    //    var fromAddress = new MailAddress("mailforcsharp1234@gmail.com", "NoReplyVolunteerOrganization");
+    //    var toAddress = new MailAddress(toEmail);
+
+    //    using var smtpClient = new SmtpClient("smtp.gmail.com")
+    //    {
+    //        Port = 587,
+    //        Credentials = new NetworkCredential("mailforcsharp1234@gmail.com", "mjhm ignt phfr whuc"),
+    //        EnableSsl = true,
+    //    };
+
+    //    using var message = new MailMessage(fromAddress, toAddress)
+    //    {
+    //        Subject = subject,
+    //        Body = body
+    //    };
+    //}
     public static async Task SendEmailAsync(string toEmail, string subject, string body)
     {
-        var fromAddress = new MailAddress("mailforcsharp1234@gmail.com", "NoReplyVolunteerOrganization");
-        var toAddress = new MailAddress(toEmail);
-
-        using var smtpClient = new SmtpClient("smtp.gmail.com")
+        try
         {
-            Port = 587,
-            Credentials = new NetworkCredential("mailforcsharp1234@gmail.com", "mjhm ignt phfr whuc"),
-            EnableSsl = true,
-        };
+            var fromAddress = new MailAddress("mailforcsharp1234@gmail.com", "NoReplyVolunteerOrganization");
+            var toAddress = new MailAddress(toEmail);
 
-        using var message = new MailMessage(fromAddress, toAddress)
+            using var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential("mailforcsharp1234@gmail.com", "mjhm ignt phfr whuc"),
+                EnableSsl = true,
+            };
+
+            using var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body
+            };
+
+            Console.WriteLine($"[Mail] Sending email to {toEmail}...");
+
+            await smtpClient.SendMailAsync(message);
+
+            Console.WriteLine("[Mail] Email sent successfully!");
+        }
+        catch (SmtpException ex)
         {
-            Subject = subject,
-            Body = body
-        };
+            // SMTP-specific errors (authentication, server not reachable, etc)
+            Console.Error.WriteLine($"[Mail][SMTP ERROR] {ex.StatusCode}: {ex.Message}");
+            if (ex.InnerException != null)
+                Console.Error.WriteLine($"[Mail][SMTP ERROR] Inner: {ex.InnerException.Message}");
+        }
+        catch (ArgumentException ex)
+        {
+            // Bad addresses, empty fields, etc
+            Console.Error.WriteLine($"[Mail][ARGUMENT ERROR] {ex.Message}");
+        }
+        catch (FormatException ex)
+        {
+            // Malformed email address, etc
+            Console.Error.WriteLine($"[Mail][FORMAT ERROR] {ex.Message}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            // For example, SMTP client already used, disposed, etc
+            Console.Error.WriteLine($"[Mail][INVALID OPERATION ERROR] {ex.Message}");
+        }
+        catch (TaskCanceledException)
+        {
+            Console.Error.WriteLine("[Mail][TIMEOUT ERROR] The email sending operation timed out.");
+        }
+        catch (Exception ex)
+        {
+            // Any other unexpected error
+            Console.Error.WriteLine($"[Mail][GENERAL ERROR] {ex.Message}\n{ex.StackTrace}");
+            if (ex.InnerException != null)
+                Console.Error.WriteLine($"[Mail][GENERAL ERROR] Inner: {ex.InnerException.Message}");
+        }
     }
 }

@@ -59,7 +59,7 @@
 
         <!-- DatePicker -->
         <Style TargetType="DatePicker">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Background" Value="#161B22"/>
             <Setter Property="BorderBrush" Value="#30363D"/>
             <Setter Property="BorderThickness" Value="1.5"/>
@@ -84,7 +84,7 @@
         </Style>
 
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#2EA043"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
     </Window.Resources>

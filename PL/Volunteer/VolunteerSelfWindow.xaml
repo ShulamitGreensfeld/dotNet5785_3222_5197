@@ -49,7 +49,7 @@
 
         <!-- GitHub-style TextBlock -->
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Margin" Value="2"/>
         </Style>
 

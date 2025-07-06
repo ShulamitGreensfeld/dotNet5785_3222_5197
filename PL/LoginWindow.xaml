@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:PL"
         Title="Login"
-        Height="450" Width="400"
+        Height="500" Width="400"
         WindowStartupLocation="CenterScreen"
         Background="#0D1117"
         FontFamily="Segoe UI">

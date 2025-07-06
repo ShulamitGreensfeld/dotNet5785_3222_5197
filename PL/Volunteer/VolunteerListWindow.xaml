@@ -93,7 +93,7 @@
 
         <!-- GitHub-style TextBlock -->
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#2EA043"/>
         </Style>
     </Window.Resources>
 

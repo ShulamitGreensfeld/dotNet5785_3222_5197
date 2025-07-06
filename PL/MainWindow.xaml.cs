@@ -100,8 +100,23 @@ namespace PL
             UpdateRiskRangeCommand = new RelayCommand(_ => s_bl.Admin.SetRiskTimeRange(TimeSpan.FromMinutes(RiskRange)), _ => !IsSimulatorRunning);
             InitializeDatabaseCommand = new RelayCommand(_ => ConfirmAndRun("Initialize", s_bl.Admin.InitializeDatabase), _ => !IsSimulatorRunning);
             ResetDatabaseCommand = new RelayCommand(_ => ConfirmAndRun("Reset", s_bl.Admin.ResetDatabase), _ => !IsSimulatorRunning);
-            OpenVolunteersCommand = new RelayCommand(_ => OpenWindow<VolunteerListWindow>());
-            OpenCallsCommand = new RelayCommand(_ => new CallManagementWindow(App.LoggedAdminId).Show());
+            //OpenVolunteersCommand = new RelayCommand(_ => OpenWindow<VolunteerListWindow>());
+            //OpenCallsCommand = new RelayCommand(_ => new CallManagementWindow(App.LoggedAdminId).Show());
+            OpenCallsCommand = new RelayCommand(_ =>
+            {
+                if (IsSimulatorRunning)
+                    new CallManagementWindow(App.LoggedAdminId).Show();
+                else
+                    CallManagementWindow.ShowSingleton(App.LoggedAdminId);
+            });
+
+            OpenVolunteersCommand = new RelayCommand(_ =>
+            {
+                if (IsSimulatorRunning)
+                    new VolunteerListWindow().Show();
+                else
+                    VolunteerListWindow.ShowSingleton();
+            });
 
             RiskRange = (int)s_bl.Admin.GetRiskTimeRange().TotalMinutes;
             CurrentTime = s_bl.Admin.GetClock();
@@ -154,11 +169,14 @@ namespace PL
                 CallQuantities.Clear();
                 foreach (CallStatus status in Enum.GetValues(typeof(CallStatus)))
                 {
-                    CallQuantities.Add(new CallQuantity
+                    if (status != CallStatus.none)
                     {
-                        Status = status,
-                        Quantity = quantities[(int)status]
-                    });
+                        CallQuantities.Add(new CallQuantity
+                        {
+                            Status = status,
+                            Quantity = quantities[(int)status]
+                        });
+                    }
                 }
             }
             catch (Exception ex)

@@ -11,7 +11,7 @@
 
     <Window.Resources>
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#238636"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
@@ -24,7 +24,7 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
         <Style TargetType="ComboBox">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#238636"/>
             <Setter Property="Background" Value="#161B22"/>
             <Setter Property="BorderBrush" Value="#30363D"/>
             <Setter Property="BorderThickness" Value="1.5"/>

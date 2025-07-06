@@ -103,7 +103,8 @@ internal class CallImplementation : BlApi.ICall
             doCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Create(doCall);
         }
-        CallManager.SendEmailWhenCallOpenedAsync(boCall).GetAwaiter().GetResult();
+        //CallManager.SendEmailWhenCallOpenedAsync(boCall).GetAwaiter().GetResult();
+        _ = CallManager.SendEmailWhenCallOpenedAsync(boCall);
         CallManager.Observers.NotifyListUpdated(); // stage 5
     }
 
@@ -172,15 +173,24 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="callTypeFilter">Optional filter for the type of calls.</param>
     /// <param name="sortField">Optional field by which to sort the list of calls.</param>
     /// <returns>A list of closed calls handled by the volunteer.</returns>
-    public IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.ClosedCallInListFields? sortField = null)
+    public IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByVolunteer(
+        int volunteerId,
+        BO.Enums.CallType? callTypeFilter = null,
+        BO.Enums.ClosedCallInListFields? sortField = null)
     {
         try
         {
             IEnumerable<BO.ClosedCallInList> closedCalls;
             lock (AdminManager.BlMutex)
             {
-                closedCalls = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTimeForTreatment != null)
-                    .Where(a => callTypeFilter is null || (BO.Enums.CallType)_dal.Call.Read(a.CallId)!.TypeOfCall == callTypeFilter)
+                closedCalls = _dal.Assignment
+                    .ReadAll(a =>
+                        a.VolunteerId == volunteerId &&
+                        a.EndTimeForTreatment != null &&
+                        a.TypeOfFinishTreatment == DO.TypeOfFinishTreatment.Treated // ← רק משימות שטופלו בפועל
+                    )
+                    .Where(a => callTypeFilter is null ||
+                                (BO.Enums.CallType)_dal.Call.Read(a.CallId)!.TypeOfCall == callTypeFilter)
                     .Select(a =>
                     {
                         var call = _dal.Call.Read(a.CallId);
@@ -231,7 +241,8 @@ internal class CallImplementation : BlApi.ICall
                 volunteerDistanceType = (BO.Enums.DistanceTypes)volunteer.DistanceType;
                 calls = _dal.Call.ReadAll()
                     .Where(c =>
-                        (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk) &&
+                        (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened ||
+                        CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk) &&
                         (callTypeFilter == null || (BO.Enums.CallType)c.TypeOfCall == callTypeFilter))
                     .ToList();
             }
@@ -302,7 +313,8 @@ internal class CallImplementation : BlApi.ICall
 
             _dal.Assignment.Update(updatedAssignment);
         }
-        CallManager.SendEmailToVolunteerAsync(volunteer, assignment);
+        //CallManager.SendEmailToVolunteerAsync(volunteer, assignment);
+        _ = CallManager.SendEmailToVolunteerAsync(volunteer, assignment);
         CallManager.Observers.NotifyItemUpdated(updatedAssignment.ID);  // stage 5
         CallManager.Observers.NotifyListUpdated(); // stage 5
         VolunteerManager.Observers.NotifyItemUpdated(volunteerId);
@@ -421,9 +433,10 @@ internal class CallImplementation : BlApi.ICall
         lock (AdminManager.BlMutex)
         {
             var call = GetCallDetails(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist.");
-            if (call.CallStatus == BO.Enums.CallStatus.is_treated ||
+            if (call.CallStatus == BO.Enums.CallStatus.is_treated || call.CallStatus == BO.Enums.CallStatus.treated_at_risk ||
                 (call.CallStatus != BO.Enums.CallStatus.opened && call.CallStatus != BO.Enums.CallStatus.opened_at_risk))
-                throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it."); if (call.Max_finish_time < AdminManager.Now)
+                throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it.");
+            if (call.Max_finish_time < AdminManager.Now)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");
             existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
             if (existingAssignments.Any(a => a?.EndTimeForTreatment == null))
@@ -463,6 +476,32 @@ internal class CallImplementation : BlApi.ICall
             }
             CallManager.Observers.NotifyItemUpdated(callId);
         
+    }
+    private void UpdateExpiredAssignments()
+    {
+        lock (AdminManager.BlMutex)
+        {
+            var now = _dal.Config.Clock;
+            var calls = _dal.Call.ReadAll().ToList();
+            foreach (var call in calls)
+            {
+                // אם הקריאה פג תוקפה
+                if (call.MaxTimeForClosing < now)
+                {
+                    var assignments = _dal.Assignment.ReadAll(a => a.CallId == call.ID).ToList();
+                    var lastAssignment = assignments.LastOrDefault(a => a.CallId == call.ID && a.EndTimeForTreatment == null);
+                    if (lastAssignment != null)
+                    {
+                        var updatedAssignment = lastAssignment with
+                        {
+                            EndTimeForTreatment = now,
+                            TypeOfFinishTreatment = DO.TypeOfFinishTreatment.OutOfRangeCancellation
+                        };
+                        _dal.Assignment.Update(updatedAssignment);
+                    }
+                }
+            }
+        }
     }
 
     #region Stage 5

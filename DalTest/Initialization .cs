@@ -240,10 +240,15 @@ namespace DalTest
             int i = 0;
             foreach (DO.TypeOfCall c_type in TypeOfCalls)
             {
-                callOpeningTime = systemTime.AddMinutes(-rand.Next(1, 1000));
 
-                int durationMinutes = rand.Next(30, 180);
-                callMaxFinishTime = callOpeningTime.AddMinutes(durationMinutes);
+                callOpeningTime = systemTime.AddMinutes(-rand.Next(1, 30)); // פתיחה עד חצי שעה אחורה
+                int durationMinutes = rand.Next(2, 10); // סגירה בעוד 2-10 ימים
+                callMaxFinishTime = callOpeningTime.AddDays(durationMinutes);
+
+                //callOpeningTime = systemTime.AddMinutes(-rand.Next(1, 1000));
+
+                //int durationMinutes = rand.Next(30, 180);
+                //callMaxFinishTime = callOpeningTime.AddMinutes(durationMinutes);
 
                 s_dal!.Call.Create(new DO.Call(
                     TypeOfCall: c_type,
@@ -401,108 +406,147 @@ namespace DalTest
             Random rand = new Random();
             var calls = s_dal!.Call.ReadAll().ToList();
             var volunteers = s_dal!.Volunteer.ReadAll().ToList();
-            var callsWithAssignment = calls.Skip((int)(calls.Count * 0.2)).ToList();
 
-            foreach (Call? call in callsWithAssignment)
+            int count = calls.Count;
+            if (count == 0 || volunteers.Count == 0)
+                return;
+
+            //int count = calls.Count;
+            int openedCount = (int)(count * 0.4);
+            int inProgressCount = (int)(count * 0.2);
+            int treatedCount = (int)(count * rand.Next(5, 16) / 100.0);
+            int selfCancelCount = (int)(count * rand.Next(5, 16) / 100.0);
+            int managerCancelCount = (int)(count * rand.Next(5, 16) / 100.0);
+            int expiredCount = (int)(count * rand.Next(5, 16) / 100.0); // הוסף משתנה ל-expired
+            //int outOfRangeCount = count - (openedCount + inProgressCount + treatedCount + selfCancelCount + managerCancelCount + expiredCount);
+            int total = openedCount + inProgressCount + treatedCount + selfCancelCount + managerCancelCount + expiredCount;
+            if (total > count)
             {
-                Volunteer randomVolunteer;
-                if (volunteers.Count > 0)
-                {
-                    randomVolunteer = volunteers[rand.Next(volunteers.Count)]!;
-                    if (randomVolunteer == null || randomVolunteer.ID == 0)
-                        throw new Exception("Selected volunteer is invalid or has ID 0.");
-                }
-                else
-                {
-                    throw new Exception("No volunteers available.");
-                }
-                TimeSpan duration;
-                if (call!.MaxTimeForClosing.HasValue)
-                    duration = call.MaxTimeForClosing.Value - call.OpeningTime;
-                else
-                    duration = TimeSpan.Zero;
+                // תקן את האחרון כך שסך הכל לא יעבור את כמות הקריאות
+                expiredCount -= (total - count);
+                if (expiredCount < 0) expiredCount = 0;
+            }
+            int outOfRangeCount = count - (openedCount + inProgressCount + treatedCount + selfCancelCount + managerCancelCount + expiredCount);
 
-                double randomMinutes = rand.NextDouble() * duration.TotalMinutes;
-                DateTime randomStartTime = call.OpeningTime.AddMinutes(randomMinutes);
+            calls = calls.OrderBy(_ => rand.Next()).ToList();
+            int idx = 0;
 
-                DateTime? randomEndTime;
+            idx += openedCount;
 
-                if (!call.MaxTimeForClosing.HasValue)
-                {
-                    if (rand.NextDouble() < 0.5)
-                    {
-                        double maxMinutes = (s_dal.Config.Clock - randomStartTime).TotalMinutes;
-                        if (maxMinutes > 0)
-                        {
-                            double endMinutes = rand.NextDouble() * maxMinutes;
-                            randomEndTime = randomStartTime.AddMinutes(endMinutes);
-                        }
-                        else
-                        {
-                            randomEndTime = randomStartTime;
-                        }
-                    }
-                    else
-                    {
-                        randomEndTime = null;
-                    }
-                }
-                else if (call.MaxTimeForClosing.Value < s_dal.Config.Clock)
-                {
-                    randomEndTime = s_dal.Config.Clock;
-                }
-                else
-                {
-                    if (rand.NextDouble() < 0.5)
-                    {
-                        DateTime maxAllowed = call.MaxTimeForClosing.Value < s_dal.Config.Clock
-                            ? call.MaxTimeForClosing.Value
-                            : s_dal.Config.Clock;
-
-                        double maxMinutes = (maxAllowed - randomStartTime).TotalMinutes;
-                        if (maxMinutes > 0)
-                        {
-                            double endMinutes = rand.NextDouble() * maxMinutes;
-                            randomEndTime = randomStartTime.AddMinutes(endMinutes);
-                        }
-                        else
-                        {
-                            randomEndTime = randomStartTime;
-                        }
-                    }
-                    else
-                    {
-                        randomEndTime = null;
-                    }
-                }
-
-                TypeOfFinishTreatment? endType = null;
-                if (randomEndTime == null)
-                    endType = null;
-                else if (call.MaxTimeForClosing.HasValue && call.MaxTimeForClosing < s_dal.Config.Clock)
-                {
-                    endType = TypeOfFinishTreatment.OutOfRangeCancellation;
-                }
-                else
-                {
-                    double randomPercentage = rand.NextDouble();
-                    if (randomPercentage < 0.33)
-                        endType = TypeOfFinishTreatment.Treated;
-                    else if (randomPercentage < 0.66)
-                        endType = TypeOfFinishTreatment.SelfCancellation;
-                    else
-                        endType = TypeOfFinishTreatment.ManagerCancellation;
-                }
+            // in-progress
+            for (int i = 0; i < inProgressCount; i++, idx++)
+            {
+                var call = calls[idx];
+                var volunteer = volunteers[rand.Next(volunteers.Count)];
                 s_dal!.Assignment.Create(new Assignment
                 {
                     CallId = call.ID,
-                    VolunteerId = randomVolunteer.ID,
-                    EntryTimeForTreatment = randomStartTime,
-                    EndTimeForTreatment = randomEndTime,
-                    TypeOfFinishTreatment = endType
+                    VolunteerId = volunteer.ID,
+                    EntryTimeForTreatment = call.OpeningTime.AddMinutes(rand.Next(5, 60)),
+                    EndTimeForTreatment = null,
+                    TypeOfFinishTreatment = null
+                });
+            }
+
+            // treated
+            for (int i = 0; i < treatedCount; i++, idx++)
+            {
+                var call = calls[idx];
+                var volunteer = volunteers[rand.Next(volunteers.Count)];
+                var entryTime = call.OpeningTime.AddMinutes(rand.Next(5, 60));
+                var endTime = entryTime.AddMinutes(rand.Next(5, 60));
+                s_dal!.Assignment.Create(new Assignment
+                {
+                    CallId = call.ID,
+                    VolunteerId = volunteer.ID,
+                    EntryTimeForTreatment = entryTime,
+                    EndTimeForTreatment = endTime,
+                    TypeOfFinishTreatment = TypeOfFinishTreatment.Treated
+                });
+            }
+
+            // self cancel
+            for (int i = 0; i < selfCancelCount; i++, idx++)
+            {
+                var call = calls[idx];
+                var volunteer = volunteers[rand.Next(volunteers.Count)];
+                var entryTime = call.OpeningTime.AddMinutes(rand.Next(5, 60));
+                var endTime = entryTime.AddMinutes(rand.Next(5, 60));
+                s_dal!.Assignment.Create(new Assignment
+                {
+                    CallId = call.ID,
+                    VolunteerId = volunteer.ID,
+                    EntryTimeForTreatment = entryTime,
+                    EndTimeForTreatment = endTime,
+                    TypeOfFinishTreatment = TypeOfFinishTreatment.SelfCancellation
+                });
+            }
+
+            // manager cancel
+            for (int i = 0; i < managerCancelCount; i++, idx++)
+            {
+                var call = calls[idx];
+                var volunteer = volunteers[rand.Next(volunteers.Count)];
+                var entryTime = call.OpeningTime.AddMinutes(rand.Next(5, 60));
+                var endTime = entryTime.AddMinutes(rand.Next(5, 60));
+                s_dal!.Assignment.Create(new Assignment
+                {
+                    CallId = call.ID,
+                    VolunteerId = volunteer.ID,
+                    EntryTimeForTreatment = entryTime,
+                    EndTimeForTreatment = endTime,
+                    TypeOfFinishTreatment = TypeOfFinishTreatment.ManagerCancellation
+                });
+            }
+
+            // expired
+            for (int i = 0; i < expiredCount; i++, idx++)
+            {
+                var call = calls[idx];
+                var volunteer = volunteers[rand.Next(volunteers.Count)];
+                var entryTime = call.OpeningTime.AddMinutes(rand.Next(5, 60));
+                // עדכן את זמן הסגירה כך שיהיה בעבר (פג תוקף)
+                var expiredCall = new Call
+                {
+                    TypeOfCall = call.TypeOfCall,
+                    Address = call.Address,
+                    Latitude = call.Latitude,
+                    Longitude = call.Longitude,
+                    OpeningTime = call.OpeningTime,
+                    MaxTimeForClosing = s_dal.Config.Clock.AddMinutes(-rand.Next(10, 60)),
+                    CallDescription = call.CallDescription,
+                    ID = call.ID
+                };
+                s_dal!.Call.Update(expiredCall);
+
+                s_dal!.Assignment.Create(new Assignment
+                {
+                    CallId = call.ID,
+                    VolunteerId = volunteer.ID,
+                    EntryTimeForTreatment = entryTime,
+                    EndTimeForTreatment = null,
+                    TypeOfFinishTreatment = null
+                });
+            }
+
+            // out of range
+            for (int i = 0; i < outOfRangeCount && idx < calls.Count; i++, idx++)
+            {
+                var call = calls[idx];
+                var volunteer = volunteers[rand.Next(volunteers.Count)];
+                var entryTime = call.OpeningTime.AddMinutes(rand.Next(5, 60));
+                var endTime = (call.MaxTimeForClosing ?? entryTime).AddMinutes(rand.Next(1, 30));
+                s_dal!.Assignment.Create(new Assignment
+                {
+                    CallId = call.ID,
+                    VolunteerId = volunteer.ID,
+                    EntryTimeForTreatment = entryTime,
+                    EndTimeForTreatment = endTime,
+                    TypeOfFinishTreatment = TypeOfFinishTreatment.OutOfRangeCancellation
                 });
             }
         }
+
         private static void createSuperAdmin()
         {
             if (s_dal!.Volunteer.Read(214323222) != null)
